@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.mainController">
+   <children>
+      <AnchorPane layoutX="14.0" layoutY="86.0" prefHeight="494.0" prefWidth="157.0">
+         <children>
+            <ComboBox fx:id="periodChoice" layoutX="19.0" layoutY="31.0" prefHeight="17.0" prefWidth="118.0" />
+            <ToggleButton onAction="#onDarkSasukeClick" fx:id="darkSasuke" contentDisplay="CENTER" layoutX="25.0" layoutY="446.0" mnemonicParsing="false" text="Dark sasuke" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
