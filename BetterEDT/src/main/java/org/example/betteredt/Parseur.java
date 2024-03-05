@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Parseur {
     public static void TestParser() {
         try {
-            FileInputStream fileInputStream = new FileInputStream("C:\\Users\\flo20\\Documents\\TP Master Info\\BetterEDT\\BetterEDT\\src\\main\\stocks\\ILSEN.ics");
+            FileInputStream fileInputStream = new FileInputStream("src/main/resources/ILSEN.ics");
             CalendarBuilder builder = new CalendarBuilder();
             Calendar calendar = builder.build(fileInputStream);
 
