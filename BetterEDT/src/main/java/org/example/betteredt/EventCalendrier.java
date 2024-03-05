@@ -14,6 +14,14 @@ public class EventCalendrier {
     private final int jourSemaine; //1 lundi, 2 mardi, 3 mercredi...
     private final int year;
 
+    private final String UCE;
+    private final String professeur;
+    private final String elevesConcerner;
+    private final String typeDeCours;
+    private final String additionalInfo;
+
+
+
     public EventCalendrier(String summary, Date startDate, Date endDate, String location) {
         //recup donner de base
         this.summary = summary;
@@ -45,6 +53,32 @@ public class EventCalendrier {
             endHeure=String.valueOf(calendar2.get(Calendar.HOUR_OF_DAY))+"H"+String.valueOf(calendar2.get(Calendar.MINUTE));
         }
 
+        String[] fragment = summary.split(" - ");
+        UCE=fragment[0];
+        //System.out.println(fragment.length);
+        if (fragment.length>1){
+            professeur=fragment[1];
+            elevesConcerner=fragment[2];
+            //System.out.println(UCE);
+
+            if (fragment.length>3){
+                typeDeCours=fragment[3];
+            } else {
+                typeDeCours="NULL"; //Gaster from Deltarune was here
+            }
+            if (fragment.length==5){
+                additionalInfo=fragment[4];
+            } else{
+                additionalInfo="NULL";
+            }
+        } else{
+            professeur="NULL";
+            elevesConcerner="NULL";
+            typeDeCours="Férier";
+            additionalInfo="NULL";
+
+        }
+
         //displayAllInfo();
 
     }
@@ -54,6 +88,11 @@ public class EventCalendrier {
         System.out.println(location);
         System.out.println(jourSemaine+"/"+mois+"/"+year);
         System.out.println(startHeure+"-"+endHeure);
+
+        System.out.println(UCE);
+        System.out.println(professeur);
+        System.out.println(elevesConcerner);
+        System.out.println(typeDeCours);
         System.out.println("===========================");
     }
 

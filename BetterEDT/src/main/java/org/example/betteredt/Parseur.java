@@ -22,23 +22,12 @@ public class Parseur {
                 Component component = (Component) o;
                 if (component.getName().equals("VEVENT")) {
                     VEvent event = (VEvent) component;
-                    System.out.println(component);
-
+                    //System.out.println(component);
                     if(event.getLocation() == null || event.getLocation().getValue() == null){
                         mainList.add(new EventCalendrier(event.getSummary().getValue(),event.getStartDate().getDate(),event.getEndDate().getDate(),"Salle non spécifier"));
                     } else {
                         mainList.add(new EventCalendrier(event.getSummary().getValue(),event.getStartDate().getDate(),event.getEndDate().getDate(),event.getLocation().getValue()));
                     }
-
-                    //System.out.println(mainList.get(0).getEndDate());
-                    /*
-                    System.out.println("Event Summary: " + event.getSummary().getValue());
-                    System.out.println("Event Start: " + event.getStartDate().getDate());
-                    System.out.println("Event End: " + event.getEndDate().getDate());
-                    //System.out.println("Salles: "+ event.getLocation().getValue());
-                    System.out.println("==============================");
-                    */
-
                 }
             }
 
