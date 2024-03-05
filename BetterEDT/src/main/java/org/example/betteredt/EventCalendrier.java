@@ -78,9 +78,7 @@ public class EventCalendrier {
             additionalInfo="NULL";
 
         }
-
-        //displayAllInfo();
-
+        displayAllInfo();
     }
 
     public void displayAllInfo(){
@@ -93,6 +91,7 @@ public class EventCalendrier {
         System.out.println(professeur);
         System.out.println(elevesConcerner);
         System.out.println(typeDeCours);
+        System.out.println(additionalInfo);
         System.out.println("===========================");
     }
 
