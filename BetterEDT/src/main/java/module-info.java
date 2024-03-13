@@ -1,7 +1,8 @@
 module org.example.betteredt {
     requires javafx.controls;
     requires javafx.fxml;
-    requires ical4j;
+    requires java.sql;
+    requires org.mnode.ical4j.core;
 
 
     opens org.example.betteredt to javafx.fxml;
