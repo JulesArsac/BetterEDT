@@ -21,7 +21,7 @@ public class mainController implements Initializable {
     @FXML
     AnchorPane rootPane;
     @FXML
-    AnchorPane filterPane;
+    GridPane filterPane;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -33,16 +33,35 @@ public class mainController implements Initializable {
 
         darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
 
-        edtGrid.prefHeightProperty().bind(rootPane.heightProperty());
-        edtGrid.prefWidthProperty().bind(rootPane.widthProperty());
+        rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            edtGrid.setPrefWidth(newVal.doubleValue()-160);
+            edtGrid.setMaxWidth(newVal.doubleValue()-160);
+
+            if (newVal.doubleValue() < 160) {
+                filterPane.setPrefWidth(newVal.doubleValue());
+                filterPane.setMaxWidth(newVal.doubleValue());
+            }
+            else {
+                filterPane.setPrefWidth(160);
+                filterPane.setMaxWidth(160);
+            }
+
+            System.out.println("Width: " + newVal);
+        });
+        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            edtGrid.setPrefHeight(newVal.doubleValue()-129);
+            edtGrid.setMaxHeight(newVal.doubleValue()-129);
+
+            filterPane.setPrefHeight(newVal.doubleValue()-150);
+            filterPane.setMaxHeight(newVal.doubleValue()-150);
+
+            System.out.println("Height: " + newVal);
+        });
 
         for (int i= 0; i < 7; i++) {
             Label label = new Label(i + "");
             edtGrid.add(label, i, 0);
         }
-
-        filterPane.prefHeightProperty().bind(rootPane.heightProperty());
-        filterPane.prefWidthProperty().bind(rootPane.widthProperty());
 
     }
 

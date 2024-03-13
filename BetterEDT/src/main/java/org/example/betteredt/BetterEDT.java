@@ -14,7 +14,7 @@ import static org.example.betteredt.Parseur.TestParser;
 public class BetterEDT extends Application {
 
     private static Scene mainScene;
-    private static File darkSasukeFile = new File("src/main/resources/darkSasuke.css");
+    private static File darkSasukeFile = new File("BetterEDT/src/main/resources/darkSasuke.css");
 
     @Override
     public void start(Stage stage) throws IOException {
