@@ -11,10 +11,9 @@ import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.ResultSet;
 
-import static org.example.betteredt.Parseur.TestParser;
+import static org.example.betteredt.Parseur.testParser;
 
 public class BetterEDT extends Application {
 
@@ -28,6 +27,7 @@ public class BetterEDT extends Application {
     public void start(Stage stage) throws IOException {
 
         this.stage = stage;
+        testParser();
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:BetterEDT/src/main/resources/database/users.db");
             System.out.println("Connection to SQLite has been established.");

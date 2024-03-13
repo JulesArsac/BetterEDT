@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Parseur {
-    public static void TestParser() {
+    public static void testParser() {
         try {
-            FileInputStream fileInputStream = new FileInputStream("src/main/resources/ILSEN.ics");
+            FileInputStream fileInputStream = new FileInputStream("BetterEDT/src/main/resources/ILSEN.ics");
             CalendarBuilder builder = new CalendarBuilder();
             Calendar calendar = builder.build(fileInputStream);
 
