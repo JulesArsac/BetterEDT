@@ -5,45 +5,49 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.connectionController">
+<AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.connectionController">
    <children>
-      <VBox alignment="CENTER" layoutX="86.0" layoutY="99.0" prefHeight="286.0" prefWidth="204.0" spacing="10.0">
+      <HBox fx:id="hBox" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="40.0">
          <children>
-            <Label text="Username">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <TextField fx:id="connectUsername" />
-            <Label text="Password">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <PasswordField fx:id="connectPassword" />
-            <Button mnemonicParsing="false" text="Connect" />
+            <VBox fx:id="connectBox" alignment="CENTER" prefHeight="286.0" prefWidth="204.0" spacing="10.0">
+               <children>
+                  <Label text="Username">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="connectUsername" />
+                  <Label text="Password">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <PasswordField fx:id="connectPassword" />
+                  <Button fx:id="connectButton" onAction="#connect" mnemonicParsing="false" text="Connect" />
+               </children>
+            </VBox>
+            <VBox fx:id="createBox" alignment="CENTER" prefHeight="286.0" prefWidth="204.0" spacing="10.0">
+               <children>
+                  <Label text="Username">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="createUsername" />
+                  <Label text="Password">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <PasswordField fx:id="createPassword" />
+                  <Button fx:id="createButton" onAction="#create" mnemonicParsing="false" text="Create account" />
+               </children>
+            </VBox>
          </children>
-      </VBox>
-      <VBox alignment="CENTER" layoutX="310.0" layoutY="99.0" prefHeight="286.0" prefWidth="204.0" spacing="10.0">
-         <children>
-            <Label text="Username">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <TextField fx:id="createUsername" />
-            <Label text="Password">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <PasswordField fx:id="createPassword" />
-            <Button mnemonicParsing="false" text="Create account" />
-         </children>
-      </VBox>
+      </HBox>
    </children>
 </AnchorPane>

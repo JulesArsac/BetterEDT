@@ -26,59 +26,68 @@ public class BetterEDT extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        try {
-            conn = DriverManager.getConnection("jdbc:sqlite:BetterEDT/src/main/resources/database/users.db");
-            System.out.println("Connection to SQLite has been established.");
-
-//            String dropTableSQL = "DROP TABLE IF EXISTS users;";
-//            conn.createStatement().execute(dropTableSQL);
+//        try {
+//            conn = DriverManager.getConnection("jdbc:sqlite:BetterEDT/src/main/resources/database/users.db");
+//            System.out.println("Connection to SQLite has been established.");
 //
-//            String createTableSQL = "CREATE TABLE IF NOT EXISTS users ("
-//                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-//                    + "username TEXT NOT NULL CHECK(length(username) <= 255),"
-//                    + "password TEXT NOT NULL CHECK(length(password) <= 2048),"
-//                    + "admin INTEGER DEFAULT 0 CHECK(admin IN (0, 1)),"
-//                    + "darkSasuke INTEGER DEFAULT 0 CHECK(darkSasuke IN (0, 1)),"
-//                    + "defaultTime INTEGER DEFAULT 0"
-//                    + ");";
-//            conn.createStatement().execute(createTableSQL);
+////            String dropTableSQL = "DROP TABLE IF EXISTS users;";
+////            conn.createStatement().execute(dropTableSQL);
+////
+////            String createTableSQL = "CREATE TABLE IF NOT EXISTS users ("
+////                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+////                    + "username TEXT NOT NULL CHECK(length(username) <= 255),"
+////                    + "password TEXT NOT NULL CHECK(length(password) <= 2048),"
+////                    + "admin INTEGER DEFAULT 0 CHECK(admin IN (0, 1)),"
+////                    + "darkSasuke INTEGER DEFAULT 0 CHECK(darkSasuke IN (0, 1)),"
+////                    + "defaultTime INTEGER DEFAULT 0"
+////                    + ");";
+////            conn.createStatement().execute(createTableSQL);
+//
+//
+////            String insertSQL = "INSERT INTO users (username, password, admin, darkSasuke, defaultTime) VALUES ('admin', 'admin', 1, 1, 0);";
+////            conn.createStatement().execute(insertSQL);
+//
+//            String selectSQL = "SELECT * FROM users";
+//            ResultSet rs = conn.createStatement().executeQuery(selectSQL);
+//            if (!rs.next()) {
+//                System.out.println("ResultSet is empty");
+//            } else {
+//                do {
+//                    System.out.println("id = " + rs.getInt("id"));
+//                    System.out.println("username = " + rs.getString("username"));
+//                    System.out.println("password = " + rs.getString("password"));
+//                    System.out.println("admin = " + rs.getInt("admin"));
+//                    System.out.println("darkSasuke = " + rs.getInt("darkSasuke"));
+//                    System.out.println("defaultTime = " + rs.getInt("defaultTime"));
+//                } while (rs.next());
+//            }
+//
+//            user = createUser("admin", "admin");
+//            System.out.println("User: " + user.getUsername() + " is admin: " + user.isAdmin() + " darkSasuke: " + user.isDarkSasuke() + " defaultTime: " + user.getDefaultTime());
+//
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        } catch (UserNotFountException e) {
+//            throw new RuntimeException(e);
+//        } catch (WrongPasswordException e) {
+//            throw new RuntimeException(e);
+//        }
 
 
-//            String insertSQL = "INSERT INTO users (username, password, admin, darkSasuke, defaultTime) VALUES ('admin', 'admin', 1, 1, 0);";
-//            conn.createStatement().execute(insertSQL);
-
-            String selectSQL = "SELECT * FROM users";
-            ResultSet rs = conn.createStatement().executeQuery(selectSQL);
-            if (!rs.next()) {
-                System.out.println("ResultSet is empty");
-            } else {
-                do {
-                    System.out.println("id = " + rs.getInt("id"));
-                    System.out.println("username = " + rs.getString("username"));
-                    System.out.println("password = " + rs.getString("password"));
-                    System.out.println("admin = " + rs.getInt("admin"));
-                    System.out.println("darkSasuke = " + rs.getInt("darkSasuke"));
-                    System.out.println("defaultTime = " + rs.getInt("defaultTime"));
-                } while (rs.next());
-            }
-
-            user = createUser("admin", "admin");
-            System.out.println("User: " + user.getUsername() + " is admin: " + user.isAdmin() + " darkSasuke: " + user.isDarkSasuke() + " defaultTime: " + user.getDefaultTime());
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (UserNotFountException e) {
-            throw new RuntimeException(e);
-        } catch (WrongPasswordException e) {
-            throw new RuntimeException(e);
+        if (user == null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("connectionScreen.fxml"));
+            mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+            stage.setTitle("BetterEDT");
+            stage.setScene(mainScene);
+            stage.show();
         }
-
-
-        FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("mainScreen.fxml"));
-        mainScene = new Scene(fxmlLoader.load(), 1000, 600);
-        stage.setTitle("Hello!");
-        stage.setScene(mainScene);
-        stage.show();
+        else {
+            FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("mainScreen.fxml"));
+            mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+            stage.setTitle("BetterEDT");
+            stage.setScene(mainScene);
+            stage.show();
+        }
 
 
     }
