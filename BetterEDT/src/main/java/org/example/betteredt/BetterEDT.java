@@ -19,6 +19,7 @@ import static org.example.betteredt.Parseur.TestParser;
 public class BetterEDT extends Application {
 
     private static Scene mainScene;
+    private static Stage stage;
     private static File darkSasukeFile = new File("BetterEDT/src/main/resources/darkSasuke.css");
     private static Connection conn = null;
     private static User user = null;
@@ -26,27 +27,28 @@ public class BetterEDT extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-//        try {
-//            conn = DriverManager.getConnection("jdbc:sqlite:BetterEDT/src/main/resources/database/users.db");
-//            System.out.println("Connection to SQLite has been established.");
+        this.stage = stage;
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite:BetterEDT/src/main/resources/database/users.db");
+            System.out.println("Connection to SQLite has been established.");
+
+//            String dropTableSQL = "DROP TABLE IF EXISTS users;";
+//            conn.createStatement().execute(dropTableSQL);
 //
-////            String dropTableSQL = "DROP TABLE IF EXISTS users;";
-////            conn.createStatement().execute(dropTableSQL);
-////
-////            String createTableSQL = "CREATE TABLE IF NOT EXISTS users ("
-////                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-////                    + "username TEXT NOT NULL CHECK(length(username) <= 255),"
-////                    + "password TEXT NOT NULL CHECK(length(password) <= 2048),"
-////                    + "admin INTEGER DEFAULT 0 CHECK(admin IN (0, 1)),"
-////                    + "darkSasuke INTEGER DEFAULT 0 CHECK(darkSasuke IN (0, 1)),"
-////                    + "defaultTime INTEGER DEFAULT 0"
-////                    + ");";
-////            conn.createStatement().execute(createTableSQL);
-//
-//
-////            String insertSQL = "INSERT INTO users (username, password, admin, darkSasuke, defaultTime) VALUES ('admin', 'admin', 1, 1, 0);";
-////            conn.createStatement().execute(insertSQL);
-//
+//            String createTableSQL = "CREATE TABLE IF NOT EXISTS users ("
+//                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+//                    + "username TEXT NOT NULL CHECK(length(username) <= 255),"
+//                    + "password TEXT NOT NULL CHECK(length(password) <= 2048),"
+//                    + "admin INTEGER DEFAULT 0 CHECK(admin IN (0, 1)),"
+//                    + "darkSasuke INTEGER DEFAULT 0 CHECK(darkSasuke IN (0, 1)),"
+//                    + "defaultTime INTEGER DEFAULT 0"
+//                    + ");";
+//            conn.createStatement().execute(createTableSQL);
+
+
+//            String insertSQL = "INSERT INTO users (username, password, admin, darkSasuke, defaultTime) VALUES ('admin', 'admin', 1, 1, 0);";
+//            conn.createStatement().execute(insertSQL);
+
 //            String selectSQL = "SELECT * FROM users";
 //            ResultSet rs = conn.createStatement().executeQuery(selectSQL);
 //            if (!rs.next()) {
@@ -61,18 +63,10 @@ public class BetterEDT extends Application {
 //                    System.out.println("defaultTime = " + rs.getInt("defaultTime"));
 //                } while (rs.next());
 //            }
-//
-//            user = createUser("admin", "admin");
-//            System.out.println("User: " + user.getUsername() + " is admin: " + user.isAdmin() + " darkSasuke: " + user.isDarkSasuke() + " defaultTime: " + user.getDefaultTime());
-//
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        } catch (UserNotFountException e) {
-//            throw new RuntimeException(e);
-//        } catch (WrongPasswordException e) {
-//            throw new RuntimeException(e);
-//        }
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         if (user == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("connectionScreen.fxml"));
@@ -108,7 +102,7 @@ public class BetterEDT extends Application {
         mainScene.getStylesheets().remove(darkSasukeFile.toURI().toString());
     }
 
-    public static User createUser(String username, String password) throws UserNotFountException, WrongPasswordException {
+    public static void createUser(String username, String password) throws UserNotFountException, WrongPasswordException {
         String selectSQL = "SELECT * FROM users WHERE username = '" + username + "';";
         try {
             ResultSet rs = conn.createStatement().executeQuery(selectSQL);
@@ -118,7 +112,7 @@ public class BetterEDT extends Application {
             else {
                 String passwordDB = rs.getString("password");
                 if (passwordDB.equals(password)) {
-                    return new User(rs.getInt("id"), rs.getString("username"), rs.getInt("admin") == 1, rs.getInt("darkSasuke") == 1, rs.getInt("defaultTime"));
+                    user = new User(rs.getInt("id"), rs.getString("username"), rs.getInt("admin") == 1, rs.getInt("darkSasuke") == 1, rs.getInt("defaultTime"));
                 }
                 else {
                     throw new WrongPasswordException("Wrong password");
@@ -126,6 +120,19 @@ public class BetterEDT extends Application {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void goToMainScreen() {
+        if (user != null) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("mainScreen.fxml"));
+                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                stage.setScene(mainScene);
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

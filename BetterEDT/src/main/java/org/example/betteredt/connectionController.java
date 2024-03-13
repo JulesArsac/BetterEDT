@@ -14,8 +14,6 @@ import java.util.TimerTask;
 
 public class connectionController implements Initializable {
 
-    Timer connectTimer = new Timer();
-    Timer createTimer = new Timer();
 
     @FXML
     AnchorPane rootPane;
@@ -52,24 +50,27 @@ public class connectionController implements Initializable {
     }
 
     public void connect() {
-        System.out.println("Connecting with username: " + connectUsername.getText() + " and password: " + connectPassword.getText());
-        connectTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                connectButton.setDisable(false);
-            }
-        }, 1000);
         connectButton.setDisable(true);
+        connectUsername.setStyle("");
+        connectPassword.setStyle("");
+        connectUsername.setPromptText("");
+        connectPassword.setPromptText("");
+        try {
+            BetterEDT.createUser(connectUsername.getText(), connectPassword.getText());
+            BetterEDT.goToMainScreen();
+        } catch (UserNotFountException e) {
+            connectUsername.setStyle("-fx-border-color: red;");
+            connectUsername.setPromptText("Invalid username");
+            connectButton.setDisable(false);
+        } catch (WrongPasswordException e) {
+            connectPassword.setStyle("-fx-border-color: red;");
+            connectPassword.setPromptText("Wrong password");
+            connectButton.setDisable(false);
+        }
     }
 
     public void create() {
         System.out.println("Creating user with username: " + createUsername.getText() + " and password: " + createPassword.getText());
-        createTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                createButton.setDisable(false);
-            }
-        }, 1000);
         createButton.setDisable(true);
     }
 
