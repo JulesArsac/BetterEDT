@@ -45,8 +45,6 @@ public class mainController implements Initializable {
                 filterPane.setPrefWidth(160);
                 filterPane.setMaxWidth(160);
             }
-
-            System.out.println("Width: " + newVal);
         });
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             edtGrid.setPrefHeight(newVal.doubleValue()-129);
@@ -55,7 +53,6 @@ public class mainController implements Initializable {
             filterPane.setPrefHeight(newVal.doubleValue()-150);
             filterPane.setMaxHeight(newVal.doubleValue()-150);
 
-            System.out.println("Height: " + newVal);
         });
 
         for (int i= 0; i < 7; i++) {
