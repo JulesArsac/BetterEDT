@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Parseur {
-    public static void testParser() {
+public class Parser {
+    public static void startParser() {
         try {
             FileInputStream fileInputStream = new FileInputStream("BetterEDT/src/main/resources/ILSEN.ics");
             CalendarBuilder builder = new CalendarBuilder();

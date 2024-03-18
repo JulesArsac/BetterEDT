@@ -13,7 +13,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
-import static org.example.betteredt.Parseur.testParser;
+import static org.example.betteredt.Parser.startParser;
 
 public class BetterEDT extends Application {
 
@@ -27,7 +27,7 @@ public class BetterEDT extends Application {
     public void start(Stage stage) throws IOException {
 
         this.stage = stage;
-        testParser();
+        startParser();
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:src/main/resources/database/users.db");
             System.out.println("Connection to SQLite has been established.");
