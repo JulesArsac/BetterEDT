@@ -7,6 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class mainController implements Initializable {
@@ -59,6 +60,12 @@ public class mainController implements Initializable {
             Label label = new Label(i + "");
             edtGrid.add(label, i, 0);
         }
+
+        List<EventCalendrier> mainList = Parser.startParser();
+        if (mainList == null) {
+            System.out.println("Error while parsing the file");
+        }
+
 
     }
 

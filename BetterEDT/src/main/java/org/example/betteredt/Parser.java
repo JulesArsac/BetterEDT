@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
-    public static void startParser() {
+    public static List<EventCalendrier> startParser() {
         try {
             FileInputStream fileInputStream = new FileInputStream("BetterEDT/src/main/resources/ILSEN.ics");
             CalendarBuilder builder = new CalendarBuilder();
@@ -30,12 +30,13 @@ public class Parser {
                     }
                 }
             }
-
+            return mainList;
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 }
