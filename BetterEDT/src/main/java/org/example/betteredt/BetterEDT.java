@@ -20,7 +20,7 @@ public class BetterEDT extends Application {
 
     private static Scene mainScene;
     private static Stage stage;
-    private static File darkSasukeFile = new File("BetterEDT/src/main/resources/darkSasuke.css");
+    private static File darkSasukeFile = new File("src/main/resources/darkSasuke.css");
     private static Connection conn = null;
     private static User user = null;
 
@@ -29,7 +29,7 @@ public class BetterEDT extends Application {
 
         this.stage = stage;
         try {
-            conn = DriverManager.getConnection("jdbc:sqlite:BetterEDT/src/main/resources/database/users.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:src/main/resources/database/users.db");
             System.out.println("Connection to SQLite has been established.");
 
 //            String dropTableSQL = "DROP TABLE IF EXISTS users;";
