@@ -1,11 +1,16 @@
 package org.example.betteredt;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -23,7 +28,7 @@ public class mainController implements Initializable {
     @FXML
     private ToggleButton darkSasuke;
     @FXML
-    GridPane edtGrid;
+    Pane edtPane;
     @FXML
     AnchorPane rootPane;
     @FXML
@@ -39,11 +44,13 @@ public class mainController implements Initializable {
 
         darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
 
-        rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            edtGrid.setPrefWidth(newVal.doubleValue()-160);
-            edtGrid.setMaxWidth(newVal.doubleValue()-160);
 
+        rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println("Pane width: " + newVal);
+            edtPane.setPrefWidth(newVal.doubleValue()-160);
+            edtPane.setMaxWidth(newVal.doubleValue()-160);
             if (newVal.doubleValue() < 160) {
+
                 filterPane.setPrefWidth(newVal.doubleValue());
                 filterPane.setMaxWidth(newVal.doubleValue());
             }
@@ -53,26 +60,38 @@ public class mainController implements Initializable {
             }
         });
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            edtGrid.setPrefHeight(newVal.doubleValue()-129);
-            edtGrid.setMaxHeight(newVal.doubleValue()-129);
+            edtPane.setPrefHeight(newVal.doubleValue()-129);
+            edtPane.setMaxHeight(newVal.doubleValue()-129);
 
             filterPane.setPrefHeight(newVal.doubleValue()-150);
             filterPane.setMaxHeight(newVal.doubleValue()-150);
-
         });
 
-        for (int i= 0; i < 7; i++) {
-            Label label = new Label(i + "");
-            edtGrid.add(label, i, 0);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("weeklyGrid.fxml"));
+        Parent rootNode = null;
+        try {
+            rootNode = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+        AnchorPane edtRootPane = (AnchorPane) rootNode.lookup("#rootPane");
+
+        edtRootPane.prefWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.prefHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.maxWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.maxHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.minWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.minHeightProperty().bind(edtPane.heightProperty());
+
+        edtPane.getChildren().add(rootNode);
+
 
         List<EventCalendrier> mainList = Parser.startParser();
         if (mainList == null) {
             System.out.println("Error while parsing the file");
         }
         else {
-
-
 
             Set<EventCalendrier> eventSet = new HashSet<>(mainList);
 
@@ -84,10 +103,6 @@ public class mainController implements Initializable {
                     return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
                 }
             });
-
-            for (EventCalendrier event : mainList) {
-                System.out.println("Event: " + event.getSummary() + " - " + event.getStartHeure() + " - " + event.getEndHeure() + " - " + event.getLocation() + " - " + event.getMois() + "/" + event.getJour() + "/" + event.getYear() + " - " + event.getJourSemaine() + " - " + event.getAdditionalInfo() + " - " + event.getProfesseur() + " - " + event.getUCE() + " - " + event.getTypeDeCours() + " - " + event.getElevesConcerner());
-            }
 
             LocalDate currentDate = LocalDate.now();
 
@@ -143,7 +158,7 @@ public class mainController implements Initializable {
                 if (eventDate.isAfter(endDate)) {
                     break;
                 }
-                if (event.getJour() == day && event.getMois() == month && event.getYear() == year) {
+                if (event.getJour() == startDay && event.getMois() == startMonth && event.getYear() == startYear) {
                     start = true;
                 }
                 if (eventDate.isAfter(savedDate)) {
@@ -153,7 +168,6 @@ public class mainController implements Initializable {
                 }
                 if (start) {
                     eventList.get(currentIndex).add(event);
-//                    System.out.println("Event: " + event.getSummary() + " - " + event.getStartHeure() + " - " + event.getEndHeure() + " - " + event.getLocation() + " - " + event.getMois() + "/" + event.getJour() + "/" + event.getYear() + " - " + event.getJourSemaine() + " - " + event.getAdditionalInfo() + " - " + event.getProfesseur() + " - " + event.getUCE() + " - " + event.getTypeDeCours() + " - " + event.getElevesConcerner());
                 }
 
             }
@@ -161,11 +175,12 @@ public class mainController implements Initializable {
             LocalTime endTime = LocalTime.of(19, 30); // 19:30
             Duration increment = Duration.ofMinutes(30);
 
-//            for (List<EventCalendrier> dayEventList : eventList) {
-//                for (EventCalendrier event : dayEventList) {
-//                    System.out.println("Event: " + event.getSummary() + " - " + event.getStartHeure() + " - " + event.getEndHeure() + " - " + event.getLocation() + " - " + event.getMois() + "/" + event.getJour() + "/" + event.getYear() + " - " + event.getJourSemaine() + " - " + event.getAdditionalInfo() + " - " + event.getProfesseur() + " - " + event.getUCE() + " - " + event.getTypeDeCours() + " - " + event.getElevesConcerner());
-//                }
-//            }
+            for (List<EventCalendrier> dayEventList : eventList) {
+                for (EventCalendrier event : dayEventList) {
+                    System.out.println("Event: " + event.getSummary() + " - " + event.getStartHeure() + " - " + event.getEndHeure() + " - " + event.getLocation() + " - " + event.getMois() + "/" + event.getJour() + "/" + event.getYear() + " - " + event.getJourSemaine() + " - " + event.getAdditionalInfo() + " - " + event.getProfesseur() + " - " + event.getUCE() + " - " + event.getTypeDeCours() + " - " + event.getElevesConcerner());
+                }
+                System.out.println("===================================== NEW DAY =====================================");
+            }
 
             int i = 0;
             for (List<EventCalendrier> dayEventList : eventList) {
