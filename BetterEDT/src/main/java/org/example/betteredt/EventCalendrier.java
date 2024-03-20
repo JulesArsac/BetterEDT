@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class EventCalendrier {
     private final String summary;
@@ -188,5 +189,32 @@ public class EventCalendrier {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy-HH'H'mm");
         return LocalDateTime.parse(dateCompacter, formatter);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EventCalendrier)) return false;
+        EventCalendrier that = (EventCalendrier) o;
+        return getMois() == that.getMois() &&
+                getJour() == that.getJour() &&
+                getJourSemaine() == that.getJourSemaine() &&
+                getYear() == that.getYear() &&
+                Objects.equals(getSummary(), that.getSummary()) &&
+                Objects.equals(getStartHeure(), that.getStartHeure()) &&
+                Objects.equals(getEndHeure(), that.getEndHeure()) &&
+                Objects.equals(getLocation(), that.getLocation()) &&
+                Objects.equals(getLocalDateTime(), that.getLocalDateTime()) &&
+                Objects.equals(getUCE(), that.getUCE()) &&
+                Objects.equals(getProfesseur(), that.getProfesseur()) &&
+                Objects.equals(getElevesConcerner(), that.getElevesConcerner()) &&
+                Objects.equals(getTypeDeCours(), that.getTypeDeCours()) &&
+                Objects.equals(getAdditionalInfo(), that.getAdditionalInfo());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSummary(), getStartHeure(), getEndHeure(), getLocation(), getLocalDateTime(), getMois(), getJour(), getJourSemaine(), getYear(), getUCE(), getProfesseur(), getElevesConcerner(), getTypeDeCours(), getAdditionalInfo());
+    }
+
 
 }

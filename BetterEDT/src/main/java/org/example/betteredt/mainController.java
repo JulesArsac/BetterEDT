@@ -72,12 +72,22 @@ public class mainController implements Initializable {
         }
         else {
 
+
+
+            Set<EventCalendrier> eventSet = new HashSet<>(mainList);
+
+            mainList = new ArrayList<>(eventSet);
+
             mainList.sort(new Comparator<EventCalendrier>() {
                 @Override
                 public int compare(EventCalendrier e1, EventCalendrier e2) {
                     return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
                 }
             });
+
+            for (EventCalendrier event : mainList) {
+                System.out.println("Event: " + event.getSummary() + " - " + event.getStartHeure() + " - " + event.getEndHeure() + " - " + event.getLocation() + " - " + event.getMois() + "/" + event.getJour() + "/" + event.getYear() + " - " + event.getJourSemaine() + " - " + event.getAdditionalInfo() + " - " + event.getProfesseur() + " - " + event.getUCE() + " - " + event.getTypeDeCours() + " - " + event.getElevesConcerner());
+            }
 
             LocalDate currentDate = LocalDate.now();
 
@@ -127,7 +137,7 @@ public class mainController implements Initializable {
             boolean start = false;
             LocalDate savedDate = startDate;
             int currentIndex = 0;
-            eventList.set(currentIndex, new ArrayList<EventCalendrier>());
+            eventList.add(new ArrayList<EventCalendrier>());
             for (EventCalendrier event : mainList) {
                 LocalDate eventDate = LocalDate.of(event.getYear(), event.getMois(), event.getJour());
                 if (eventDate.isAfter(endDate)) {
@@ -139,17 +149,23 @@ public class mainController implements Initializable {
                 if (eventDate.isAfter(savedDate)) {
                     savedDate = eventDate;
                     currentIndex++;
-                    eventList.set(currentIndex, new ArrayList<EventCalendrier>());
+                    eventList.add(new ArrayList<EventCalendrier>());
                 }
                 if (start) {
                     eventList.get(currentIndex).add(event);
-                    System.out.println("Event start date:" + event.getJour() + "-" + event.getMois() + "-" + event.getYear() + " " + event.getStartHeure() + " - " + event.getEndHeure());
+//                    System.out.println("Event: " + event.getSummary() + " - " + event.getStartHeure() + " - " + event.getEndHeure() + " - " + event.getLocation() + " - " + event.getMois() + "/" + event.getJour() + "/" + event.getYear() + " - " + event.getJourSemaine() + " - " + event.getAdditionalInfo() + " - " + event.getProfesseur() + " - " + event.getUCE() + " - " + event.getTypeDeCours() + " - " + event.getElevesConcerner());
                 }
 
             }
             LocalTime startTime = LocalTime.of(8, 0); // 08:00
             LocalTime endTime = LocalTime.of(19, 30); // 19:30
             Duration increment = Duration.ofMinutes(30);
+
+//            for (List<EventCalendrier> dayEventList : eventList) {
+//                for (EventCalendrier event : dayEventList) {
+//                    System.out.println("Event: " + event.getSummary() + " - " + event.getStartHeure() + " - " + event.getEndHeure() + " - " + event.getLocation() + " - " + event.getMois() + "/" + event.getJour() + "/" + event.getYear() + " - " + event.getJourSemaine() + " - " + event.getAdditionalInfo() + " - " + event.getProfesseur() + " - " + event.getUCE() + " - " + event.getTypeDeCours() + " - " + event.getElevesConcerner());
+//                }
+//            }
 
             int i = 0;
             for (List<EventCalendrier> dayEventList : eventList) {
