@@ -46,7 +46,6 @@ public class mainController implements Initializable {
 
 
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("Pane width: " + newVal);
             edtPane.setPrefWidth(newVal.doubleValue()-160);
             edtPane.setMaxWidth(newVal.doubleValue()-160);
             if (newVal.doubleValue() < 160) {

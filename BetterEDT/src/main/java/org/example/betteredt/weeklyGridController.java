@@ -19,7 +19,6 @@ public class weeklyGridController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("RootPane width: " + newVal);
             edtGrid.setPrefWidth(newVal.doubleValue());
             edtGrid.setMaxWidth(newVal.doubleValue());
         });
