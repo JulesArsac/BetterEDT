@@ -12,10 +12,10 @@ import java.util.List;
 public class Parser {
     public static List<EventCalendrier> startParser() {
         try {
-            FileInputStream fileInputStream = new FileInputStream("BetterEDT/src/main/resources/ILSEN.ics");
+            FileInputStream fileInputStream = new FileInputStream("src/main/resources/ILSEN.ics");
             CalendarBuilder builder = new CalendarBuilder();
             Calendar calendar = builder.build(fileInputStream);
-
+            //sort here?
             List<EventCalendrier> mainList = new ArrayList<>();
 
             for (Object o : calendar.getComponents()) {

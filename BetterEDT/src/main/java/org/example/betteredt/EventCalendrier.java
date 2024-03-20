@@ -9,8 +9,10 @@ public class EventCalendrier {
     private final String endHeure;
     private final String location;
 
-    private final int mois;
+    private final String dateCompacter;
 
+    private final int mois;
+    private final int jour;
     private final int jourSemaine; //1 lundi, 2 mardi, 3 mercredi...
     private final int year;
 
@@ -33,6 +35,8 @@ public class EventCalendrier {
 
         //recuperation des jour mois et année
         jourSemaine = calendar.get(Calendar.DAY_OF_WEEK)-1;
+
+        jour=calendar.get(Calendar.DAY_OF_MONTH);
         mois=calendar.get(Calendar.MONTH)+1;
         year = calendar.get(Calendar.YEAR);
 
@@ -42,6 +46,8 @@ public class EventCalendrier {
         } else {
             startHeure=String.valueOf(calendar.get(Calendar.HOUR_OF_DAY))+"H"+String.valueOf(calendar.get(Calendar.MINUTE));
         }
+
+
 
         //creation calendar pour la fin du cours
         Calendar calendar2 = Calendar.getInstance();
@@ -78,13 +84,14 @@ public class EventCalendrier {
             additionalInfo="NULL";
 
         }
+        dateCompacter=jour+"/"+mois+"/"+year+"-"+startHeure;
         displayAllInfo();
     }
 
     public void displayAllInfo(){
         System.out.println(summary);
         System.out.println(location);
-        System.out.println(jourSemaine+"/"+mois+"/"+year);
+        System.out.println(jour+"/"+mois+"/"+year);
         System.out.println(startHeure+"-"+endHeure);
 
         System.out.println(UCE);
@@ -121,5 +128,29 @@ public class EventCalendrier {
 
     public int getYear() {
         return year;
+    }
+
+    public int getJour() {
+        return jour;
+    }
+
+    public String getUCE() {
+        return UCE;
+    }
+
+    public String getProfesseur() {
+        return professeur;
+    }
+
+    public String getElevesConcerner() {
+        return elevesConcerner;
+    }
+
+    public String getTypeDeCours() {
+        return typeDeCours;
+    }
+
+    public String getAdditionalInfo() {
+        return additionalInfo;
     }
 }

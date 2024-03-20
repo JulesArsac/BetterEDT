@@ -2,21 +2,18 @@ package org.example.betteredt;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class mainController implements Initializable {
+public class personalScreenController implements Initializable {
     @FXML
     private Label welcomeText;
     @FXML
@@ -99,5 +96,8 @@ public class mainController implements Initializable {
 
     public void switchToSalleSchedule(ActionEvent actionEvent) {
         BetterEDT.switchToSalleSchedule();
+    }
+    public void switchToCustomEventMenu(ActionEvent actionEvent) {
+        BetterEDT.switchToCustomEventMenu();
     }
 }

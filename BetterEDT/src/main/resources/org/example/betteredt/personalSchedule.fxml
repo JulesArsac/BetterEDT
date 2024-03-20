@@ -9,11 +9,11 @@
 
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.layout.VBox?>
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.mainController">
-    <VBox alignment="CENTER" prefWidth="300" prefHeight="200">
-        <Text text="Ceci est l'écran de formation" />
-    </VBox>
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.personalScreenController">
     <children>
+        <VBox alignment="CENTER" prefWidth="300" prefHeight="200">
+            <Text text="Ceci est l'écran des salles" />
+        </VBox>
         <GridPane fx:id="edtGrid" layoutX="172.0" layoutY="129.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="982.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
@@ -41,11 +41,13 @@
             </rowConstraints>
             <children>
                 <ComboBox fx:id="periodChoice" prefHeight="17.0" prefWidth="118.0" GridPane.halignment="CENTER" GridPane.valignment="TOP"/>
+                <Button fx:id="AddNewPersonalEvent" layoutX="370.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToCustomEventMenu" text="New Event"/>
                 <ToggleButton fx:id="darkSasuke" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onDarkSasukeClick" text="Dark sasuke" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM"/>
             </children>
         </GridPane>
-        <Button fx:id="AddNewPersonalEvent2" layoutX="370.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToMainScreen" text="Formation"/>
-        <Button fx:id="AddNewPersonalEvent3" layoutX="445.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToSalleSchedule" text="Salle"/>
-        <Button fx:id="AddNewPersonalEvent" layoutX="495.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToPersonalSchedule" text="Personnel"/>
+
+        <Button fx:id="switchFormation" layoutX="370.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToMainScreen" text="Formation"/>
+        <Button fx:id="switchSalle" layoutX="445.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToSalleSchedule" text="Salle"/>
+        <Button fx:id="switchPersonal" layoutX="495.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToPersonalSchedule" text="Personnel"/>
     </children>
 </AnchorPane>
