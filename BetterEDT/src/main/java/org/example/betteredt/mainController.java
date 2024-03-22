@@ -170,6 +170,10 @@ public class mainController implements Initializable {
                 }
 
             }
+
+
+
+
             LocalTime startTime = LocalTime.of(8, 0); // 08:00
             LocalTime endTime = LocalTime.of(19, 30); // 19:30
             Duration increment = Duration.ofMinutes(30);
