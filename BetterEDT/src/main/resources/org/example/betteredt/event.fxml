@@ -1,38 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Label?>
 
-
-<AnchorPane prefHeight="201.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.eventController">
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="root" style="-fx-background-color: #9dc1fc; -fx-border-color: black; -fx-border-width: 1px;" fx:controller="org.example.betteredt.eventController" spacing="10">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#aed2f4" height="201.0" stroke="BLACK" strokeType="INSIDE" width="450.0" />
-      <Label layoutX="14.0" layoutY="8.0" prefHeight="27.0" prefWidth="199.0" text="XX:XX - XX:XX" textFill="#4471d9">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Label>
-      <Label alignment="CENTER_RIGHT" layoutX="257.0" layoutY="8.0" prefHeight="27.0" prefWidth="178.0" text="Stat X = C XXX" textFill="#4471d9">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Label>
-      <Label layoutX="15.0" layoutY="50.0" prefHeight="27.0" prefWidth="419.0" text="Matière: Feur" textFill="#4471d9">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <Label layoutX="14.0" layoutY="86.0" prefHeight="27.0" prefWidth="419.0" text="Enseignant: Mr Feur" textFill="#4471d9">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <Label layoutX="13.0" layoutY="122.0" prefHeight="27.0" prefWidth="419.0" text="Type: TP" textFill="#4471d9">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
+      <!-- First label at top left -->
+      <Label fx:id="time" text="XX:XX - XX:XX" wrapText="true" textFill="BLACK" />
+
+      <!-- Second label at top right -->
+      <Label fx:id="room" text="Stat X = C XXX"  wrapText="true" textFill="BLACK" />
+
+      <!-- Third label below first label -->
+      <Label fx:id="title" text="Matière: Feur" wrapText="true" textFill="BLACK" />
+
+      <!-- Fourth label below third label -->
+      <Label fx:id="prof" text="Enseignant: Mr Feur" wrapText="true" textFill="BLACK" />
+
+      <!-- Fifth label below fourth label -->
+      <Label fx:id="type" text="Type: TP" wrapText="true" textFill="BLACK" />
    </children>
-</AnchorPane>
+</VBox>
+

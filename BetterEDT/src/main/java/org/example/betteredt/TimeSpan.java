@@ -1,5 +1,7 @@
 package org.example.betteredt;
 import java.time.LocalTime;
+import java.time.Duration;
+
 
 public class TimeSpan {
     private LocalTime start;
@@ -14,8 +16,22 @@ public class TimeSpan {
     }
 
     public boolean contains(LocalTime time) {
-        return !time.isBefore(start) && time.isBefore(end);
+        return time.isAfter(start) && time.isBefore(end);
     }
 
+    public LocalTime getStart() {
+        return start;
+    }
 
+    public LocalTime getEnd() {
+        return end;
+    }
+
+    public void setStart(LocalTime start) {
+        this.start = start;
+    }
+
+    public void setEnd(LocalTime end) {
+        this.end = end;
+    }
 }

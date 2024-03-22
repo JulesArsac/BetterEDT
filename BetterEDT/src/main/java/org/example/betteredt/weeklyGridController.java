@@ -2,16 +2,20 @@ package org.example.betteredt;
 
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -87,36 +91,121 @@ public class weeklyGridController implements Initializable {
 //        }
 
         if (weeklyList != null) {
-            LocalTime startTime = LocalTime.of(8, 0); // 08:00
-            LocalTime endTime = LocalTime.of(19, 30); // 19:30
+            LocalTime startTime = LocalTime.of(8, 30);
+            LocalTime endTime = LocalTime.of(19, 0);
             Duration increment = Duration.ofMinutes(30);
-
-//            for (List<EventCalendrier> dayEventList : weeklyList) {
-//                for (EventCalendrier event : dayEventList) {
-//                    System.out.println("Event: " + event.getSummary() + " - " + event.getStartHeure() + " - " + event.getEndHeure() + " - " + event.getLocation() + " - " + event.getMois() + "/" + event.getJour() + "/" + event.getYear() + " - " + event.getJourSemaine() + " - " + event.getAdditionalInfo() + " - " + event.getProfesseur() + " - " + event.getUCE() + " - " + event.getTypeDeCours() + " - " + event.getElevesConcerner());
-//                }
-//                System.out.println("===================================== NEW DAY =====================================");
-//            }
 
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH'H'mm");
+            int column = 0;
+            int currentDuration = 0;
             for (List<EventCalendrier> dayEventList : weeklyList) {
                 LocalTime currentTime = startTime;
-                while (currentTime.isBefore(endTime)) { //Loop from 08:00 to 19:30
+                VBox vbox = setUpVBox();
+                edtGrid.add(vbox, column, 1);
+                List<HBox> hboxList = new ArrayList<>();
+                TimeSpan span = new TimeSpan(LocalTime.of(0, 0), LocalTime.of(0, 0));
+                while (currentTime.isBefore(endTime)) { //Loop from 08:30 to 19:00
+                    List<EventCalendrier> eventToDisplay = new ArrayList<>();
                     for (EventCalendrier event : dayEventList) {
                         if (event.isDisplayed()) {
                             continue;
                         }
                         LocalTime eventStartTime = LocalTime.parse(event.getStartHeure(), formatter);
                         if (currentTime.equals(eventStartTime)) {
-                            System.out.println(event.getStartHeure() + " - " + event.getEndHeure() + " - " + event.getLocation() + " - " + event.getMois() + "/" + event.getJour() + "/" + event.getYear() + " - " + event.getJourSemaine());
+                            eventToDisplay.add(event);
                             event.setDisplayed(true);
                         }
+                    }
+                    if (eventToDisplay.isEmpty() && !span.contains(currentTime)) {
+                        Region spacer = new Region();
+                        spacer.prefHeightProperty().bind(Bindings.divide(vbox.heightProperty(), 23));
+                        spacer.minHeightProperty().bind(Bindings.divide(vbox.heightProperty(), 23));
+                        vbox.getChildren().add(spacer);
+                    } else {
+                        int biggestDuration = 0;
+                        for (EventCalendrier event : eventToDisplay) {
+                            LocalTime eventStartTime = LocalTime.parse(event.getStartHeure(), formatter);
+                            LocalTime eventEndTime = LocalTime.parse(event.getEndHeure(), formatter);
+                            int duration = (int) Math.ceil((double) Duration.between(eventStartTime, eventEndTime).toMinutes() / 30);
+                            if (duration > biggestDuration) {
+                                biggestDuration = duration;
+                                if (span.getStart().equals(LocalTime.of(0, 0)) && span.getEnd().equals(LocalTime.of(0, 0))) {
+                                    span = new TimeSpan(eventStartTime, eventEndTime);
+                                    currentDuration = duration;
+                                } else {
+                                    if (eventEndTime.isAfter(span.getEnd())) {
+                                        span.setStart(eventStartTime);
+                                        span.setEnd(eventEndTime);
+                                        currentDuration = (int) Math.ceil((double) Duration.between(span.getStart(), eventEndTime).toMinutes() / 30);
+                                    }
+                                    else {
+                                        span.setEnd(eventEndTime);
+                                        currentDuration = (int) Math.ceil((double) Duration.between(span.getStart(), span.getEnd()).toMinutes() / 30);
+                                    }
+                                }
+
+                            }
+                        }
+
+                        if (!span.contains(currentTime)) {
+                            HBox hbox = new HBox();
+                            hbox.prefHeightProperty().bind(Bindings.multiply(Bindings.divide(vbox.heightProperty(), 23), biggestDuration));
+                            hbox.maxHeightProperty().bind(Bindings.multiply(Bindings.divide(vbox.heightProperty(), 23), biggestDuration));
+                            hbox.setMinHeight(0);
+                            hbox.prefWidthProperty().bind(vbox.prefWidthProperty());
+                            hbox.setSpacing(0);
+                            hboxList.add(hbox);
+                            vbox.getChildren().add(hbox);
+                        }
+
+
+                        for (EventCalendrier event : eventToDisplay) {
+                            HBox hbox = hboxList.get(hboxList.size() - 1);
+                            LocalTime eventStartTime = LocalTime.parse(event.getStartHeure(), formatter);
+                            LocalTime eventEndTime = LocalTime.parse(event.getEndHeure(), formatter);
+                            int duration = (int) Math.ceil((double) Duration.between(eventStartTime, eventEndTime).toMinutes() / 30);
+                            System.out.println("Duration: " + duration + " For event: " + event.getUCE());
+                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("event.fxml"));
+                            Pane eventRootNode = null;
+                            try {
+                                eventRootNode = fxmlLoader.load();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            eventRootNode.prefHeightProperty().bind(Bindings.multiply(Bindings.divide(vbox.heightProperty(), 23), duration));
+                            eventRootNode.prefWidthProperty().bind(Bindings.divide(hbox.widthProperty(), eventToDisplay.size()));
+                            eventController controller = fxmlLoader.getController();
+                            controller.setTime(event.getStartHeure() + " - " + event.getEndHeure());
+                            controller.setRoom(event.getLocation());
+                            controller.setTitle(event.getUCE());
+                            controller.setProf(event.getProfesseur());
+                            controller.setType(event.getTypeDeCours());
+                            if (eventStartTime.equals(span.getStart())) {
+                                hbox.getChildren().add(eventRootNode);
+                            }
+                            else {
+                                VBox spacerVBox = new VBox();
+                                spacerVBox.prefHeightProperty().bind(hbox.heightProperty());
+                                spacerVBox.prefWidthProperty().bind(Bindings.divide(hbox.widthProperty(), eventToDisplay.size()));
+                                int nbSpacer = currentDuration - duration;
+                                System.out.println("Adding " + nbSpacer + " spacers for event " + event.getUCE());
+                                for (int i = 0; i < nbSpacer; i++) {
+                                    Region spacer = new Region();
+                                    spacer.prefHeightProperty().bind(Bindings.divide(vbox.heightProperty(), 23));
+                                    spacerVBox.getChildren().add(spacer);
+                                }
+                                spacerVBox.getChildren().add(eventRootNode);
+                                hbox.getChildren().add(spacerVBox);
+                            }
+                        }
+
                     }
 
                     currentTime = currentTime.plus(increment);
                 }
                 System.out.println("===================================== NEW DAY =====================================");
+                column++;
             }
         }
 
