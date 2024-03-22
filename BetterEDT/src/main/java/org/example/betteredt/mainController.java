@@ -171,30 +171,9 @@ public class mainController implements Initializable {
 
             }
 
+            weeklyGridController controller = fxmlLoader.getController();
+            controller.setWeeklyList(eventList);
 
-
-
-            LocalTime startTime = LocalTime.of(8, 0); // 08:00
-            LocalTime endTime = LocalTime.of(19, 30); // 19:30
-            Duration increment = Duration.ofMinutes(30);
-
-            for (List<EventCalendrier> dayEventList : eventList) {
-                for (EventCalendrier event : dayEventList) {
-                    System.out.println("Event: " + event.getSummary() + " - " + event.getStartHeure() + " - " + event.getEndHeure() + " - " + event.getLocation() + " - " + event.getMois() + "/" + event.getJour() + "/" + event.getYear() + " - " + event.getJourSemaine() + " - " + event.getAdditionalInfo() + " - " + event.getProfesseur() + " - " + event.getUCE() + " - " + event.getTypeDeCours() + " - " + event.getElevesConcerner());
-                }
-                System.out.println("===================================== NEW DAY =====================================");
-            }
-
-            int i = 0;
-            for (List<EventCalendrier> dayEventList : eventList) {
-                //TODO: process the events
-//                LocalTime currentTime = startTime;
-//                while (currentTime.isBefore(endTime)) {
-//                    System.out.println(i);
-//                    i++;
-//                    currentTime = currentTime.plus(increment);
-//                }
-            }
         }
 
     }

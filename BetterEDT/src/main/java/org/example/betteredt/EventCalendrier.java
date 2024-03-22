@@ -25,6 +25,8 @@ public class EventCalendrier {
     private final String typeDeCours;
     private final String additionalInfo;
 
+    private boolean isDisplayed = false;
+
 
 
     public EventCalendrier(String summary, Date startDate, Date endDate, String location) {
@@ -188,6 +190,14 @@ public class EventCalendrier {
     public LocalDateTime getLocalDateTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy-HH'H'mm");
         return LocalDateTime.parse(dateCompacter, formatter);
+    }
+
+    public boolean isDisplayed() {
+        return isDisplayed;
+    }
+
+    public void setDisplayed(boolean displayed) {
+        isDisplayed = displayed;
     }
 
     @Override
