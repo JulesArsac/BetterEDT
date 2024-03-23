@@ -26,8 +26,7 @@ import java.util.*;
 public class mainController implements Initializable {
 
     private List<EventCalendrier> mainList = null;
-    @FXML
-    private Label welcomeText;
+
     @FXML
     private ComboBox periodChoice;
     @FXML
@@ -44,7 +43,21 @@ public class mainController implements Initializable {
         periodChoice.getItems().addAll("Semaine" , "Jour" , "Mois");
         periodChoice.getSelectionModel().selectFirst();
         periodChoice.valueProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("Selected period: " + newVal);
+            if (newVal == oldVal) {
+                return;
+            }
+            for (EventCalendrier event : mainList) {
+                event.setDisplayed(false);
+            }
+            if (newVal.equals("Semaine")) {
+                switchToWeekly();
+            }
+            else if (newVal.equals("Jour")) {
+                switchToDaily();
+            }
+            else {
+                //TODO switch to monthly
+            }
         });
 
         darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
@@ -71,38 +84,9 @@ public class mainController implements Initializable {
             filterPane.setMaxHeight(newVal.doubleValue()-150);
         });
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("weeklyGrid.fxml"));
-        Parent rootNode = null;
-        try {
-            rootNode = fxmlLoader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        AnchorPane edtRootPane = (AnchorPane) rootNode.lookup("#rootPane");
-
-        edtRootPane.prefWidthProperty().bind(edtPane.widthProperty());
-        edtRootPane.prefHeightProperty().bind(edtPane.heightProperty());
-        edtRootPane.maxWidthProperty().bind(edtPane.widthProperty());
-        edtRootPane.maxHeightProperty().bind(edtPane.heightProperty());
-        edtRootPane.minWidthProperty().bind(edtPane.widthProperty());
-        edtRootPane.minHeightProperty().bind(edtPane.heightProperty());
-
-        edtPane.getChildren().add(rootNode);
-
         setupMainList();
 
-        LocalDate currentDate = LocalDate.now();
-
-        LocalDate startOfWeek = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate endOfWeek = currentDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-
-
-
-        weeklyGridController controller = fxmlLoader.getController();
-        controller.setWeeklyList(getEvents(startOfWeek, endOfWeek));
-
-
+        switchToWeekly();
     }
 
     @FXML
@@ -173,6 +157,59 @@ public class mainController implements Initializable {
 
         }
         return eventList;
+    }
+
+    private void switchToWeekly() {
+        edtPane.getChildren().clear();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("weeklyGrid.fxml"));
+        Parent rootNode = null;
+        try {
+            rootNode = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        AnchorPane edtRootPane = (AnchorPane) rootNode.lookup("#rootPane");
+        edtRootPane.prefWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.prefHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.maxWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.maxHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.minWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.minHeightProperty().bind(edtPane.heightProperty());
+
+        LocalDate currentDate = LocalDate.now();
+        LocalDate startOfWeek = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate endOfWeek = currentDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+        weeklyGridController controller = fxmlLoader.getController();
+        controller.setWeeklyList(getEvents(startOfWeek, endOfWeek));
+
+        edtPane.getChildren().add(rootNode);
+    }
+
+    public void switchToDaily() {
+        edtPane.getChildren().clear();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("dailyGrid.fxml"));
+        Parent rootNode = null;
+        try {
+            rootNode = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        GridPane edtRootPane = (GridPane) rootNode.lookup("#edtGrid");
+        edtRootPane.prefWidthProperty().bind(edtPane.widthProperty().divide(2));
+        edtRootPane.prefHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.maxWidthProperty().bind(edtPane.widthProperty().divide(2));
+        edtRootPane.maxHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.minWidthProperty().bind(edtPane.widthProperty().divide(2));
+        edtRootPane.minHeightProperty().bind(edtPane.heightProperty());
+
+        LocalDate currentDate = LocalDate.now();
+
+        dailyGridController controller = fxmlLoader.getController();
+        controller.setDate(currentDate);
+        controller.setEventList(getEvents(currentDate, currentDate).get(0));
+
+        edtPane.getChildren().add(rootNode);
     }
 
 }

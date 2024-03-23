@@ -6,11 +6,13 @@ import net.fortuna.ical4j.model.component.VEvent;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.spec.RSAOtherPrimeInfo;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
     public static List<EventCalendrier> startParser(String filePath) {
+        long startTime = System.currentTimeMillis();
         try {
             FileInputStream fileInputStream = new FileInputStream(filePath);
             CalendarBuilder builder = new CalendarBuilder();
@@ -29,6 +31,12 @@ public class Parser {
                     }
                 }
             }
+            if(System.currentTimeMillis() - startTime > 1000){
+                System.out.println("=============================================================================================");
+                System.out.println("WARNING: Time to parse is above 1s");
+                System.out.println("=============================================================================================");
+            }
+            System.out.println("Time to parse: " + (System.currentTimeMillis() - startTime) + "ms");
             return mainList;
 
         } catch (IOException e) {
