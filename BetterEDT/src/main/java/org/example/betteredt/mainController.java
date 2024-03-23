@@ -1,13 +1,16 @@
 package org.example.betteredt;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
@@ -189,5 +192,18 @@ public class mainController implements Initializable {
             BetterEDT.goLightMode();
             darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
         }
+    }
+
+    public void switchToPersonalSchedule(ActionEvent actionEvent) {
+        //do some visual change here
+        BetterEDT.goToPersonalScreen();
+    }
+
+    public void switchToMainScreen(ActionEvent actionEvent) {
+        BetterEDT.goToMainScreen();
+    }
+
+    public void switchToSalleSchedule(ActionEvent actionEvent) {
+        BetterEDT.switchToSalleSchedule();
     }
 }

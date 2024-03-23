@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ColorPicker?>
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.customEventMenuController">
+   <children>
+      <VBox alignment="CENTER" prefWidth="300" prefHeight="150" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+         <Text text="Creation d'un évenement personnel:" style="-fx-font-size: 14px;-fx-underline: true;"/>
+      </VBox>
+
+      <GridPane fx:id="filterPane" alignment="TOP_CENTER" prefHeight="450.0" prefWidth="152.0" AnchorPane.topAnchor="129.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+         </rowConstraints>
+         <ToggleButton fx:id="darkSasuke" mnemonicParsing="false" onAction="#onDarkSasukeClick" text="Dark sasuke" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM"/>
+      </GridPane>
+
+      <GridPane layoutX="200.0" layoutY="150.0" prefHeight="450.0" prefWidth="600.0" vgap="10" hgap="15" AnchorPane.topAnchor="100.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="150.0"/>
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+         </rowConstraints>
+         <!-- Vos Text et TextField ici -->
+         <Text text="*Nom evenement:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+         <Text text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+         <Text text="Location:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+         <Text text="Couleur:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+         <Text text="*Jour:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+         <Text text="*Mois:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+         <Text text="*Année:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+         <Text text="*Heure début:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+         <Text text="*Minute début:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+         <Text text="*Heure fin:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+         <Text text="*Minute Fin:" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+         <TextField fx:id="eventNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+         <TextArea fx:id="descriptionArea" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+         <TextField fx:id="locationField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+         <ColorPicker fx:id="colorPicker" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+         <TextField fx:id="dayField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+         <TextField fx:id="monthField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+         <TextField fx:id="yearField" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+         <TextField fx:id="startTimeFieldHeure" GridPane.columnIndex="1" GridPane.rowIndex="7" promptText="Ex: 14"/>
+         <TextField fx:id="startTimeFieldMinute" GridPane.columnIndex="1" GridPane.rowIndex="8" promptText="Seulement 00 or 30"/>
+         <TextField fx:id="endTimeFieldHeure" GridPane.columnIndex="1" GridPane.rowIndex="9" promptText="Ex: 8"/>
+         <TextField fx:id="endTimeFieldMinute" GridPane.columnIndex="1" GridPane.rowIndex="10" promptText="Seulement 00 or 30"/>
+         <!-- Le bouton SendButton -->
+         <Button fx:id="sendButton" GridPane.columnIndex="1" GridPane.rowIndex="11" mnemonicParsing="false" onAction="#addNewEvent" text="Send"/>
+      </GridPane>
+
+      <HBox spacing="10" alignment="CENTER" AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.leftAnchor="20.0">
+         <Button fx:id="switchFormation" mnemonicParsing="false" onAction="#switchToMainScreen" text="Formation"/>
+         <Button fx:id="switchSalle" mnemonicParsing="false" onAction="#switchToSalleSchedule" text="Salle"/>
+         <Button fx:id="switchPersonal" mnemonicParsing="false" onAction="#switchToPersonalSchedule" text="Personnel"/>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -20,7 +20,13 @@ public class BetterEDT extends Application {
     private static Scene mainScene;
     private static Stage stage;
     private static File darkSasukeFile = new File("src/main/resources/darkSasuke.css");
+
+    public static Connection getConn() {
+        return conn;
+    }
+
     private static Connection conn = null;
+
     private static User user = null;
 
     @Override
@@ -86,6 +92,7 @@ public class BetterEDT extends Application {
 
     }
 
+
     public static void main(String[] args) {
         launch();
     }
@@ -135,5 +142,45 @@ public class BetterEDT extends Application {
             }
         }
     }
+    public static void goToPersonalScreen() {
+        if (user != null) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("personalSchedule.fxml"));
+                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                stage.setScene(mainScene);
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public static void switchToSalleSchedule() {
+        if (user != null) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("salleSchedule.fxml"));
+                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                stage.setScene(mainScene);
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public static void switchToCustomEventMenu() {
+        if (user != null) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("customEventCreatorScreen.fxml"));
+                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                stage.setScene(mainScene);
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public static User getUser() {
+        return user;
+    }
+
 
 }

@@ -105,6 +105,7 @@ public class EventCalendrier {
             additionalInfo="NULL";
 
         }
+
         String day;
         String month;
         String hour;
@@ -225,6 +226,5 @@ public class EventCalendrier {
     public int hashCode() {
         return Objects.hash(getSummary(), getStartHeure(), getEndHeure(), getLocation(), getLocalDateTime(), getMois(), getJour(), getJourSemaine(), getYear(), getUCE(), getProfesseur(), getElevesConcerner(), getTypeDeCours(), getAdditionalInfo(), getLocalDateTime());
     }
-
 
 }

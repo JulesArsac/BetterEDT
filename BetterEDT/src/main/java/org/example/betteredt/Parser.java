@@ -15,7 +15,7 @@ public class Parser {
             FileInputStream fileInputStream = new FileInputStream("src/main/resources/ILSEN.ics");
             CalendarBuilder builder = new CalendarBuilder();
             Calendar calendar = builder.build(fileInputStream);
-
+            //sort here?
             List<EventCalendrier> mainList = new ArrayList<>();
 
             for (Object o : calendar.getComponents()) {
