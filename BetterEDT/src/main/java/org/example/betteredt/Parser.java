@@ -12,7 +12,7 @@ import java.util.List;
 public class Parser {
     public static List<EventCalendrier> startParser() {
         try {
-            FileInputStream fileInputStream = new FileInputStream("BetterEDT/src/main/resources/ILSEN.ics");
+            FileInputStream fileInputStream = new FileInputStream("src/main/resources/ILSEN.ics");
             CalendarBuilder builder = new CalendarBuilder();
             Calendar calendar = builder.build(fileInputStream);
 
@@ -22,7 +22,6 @@ public class Parser {
                 Component component = (Component) o;
                 if (component.getName().equals("VEVENT")) {
                     VEvent event = (VEvent) component;
-                    //System.out.println(component);
                     if(event.getLocation() == null || event.getLocation().getValue() == null){
                         mainList.add(new EventCalendrier(event.getSummary().getValue(),event.getStartDate().getDate(),event.getEndDate().getDate(),"Salle non spécifier"));
                     } else {
