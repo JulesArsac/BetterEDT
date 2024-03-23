@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
-    public static List<EventCalendrier> startParser() {
+    public static List<EventCalendrier> startParser(String filePath) {
         try {
-            FileInputStream fileInputStream = new FileInputStream("src/main/resources/ILSEN.ics");
+            FileInputStream fileInputStream = new FileInputStream(filePath);
             CalendarBuilder builder = new CalendarBuilder();
             Calendar calendar = builder.build(fileInputStream);
             //sort here?

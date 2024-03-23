@@ -64,9 +64,9 @@ public class personalScreenController implements Initializable {
             edtGrid.add(label, i, 0);
         }
 
-        List<EventCalendrier> mainList = Parser.startParser();
+        List<EventCalendrier> mainList = Parser.startParser("src/main/resources/ILSEN.ics");
         if (mainList == null) {
-            System.out.println("Error while parsing the file");
+            throw new RuntimeException("Error while parsing the file");
         }
 
 
