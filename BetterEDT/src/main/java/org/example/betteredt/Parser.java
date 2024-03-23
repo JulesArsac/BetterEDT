@@ -22,7 +22,6 @@ public class Parser {
                 Component component = (Component) o;
                 if (component.getName().equals("VEVENT")) {
                     VEvent event = (VEvent) component;
-                    //System.out.println(component);
                     if(event.getLocation() == null || event.getLocation().getValue() == null){
                         mainList.add(new EventCalendrier(event.getSummary().getValue(),event.getStartDate().getDate(),event.getEndDate().getDate(),"Salle non spécifier"));
                     } else {

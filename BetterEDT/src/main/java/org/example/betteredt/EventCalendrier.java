@@ -2,6 +2,9 @@ package org.example.betteredt;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class EventCalendrier {
     private final String summary;
@@ -21,6 +24,8 @@ public class EventCalendrier {
     private final String elevesConcerner;
     private final String typeDeCours;
     private final String additionalInfo;
+
+    private boolean isDisplayed = false;
 
 
 
@@ -42,9 +47,17 @@ public class EventCalendrier {
 
         //recuperation de l'heure début d'un cours
         if (calendar.get(Calendar.MINUTE)==0){
-            startHeure=String.valueOf(calendar.get(Calendar.HOUR_OF_DAY))+"H00";
+            if (calendar.get(Calendar.HOUR_OF_DAY)<10){
+                startHeure="0"+String.valueOf(calendar.get(Calendar.HOUR_OF_DAY))+"H00";
+            } else {
+                startHeure=String.valueOf(calendar.get(Calendar.HOUR_OF_DAY))+"H00";
+            }
         } else {
-            startHeure=String.valueOf(calendar.get(Calendar.HOUR_OF_DAY))+"H"+String.valueOf(calendar.get(Calendar.MINUTE));
+            if (calendar.get(Calendar.HOUR_OF_DAY)<10){
+                startHeure="0"+String.valueOf(calendar.get(Calendar.HOUR_OF_DAY))+"H"+String.valueOf(calendar.get(Calendar.MINUTE));
+            } else {
+                startHeure=String.valueOf(calendar.get(Calendar.HOUR_OF_DAY))+"H"+String.valueOf(calendar.get(Calendar.MINUTE));
+            }
         }
 
 
@@ -53,10 +66,18 @@ public class EventCalendrier {
         Calendar calendar2 = Calendar.getInstance();
         calendar2.setTime(endDate);
         //recup fin de cours
-        if (calendar.get(Calendar.MINUTE)==0){
-            endHeure=String.valueOf(calendar2.get(Calendar.HOUR_OF_DAY))+"H00";
+        if (calendar2.get(Calendar.MINUTE)==0){
+            if (calendar2.get(Calendar.HOUR_OF_DAY)<10){
+                endHeure="0"+String.valueOf(calendar2.get(Calendar.HOUR_OF_DAY))+"H00";
+            } else {
+                endHeure=String.valueOf(calendar2.get(Calendar.HOUR_OF_DAY))+"H00";
+            }
         } else {
-            endHeure=String.valueOf(calendar2.get(Calendar.HOUR_OF_DAY))+"H"+String.valueOf(calendar2.get(Calendar.MINUTE));
+            if (calendar2.get(Calendar.HOUR_OF_DAY)<10){
+                endHeure="0"+String.valueOf(calendar2.get(Calendar.HOUR_OF_DAY))+"H"+String.valueOf(calendar2.get(Calendar.MINUTE));
+            } else {
+                endHeure=String.valueOf(calendar2.get(Calendar.HOUR_OF_DAY))+"H"+String.valueOf(calendar2.get(Calendar.MINUTE));
+            }
         }
 
         String[] fragment = summary.split(" - ");
@@ -84,8 +105,21 @@ public class EventCalendrier {
             additionalInfo="NULL";
 
         }
-        dateCompacter=jour+"/"+mois+"/"+year+"-"+startHeure;
-        displayAllInfo();
+
+        String day;
+        String month;
+        String hour;
+        if (jour < 10){
+            day="0"+jour;
+        } else {
+            day=String.valueOf(jour);
+        }
+        if (mois < 10){
+            month="0"+mois;
+        } else {
+            month=String.valueOf(mois);
+        }
+        dateCompacter=day+"/"+month+"/"+year+"-"+startHeure;
     }
 
     public void displayAllInfo(){
@@ -153,4 +187,44 @@ public class EventCalendrier {
     public String getAdditionalInfo() {
         return additionalInfo;
     }
+
+    public LocalDateTime getLocalDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy-HH'H'mm");
+        return LocalDateTime.parse(dateCompacter, formatter);
+    }
+
+    public boolean isDisplayed() {
+        return isDisplayed;
+    }
+
+    public void setDisplayed(boolean displayed) {
+        isDisplayed = displayed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EventCalendrier)) return false;
+        EventCalendrier that = (EventCalendrier) o;
+        return getMois() == that.getMois() &&
+                getJour() == that.getJour() &&
+                getJourSemaine() == that.getJourSemaine() &&
+                getYear() == that.getYear() &&
+                Objects.equals(getSummary(), that.getSummary()) &&
+                Objects.equals(getStartHeure(), that.getStartHeure()) &&
+                Objects.equals(getEndHeure(), that.getEndHeure()) &&
+                Objects.equals(getLocation(), that.getLocation()) &&
+                Objects.equals(getLocalDateTime(), that.getLocalDateTime()) &&
+                Objects.equals(getUCE(), that.getUCE()) &&
+                Objects.equals(getProfesseur(), that.getProfesseur()) &&
+                Objects.equals(getElevesConcerner(), that.getElevesConcerner()) &&
+                Objects.equals(getTypeDeCours(), that.getTypeDeCours()) &&
+                Objects.equals(getAdditionalInfo(), that.getAdditionalInfo());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSummary(), getStartHeure(), getEndHeure(), getLocation(), getLocalDateTime(), getMois(), getJour(), getJourSemaine(), getYear(), getUCE(), getProfesseur(), getElevesConcerner(), getTypeDeCours(), getAdditionalInfo(), getLocalDateTime());
+    }
+
 }
