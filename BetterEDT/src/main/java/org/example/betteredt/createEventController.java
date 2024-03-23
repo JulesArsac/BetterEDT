@@ -1,31 +1,37 @@
 package org.example.betteredt;
 
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.net.URL;
 import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 import static org.example.betteredt.BetterEDT.getConn;
 import static org.example.betteredt.BetterEDT.getUser;
 
-public class customEventMenuController {
+public class createEventController implements Initializable {
 
     public TextField startTimeFieldHeure;
     public TextField startTimeFieldMinute;
     public TextField endTimeFieldHeure;
     public TextField endTimeFieldMinute;
+    public AnchorPane rootPane;
 
     @FXML
     private TextField eventNameField;
@@ -46,6 +52,8 @@ public class customEventMenuController {
     private Button sendButton;
     @FXML
     private ToggleButton darkSasuke;
+    @FXML
+    private GridPane mainGrid;
 
     @FXML
     void openNewScene(ActionEvent event) {
@@ -73,22 +81,13 @@ public class customEventMenuController {
         }
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        mainGrid.prefHeightProperty().bind(Bindings.subtract(rootPane.heightProperty(), 100));
+    }
 
     public void addNewEvent(ActionEvent actionEvent) throws SQLException {
-        /*
-        System.out.println("Event Name: " + eventNameField.getText());
-        System.out.println("Description: " + descriptionArea.getText());
-        System.out.println("Location: " + locationField.getText());
-        System.out.println("Color: " + colorPicker.getValue());
-        System.out.println("Day: " + dayField.getText());
-        System.out.println("Month: " + monthField.getText());
-        System.out.println("Year: " + yearField.getText());
-        System.out.println("Start heure: " + startTimeFieldHeure.getText());
-        System.out.println("Start minute: " + startTimeFieldMinute.getText());
-        System.out.println("End heure: " + endTimeFieldHeure.getText());
-        System.out.println("End minute: " + endTimeFieldMinute.getText());
-        */
-        //test si les fields sont bien remplie
+
         if (eventNameField.getText().isEmpty()||dayField.getText().isEmpty()||monthField.getText().isEmpty()||yearField.getText().isEmpty()||
                 startTimeFieldHeure.getText().isEmpty() || startTimeFieldMinute.getText().isEmpty()||endTimeFieldHeure.getText().isEmpty() || endTimeFieldMinute.getText().isEmpty()){
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -105,8 +104,6 @@ public class customEventMenuController {
             int month = Integer.parseInt(monthField.getText());
             int year = Integer.parseInt(yearField.getText());
             LocalDate date = LocalDate.of(year, month, day);
-            //Je suis content de cette idée
-            //bon je pourrais aussi verifier si l'année est pas en 1782 mais bon
         } catch (DateTimeException | NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Date invalide");
@@ -116,7 +113,6 @@ public class customEventMenuController {
             return;
         }
 
-        //test heures
         try {
             int heureDebut = Integer.parseInt(startTimeFieldHeure.getText());
             int minuteDebut = Integer.parseInt(startTimeFieldMinute.getText());
@@ -167,7 +163,6 @@ public class customEventMenuController {
             return;
         }
 
-        // Transformation en couleur hexa
         Color selectedColor = colorPicker.getValue();
         String hexColor = String.format("%02X%02X%02X",
                 (int) (selectedColor.getRed() * 255),
@@ -187,7 +182,6 @@ public class customEventMenuController {
 
     }
     public void switchToPersonalSchedule(ActionEvent actionEvent) {
-        //do some visual change here
         BetterEDT.goToPersonalScreen();
     }
 
@@ -198,4 +192,5 @@ public class customEventMenuController {
     public void switchToSalleSchedule(ActionEvent actionEvent) {
         BetterEDT.switchToSalleSchedule();
     }
+
 }

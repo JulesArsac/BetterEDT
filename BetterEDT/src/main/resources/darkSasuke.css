@@ -21,6 +21,10 @@
     -fx-text-fill: -fx-text-inner-color; /* This will use the default text color */
 }
 
+.color-picker {
+    -fx-background-color: #1A1A1A;
+    background-color: #1A1A1A;
+}
 
 /* Pane */
 .pane-grid{

@@ -169,7 +169,7 @@ public class BetterEDT extends Application {
     public static void switchToCustomEventMenu() {
         if (user != null) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("customEventCreatorScreen.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("createEvent.fxml"));
                 mainScene = new Scene(fxmlLoader.load(), 1000, 600);
                 stage.setScene(mainScene);
                 stage.show();
