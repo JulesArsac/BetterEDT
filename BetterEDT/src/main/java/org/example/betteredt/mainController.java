@@ -24,6 +24,8 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 public class mainController implements Initializable {
+
+    private List<EventCalendrier> mainList = null;
     @FXML
     private Label welcomeText;
     @FXML
@@ -89,95 +91,94 @@ public class mainController implements Initializable {
         edtPane.getChildren().add(rootNode);
 
 
-        List<EventCalendrier> mainList = Parser.startParser();
+        mainList = Parser.startParser();
         if (mainList == null) {
-            System.out.println("Error while parsing the file");
+            throw new RuntimeException("Error while parsing the file");
         }
-        else {
 
-            Set<EventCalendrier> eventSet = new HashSet<>(mainList);
+        Set<EventCalendrier> eventSet = new HashSet<>(mainList);
 
-            mainList = new ArrayList<>(eventSet);
+        mainList = new ArrayList<>(eventSet);
 
-            mainList.sort(new Comparator<EventCalendrier>() {
-                @Override
-                public int compare(EventCalendrier e1, EventCalendrier e2) {
-                    return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
-                }
-            });
+        mainList.sort(new Comparator<EventCalendrier>() {
+            @Override
+            public int compare(EventCalendrier e1, EventCalendrier e2) {
+                return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
+            }
+        });
 
-            LocalDate currentDate = LocalDate.now();
+        LocalDate currentDate = LocalDate.now();
+        currentDate = currentDate.plusWeeks(1);
 
-            int day = currentDate.getDayOfMonth();
-            int month = currentDate.getMonthValue();
-            int year = currentDate.getYear();
+        int day = currentDate.getDayOfMonth();
+        int month = currentDate.getMonthValue();
+        int year = currentDate.getYear();
 
-            System.out.println("Current Day: " + day);
-            System.out.println("Current Month: " + month);
-            System.out.println("Current Year: " + year);
+        System.out.println("Current Day: " + day);
+        System.out.println("Current Month: " + month);
+        System.out.println("Current Year: " + year);
 
-            LocalDate startOfWeek = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-            LocalDate endOfWeek = currentDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        LocalDate startOfWeek = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate endOfWeek = currentDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
 
-            int startDay = startOfWeek.getDayOfMonth();
-            int startMonth = startOfWeek.getMonthValue();
-            int startYear = startOfWeek.getYear();
+        int startDay = startOfWeek.getDayOfMonth();
+        int startMonth = startOfWeek.getMonthValue();
+        int startYear = startOfWeek.getYear();
 
-            int endDay = endOfWeek.getDayOfMonth();
-            int endMonth = endOfWeek.getMonthValue();
-            int endYear = endOfWeek.getYear();
+        int endDay = endOfWeek.getDayOfMonth();
+        int endMonth = endOfWeek.getMonthValue();
+        int endYear = endOfWeek.getYear();
 
-            System.out.println("Start of Week: " + startDay + "-" + startMonth + "-" + startYear);
-            System.out.println("End of Week: " + endDay + "-" + endMonth + "-" + endYear);
+        System.out.println("Start of Week: " + startDay + "-" + startMonth + "-" + startYear);
+        System.out.println("End of Week: " + endDay + "-" + endMonth + "-" + endYear);
 
 
-            LocalDate startOfMonth = currentDate.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate startOfMonth = currentDate.with(TemporalAdjusters.firstDayOfMonth());
 
-            // Get the end of the month (last day)
-            LocalDate endOfMonth = currentDate.with(TemporalAdjusters.lastDayOfMonth());
+        // Get the end of the month (last day)
+        LocalDate endOfMonth = currentDate.with(TemporalAdjusters.lastDayOfMonth());
 
-            int startDayMonth = startOfMonth.getDayOfMonth();
-            int startMonthMonth = startOfMonth.getMonthValue();
-            int startYearMonth = startOfMonth.getYear();
+        int startDayMonth = startOfMonth.getDayOfMonth();
+        int startMonthMonth = startOfMonth.getMonthValue();
+        int startYearMonth = startOfMonth.getYear();
 
-            int endDayMonth = endOfMonth.getDayOfMonth();
-            int endMonthMonth = endOfMonth.getMonthValue();
-            int endYearMonth = endOfMonth.getYear();
+        int endDayMonth = endOfMonth.getDayOfMonth();
+        int endMonthMonth = endOfMonth.getMonthValue();
+        int endYearMonth = endOfMonth.getYear();
 
-            System.out.println("Start of Month: " + startDayMonth + "-" + startMonthMonth + "-" + startYearMonth);
-            System.out.println("End of Month: " + endDayMonth + "-" + endMonthMonth + "-" + endYearMonth);
+        System.out.println("Start of Month: " + startDayMonth + "-" + startMonthMonth + "-" + startYearMonth);
+        System.out.println("End of Month: " + endDayMonth + "-" + endMonthMonth + "-" + endYearMonth);
 
-            LocalDate startDate = LocalDate.of(startYear, startMonth, startDay);
-            LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
+        LocalDate startDate = LocalDate.of(startYear, startMonth, startDay);
+        LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
 
-            List<List<EventCalendrier>> eventList = new ArrayList<>();
-            boolean start = false;
-            LocalDate savedDate = startDate;
-            int currentIndex = 0;
-            eventList.add(new ArrayList<EventCalendrier>());
-            for (EventCalendrier event : mainList) {
-                LocalDate eventDate = LocalDate.of(event.getYear(), event.getMois(), event.getJour());
-                if (eventDate.isAfter(endDate)) {
-                    break;
-                }
-                if (event.getJour() == startDay && event.getMois() == startMonth && event.getYear() == startYear) {
-                    start = true;
-                }
-                if (eventDate.isAfter(savedDate)) {
-                    savedDate = eventDate;
-                    currentIndex++;
-                    eventList.add(new ArrayList<EventCalendrier>());
-                }
-                if (start) {
-                    eventList.get(currentIndex).add(event);
-                }
-
+        List<List<EventCalendrier>> eventList = new ArrayList<>();
+        boolean start = false;
+        LocalDate savedDate = startDate;
+        int currentIndex = 0;
+        eventList.add(new ArrayList<EventCalendrier>());
+        for (EventCalendrier event : mainList) {
+            LocalDate eventDate = LocalDate.of(event.getYear(), event.getMois(), event.getJour());
+            if (eventDate.isAfter(endDate)) {
+                break;
+            }
+            if (event.getJour() == startDay && event.getMois() == startMonth && event.getYear() == startYear) {
+                start = true;
+            }
+            if (eventDate.isAfter(savedDate)) {
+                savedDate = eventDate;
+                currentIndex++;
+                eventList.add(new ArrayList<EventCalendrier>());
+            }
+            if (start) {
+                eventList.get(currentIndex).add(event);
             }
 
-            weeklyGridController controller = fxmlLoader.getController();
-            controller.setWeeklyList(eventList);
-
         }
+
+        weeklyGridController controller = fxmlLoader.getController();
+        controller.setWeeklyList(eventList);
+
 
     }
 
@@ -206,4 +207,7 @@ public class mainController implements Initializable {
     public void switchToSalleSchedule(ActionEvent actionEvent) {
         BetterEDT.switchToSalleSchedule();
     }
+
+
+
 }
