@@ -17,6 +17,10 @@
     -fx-text-fill: #AFB1B3;
 }
 
+.label-excluded {
+    -fx-text-fill: -fx-text-inner-color; /* This will use the default text color */
+}
+
 
 /* Pane */
 .pane-grid{

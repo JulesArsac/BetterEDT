@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -45,6 +47,7 @@ public class eventController implements Initializable {
             }
         });
 
+        time.setFont(Font.font("System", FontWeight.BOLD, 12));
     }
 
     public void setTime(String time) {

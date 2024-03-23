@@ -46,10 +46,11 @@ public class weeklyGridController implements Initializable {
 
         edtGrid.setGridLinesVisible(true);
 
-        for (int i= 0; i < 5; i++) {
-            Label label = new Label(i + "");
-            edtGrid.add(label, i, 0);
-        }
+        edtGrid.add(new Label("Lundi"), 0, 0);
+        edtGrid.add(new Label("Mardi"), 1, 0);
+        edtGrid.add(new Label("Mercredi"), 2, 0);
+        edtGrid.add(new Label("Jeudi"), 3, 0);
+        edtGrid.add(new Label("Vendredi"), 4, 0);
 
         RowConstraints row1 = new RowConstraints();
         RowConstraints row2 = new RowConstraints();
@@ -69,26 +70,6 @@ public class weeklyGridController implements Initializable {
         edtGrid.getRowConstraints().addAll(row1, row2);
         edtGrid.getColumnConstraints().addAll(col0, col1, col2, col3, col4);
 
-        //Code that add 5 vbox to the grid. Within each vbox, there are 23 regions (to represent 30min intervals). 3 of them are blue rectangles.
-//        for (int j = 0; j < 5; j++) {
-//            VBox vbox = setUpVBox();
-//
-//            for (int i = 0; i < 23; i++) {
-//                if (i == 5 || i == 12 || i == 22) {
-//                    Rectangle blueRectangle = new Rectangle();
-//                    blueRectangle.widthProperty().bind(vbox.prefWidthProperty());
-//                    blueRectangle.heightProperty().bind(Bindings.divide(vbox.heightProperty(), 23));
-//                    blueRectangle.setFill(Color.BLUE);
-//                    vbox.getChildren().add(blueRectangle);
-//                    System.out.println("Added blue rectangle");
-//                } else {
-//                    Region spacer = new Region();
-//                    spacer.prefHeightProperty().bind(Bindings.divide(vbox.heightProperty(), 23));
-//                    vbox.getChildren().add(spacer);
-//                }
-//            }
-//            edtGrid.add(vbox, j, 1);
-//        }
 
         if (weeklyList != null) {
             LocalTime startTime = LocalTime.of(8, 30);
