@@ -107,20 +107,33 @@ public class weeklyGridController implements Initializable {
                 TimeSpan span = new TimeSpan(LocalTime.of(0, 0), LocalTime.of(0, 0));
                 while (currentTime.isBefore(endTime)) { //Loop from 08:30 to 19:00
                     List<EventCalendrier> eventToDisplay = new ArrayList<>();
+                    TimeSpan spanToDisplay = new TimeSpan(LocalTime.of(0, 0), LocalTime.of(0, 0));
                     for (EventCalendrier event : dayEventList) {
                         if (event.isDisplayed()) {
                             continue;
                         }
                         LocalTime eventStartTime = LocalTime.parse(event.getStartHeure(), formatter);
-                        if (currentTime.equals(eventStartTime)) {
+                        LocalTime eventEndTime = LocalTime.parse(event.getEndHeure(), formatter);
+                        if (currentTime.equals(eventStartTime) && spanToDisplay.getStart().equals(LocalTime.of(0, 0)) && spanToDisplay.getEnd().equals(LocalTime.of(0, 0))) {
+                            spanToDisplay.setStart(eventStartTime);
+                            spanToDisplay.setEnd(eventEndTime);
                             eventToDisplay.add(event);
                             event.setDisplayed(true);
                         }
+                        else if (currentTime.equals(eventStartTime) || spanToDisplay.contains(eventStartTime)) {
+                            if (spanToDisplay.getEnd().isBefore(eventEndTime)) {
+                                spanToDisplay.setEnd(eventEndTime);
+                            }
+                            eventToDisplay.add(event);
+                            event.setDisplayed(true);
+                        }
+
                     }
                     if (eventToDisplay.isEmpty() && !span.contains(currentTime)) {
                         Region spacer = new Region();
                         spacer.prefHeightProperty().bind(Bindings.divide(vbox.heightProperty(), 23));
                         spacer.minHeightProperty().bind(Bindings.divide(vbox.heightProperty(), 23));
+                        spacer.maxHeightProperty().bind(Bindings.divide(vbox.heightProperty(), 23));
                         vbox.getChildren().add(spacer);
                     } else {
                         int biggestDuration = 0;
@@ -134,7 +147,7 @@ public class weeklyGridController implements Initializable {
                                     span = new TimeSpan(eventStartTime, eventEndTime);
                                     currentDuration = duration;
                                 } else {
-                                    if (eventEndTime.isAfter(span.getEnd())) {
+                                    if (eventStartTime.isAfter(span.getEnd()) || eventStartTime.equals(span.getEnd())) {
                                         span.setStart(eventStartTime);
                                         span.setEnd(eventEndTime);
                                         currentDuration = (int) Math.ceil((double) Duration.between(span.getStart(), eventEndTime).toMinutes() / 30);
@@ -147,8 +160,12 @@ public class weeklyGridController implements Initializable {
 
                             }
                         }
-
-                        if (!span.contains(currentTime)) {
+                        if (!spanToDisplay.getStart().equals(LocalTime.of(0, 0)) && !spanToDisplay.getEnd().equals(LocalTime.of(0, 0))) {
+                            span = spanToDisplay;
+                            currentDuration = (int) Math.ceil((double) Duration.between(span.getStart(), span.getEnd()).toMinutes() / 30);
+                        }
+                        biggestDuration = (int) Math.ceil((double) Duration.between(span.getStart(), span.getEnd()).toMinutes() / 30);
+                        if (!span.contains(currentTime)) { //New event group
                             HBox hbox = new HBox();
                             hbox.prefHeightProperty().bind(Bindings.multiply(Bindings.divide(vbox.heightProperty(), 23), biggestDuration));
                             hbox.maxHeightProperty().bind(Bindings.multiply(Bindings.divide(vbox.heightProperty(), 23), biggestDuration));
@@ -165,7 +182,6 @@ public class weeklyGridController implements Initializable {
                             LocalTime eventStartTime = LocalTime.parse(event.getStartHeure(), formatter);
                             LocalTime eventEndTime = LocalTime.parse(event.getEndHeure(), formatter);
                             int duration = (int) Math.ceil((double) Duration.between(eventStartTime, eventEndTime).toMinutes() / 30);
-                            System.out.println("Duration: " + duration + " For event: " + event.getUCE());
                             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("event.fxml"));
                             Pane eventRootNode = null;
                             try {
@@ -174,6 +190,8 @@ public class weeklyGridController implements Initializable {
                                 throw new RuntimeException(e);
                             }
                             eventRootNode.prefHeightProperty().bind(Bindings.multiply(Bindings.divide(vbox.heightProperty(), 23), duration));
+                            eventRootNode.maxHeightProperty().bind(Bindings.multiply(Bindings.divide(vbox.heightProperty(), 23), duration));
+                            eventRootNode.setMinHeight(0);
                             eventRootNode.prefWidthProperty().bind(Bindings.divide(hbox.widthProperty(), eventToDisplay.size()));
                             eventController controller = fxmlLoader.getController();
                             controller.setTime(event.getStartHeure() + " - " + event.getEndHeure());
@@ -189,8 +207,7 @@ public class weeklyGridController implements Initializable {
                                 spacerVBox.prefHeightProperty().bind(hbox.heightProperty());
                                 spacerVBox.prefWidthProperty().bind(Bindings.divide(hbox.widthProperty(), eventToDisplay.size()));
                                 int nbSpacer = currentDuration - duration;
-                                System.out.println("Adding " + nbSpacer + " spacers for event " + event.getUCE());
-                                for (int i = 0; i < nbSpacer; i++) {
+                                for (int i = 0; i < nbSpacer; i++) { //Add spacers to fill the gap
                                     Region spacer = new Region();
                                     spacer.prefHeightProperty().bind(Bindings.divide(vbox.heightProperty(), 23));
                                     spacerVBox.getChildren().add(spacer);
@@ -204,21 +221,10 @@ public class weeklyGridController implements Initializable {
 
                     currentTime = currentTime.plus(increment);
                 }
-                System.out.println("===================================== NEW DAY =====================================");
+                //New day
                 column++;
             }
         }
-
-        LocalTime start = LocalTime.of(8, 30);
-        LocalTime end = LocalTime.of(11, 30);
-
-        TimeSpan ts = new TimeSpan(start, end);
-        LocalTime test = LocalTime.of(9, 0);
-        LocalTime test2 = LocalTime.of(8, 30);
-        LocalTime test3 = LocalTime.of(11, 30);
-        System.out.println(ts.contains(test));
-        System.out.println(ts.contains(test2));
-        System.out.println(ts.contains(test3));
 
     }
 

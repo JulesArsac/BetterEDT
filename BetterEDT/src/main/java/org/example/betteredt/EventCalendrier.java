@@ -223,7 +223,7 @@ public class EventCalendrier {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getSummary(), getStartHeure(), getEndHeure(), getLocation(), getLocalDateTime(), getMois(), getJour(), getJourSemaine(), getYear(), getUCE(), getProfesseur(), getElevesConcerner(), getTypeDeCours(), getAdditionalInfo());
+        return Objects.hash(getSummary(), getStartHeure(), getEndHeure(), getLocation(), getLocalDateTime(), getMois(), getJour(), getJourSemaine(), getYear(), getUCE(), getProfesseur(), getElevesConcerner(), getTypeDeCours(), getAdditionalInfo(), getLocalDateTime());
     }
 
 
