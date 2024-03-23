@@ -41,7 +41,7 @@ public class mainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        periodChoice.getItems().addAll("Month" , "Week" , "Day");
+        periodChoice.getItems().addAll("Semaine" , "Jour" , "Mois");
         periodChoice.getSelectionModel().selectFirst();
         periodChoice.valueProperty().addListener((obs, oldVal, newVal) -> {
             System.out.println("Selected period: " + newVal);
@@ -90,7 +90,7 @@ public class mainController implements Initializable {
 
         edtPane.getChildren().add(rootNode);
 
-
+        setupMainList();
 
         LocalDate currentDate = LocalDate.now();
 
