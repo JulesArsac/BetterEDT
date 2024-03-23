@@ -20,7 +20,13 @@ public class BetterEDT extends Application {
     private static Scene mainScene;
     private static Stage stage;
     private static File darkSasukeFile = new File("src/main/resources/darkSasuke.css");
+
+    public static Connection getConn() {
+        return conn;
+    }
+
     private static Connection conn = null;
+
     private static User user = null;
 
     @Override
@@ -172,5 +178,9 @@ public class BetterEDT extends Application {
             }
         }
     }
+    public static User getUser() {
+        return user;
+    }
+
 
 }

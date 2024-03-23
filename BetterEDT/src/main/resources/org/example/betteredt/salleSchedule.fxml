@@ -48,7 +48,7 @@
 
         <HBox spacing="10" alignment="CENTER" AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.leftAnchor="20.0">
             <Button fx:id="switchFormation" mnemonicParsing="false" onAction="#switchToMainScreen" text="Formation"/>
-            <Button fx:id="switchSalle" mnemonicParsing="false" onAction="#switchToSalleSchedule" text="Salle" style="-fx-background-color: #0707d9;"/>
+            <Button fx:id="switchSalle" mnemonicParsing="false" onAction="#switchToSalleSchedule" text="Salle" style="-fx-background-color: GRAY;"/>
             <Button fx:id="switchPersonal" mnemonicParsing="false" onAction="#switchToPersonalSchedule" text="Personnel"/>
         </HBox>
     </children>
