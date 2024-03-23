@@ -5,15 +5,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class customEventMenuController {
+
     @FXML
     private TextField eventNameField;
     @FXML
@@ -34,7 +32,7 @@ public class customEventMenuController {
     private TextField endTimeField;
 
     @FXML
-    private Button SendButton;
+    private Button sendButton;
     @FXML
     private ToggleButton darkSasuke;
 
@@ -63,8 +61,30 @@ public class customEventMenuController {
             darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
         }
     }
-    public void addNewEvent(ActionEvent actionEvent) {
 
+
+    public void addNewEvent(ActionEvent actionEvent) {
+        System.out.println("Event Name: " + eventNameField.getText());
+        System.out.println("Description: " + descriptionArea.getText());
+        System.out.println("Location: " + locationField.getText());
+        System.out.println("Color: " + colorField.getText());
+        System.out.println("Day: " + dayField.getText());
+        System.out.println("Month: " + monthField.getText());
+        System.out.println("Year: " + yearField.getText());
+        System.out.println("Start Time: " + startTimeField.getText());
+        System.out.println("End Time: " + endTimeField.getText());
+
+
+        if (eventNameField.getText().isEmpty()||dayField.getText().isEmpty()||monthField.getText().isEmpty()||yearField.getText().isEmpty()||
+                startTimeField.getText().isEmpty() || endTimeField.getText().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Champs obligatoires");
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez remplir tous les champs obligatoires.");
+            alert.showAndWait();
+        }
+        //faire les tests et verifier si l'utilisteur remplie bien les fields puis insert into
+        BetterEDT.goToPersonalScreen();
 
     }
     public void switchToPersonalSchedule(ActionEvent actionEvent) {

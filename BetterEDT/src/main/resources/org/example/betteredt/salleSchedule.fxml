@@ -9,6 +9,7 @@
 
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.salleScreenController">
     <children>
         <VBox alignment="CENTER" prefWidth="300" prefHeight="200">
@@ -45,8 +46,10 @@
             </children>
         </GridPane>
 
-        <Button fx:id="AddNewPersonalEvent2" layoutX="370.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToMainScreen" text="Formation"/>
-        <Button fx:id="AddNewPersonalEvent3" layoutX="445.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToSalleSchedule" text="Salle"/>
-        <Button fx:id="AddNewPersonalEvent" layoutX="495.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToPersonalSchedule" text="Personnel"/>
+        <HBox spacing="10" alignment="CENTER" AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.leftAnchor="20.0">
+            <Button fx:id="switchFormation" mnemonicParsing="false" onAction="#switchToMainScreen" text="Formation"/>
+            <Button fx:id="switchSalle" mnemonicParsing="false" onAction="#switchToSalleSchedule" text="Salle" style="-fx-background-color: #0707d9;"/>
+            <Button fx:id="switchPersonal" mnemonicParsing="false" onAction="#switchToPersonalSchedule" text="Personnel"/>
+        </HBox>
     </children>
 </AnchorPane>
