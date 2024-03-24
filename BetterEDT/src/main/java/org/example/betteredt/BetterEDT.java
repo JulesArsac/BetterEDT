@@ -179,7 +179,7 @@ public class BetterEDT extends Application {
         if (user != null) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("createReservationEvent.fxml"));
-                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                mainScene.setRoot(fxmlLoader.load());
                 stage.setScene(mainScene);
                 stage.show();
             } catch (IOException e) {

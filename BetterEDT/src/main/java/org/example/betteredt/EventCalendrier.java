@@ -17,7 +17,7 @@ public class EventCalendrier {
 
     private final int mois;
     private final int jour;
-    private final int jourSemaine; //1 lundi, 2 mardi, 3 mercredi...
+    private final int jourSemaine;
     private final int year;
 
     private final String UCE;
@@ -31,22 +31,20 @@ public class EventCalendrier {
 
 
     public EventCalendrier(String summary, Date startDate, Date endDate, String location) {
-        //recup donner de base
+
         this.summary = summary;
         this.location = location;
 
-        //création calendar
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
 
-        //recuperation des jour mois et année
+
         jourSemaine = calendar.get(Calendar.DAY_OF_WEEK)-1;
 
         jour=calendar.get(Calendar.DAY_OF_MONTH);
         mois=calendar.get(Calendar.MONTH)+1;
         year = calendar.get(Calendar.YEAR);
 
-        //recuperation de l'heure début d'un cours
         if (calendar.get(Calendar.MINUTE)==0){
             if (calendar.get(Calendar.HOUR_OF_DAY)<10){
                 startHeure="0"+String.valueOf(calendar.get(Calendar.HOUR_OF_DAY))+"H00";
@@ -61,12 +59,8 @@ public class EventCalendrier {
             }
         }
 
-
-
-        //creation calendar pour la fin du cours
         Calendar calendar2 = Calendar.getInstance();
         calendar2.setTime(endDate);
-        //recup fin de cours
         if (calendar2.get(Calendar.MINUTE)==0){
             if (calendar2.get(Calendar.HOUR_OF_DAY)<10){
                 endHeure="0"+String.valueOf(calendar2.get(Calendar.HOUR_OF_DAY))+"H00";
@@ -84,7 +78,6 @@ public class EventCalendrier {
         String[] fragment = summary.split(" - ");
         UCE=fragment[0];
         if (fragment.length>1){
-            //System.out.println(Arrays.toString(fragment));
             professeur=fragment[1];
             if (fragment.length==2){
                 elevesConcerner="Ouvert a tous";
@@ -124,7 +117,6 @@ public class EventCalendrier {
             month=String.valueOf(mois);
         }
         dateCompacter=day+"/"+month+"/"+year+"-"+startHeure;
-        displayAllInfo();
     }
 
     public void displayAllInfo(){

@@ -20,14 +20,14 @@
             <children>
                 <HBox alignment="CENTER" spacing="10">
                     <children>
-                        <Button fx:id="switchFormation" mnemonicParsing="false" onAction="#switchToMainScreen"  text="Formation" />
+                        <Button fx:id="switchFormation" mnemonicParsing="false" onAction="#switchToMainScreen" text="Formation" />
                         <Button fx:id="switchSalle" mnemonicParsing="false" onAction="#switchToSalleSchedule" style="-fx-background-color: GRAY;" text="Salle" />
                         <Button fx:id="switchPersonal" mnemonicParsing="false" onAction="#switchToPersonalSchedule" text="Personnel" />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Button onAction="#selectFormation" mnemonicParsing="false" text="Choisissez votre EDT" />
+                        <Button mnemonicParsing="false" onAction="#selectFormation" text="Choisissez votre EDT" />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" prefHeight="38.0" prefWidth="878.0" spacing="30.0">
@@ -66,6 +66,7 @@
             </rowConstraints>
             <children>
                 <ComboBox fx:id="periodChoice" prefHeight="17.0" prefWidth="118.0" GridPane.halignment="CENTER" GridPane.valignment="TOP" />
+                <Button fx:id="addNewReservationEvent" layoutX="370.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToReservationMenu" text="Réserver une salle" GridPane.halignment="CENTER" />
                 <ToggleButton fx:id="darkSasuke" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onDarkSasukeClick" text="Dark sasuke" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
             </children>
         </GridPane>

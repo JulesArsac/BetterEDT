@@ -31,8 +31,8 @@ public class salleScreenController implements Initializable {
     private int currentDisplay = 1;
     private boolean darkMode = false;
 
-    //TODO check this
-    public Button AddNewReservationEvent;
+    @FXML
+    public Button addNewReservationEvent;
     @FXML
     private Label welcomeText;
     @FXML
@@ -114,7 +114,7 @@ public class salleScreenController implements Initializable {
             }
         });
 
-        AddNewReservationEvent.setVisible(BetterEDT.getUser().isAdmin());
+        addNewReservationEvent.setVisible(BetterEDT.getUser().isAdmin());
     }
 
     @FXML
