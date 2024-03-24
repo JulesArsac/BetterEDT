@@ -82,16 +82,18 @@ public class EventCalendrier {
 
         String[] fragment = summary.split(" - ");
         UCE=fragment[0];
-        //System.out.println(fragment.length);
         if (fragment.length>1){
             professeur=fragment[1];
-            elevesConcerner=fragment[2];
-            //System.out.println(UCE);
+            if (fragment.length==2){
+                elevesConcerner="Ouvert a tous";
+            } else{
+                elevesConcerner=fragment[2];
+            }
 
             if (fragment.length>3){
                 typeDeCours=fragment[3];
             } else {
-                typeDeCours="NULL"; //Gaster from Deltarune was here
+                typeDeCours="NULL";
             }
             if (fragment.length==5){
                 additionalInfo=fragment[4];

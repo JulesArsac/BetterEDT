@@ -3,6 +3,7 @@ package org.example.betteredt;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -12,22 +13,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
-
-import static org.example.betteredt.Parser.startParser;
+import java.util.List;
 
 public class BetterEDT extends Application {
 
-    private static Scene mainScene;
+    private static Scene mainScene = null;
     private static Stage stage;
     private static File darkSasukeFile = new File("src/main/resources/darkSasuke.css");
-
     public static Connection getConn() {
         return conn;
     }
-
     private static Connection conn = null;
-
     private static User user = null;
+    private static List<EventCalendrier> currentEvents = null;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -40,7 +38,7 @@ public class BetterEDT extends Application {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        user = new User(1, "admin", true, false, 0);
+        user = new User(1, "admin", true, false, 1);
         if (user == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("connectionScreen.fxml"));
             mainScene = new Scene(fxmlLoader.load(), 1000, 600);
@@ -49,7 +47,7 @@ public class BetterEDT extends Application {
             stage.show();
         }
         else {
-            FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("mainScreen.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("formationScreen.fxml"));
             mainScene = new Scene(fxmlLoader.load(), 1000, 600);
             stage.setTitle("BetterEDT");
             stage.setScene(mainScene);
@@ -116,11 +114,16 @@ public class BetterEDT extends Application {
     public static void goToMainScreen() {
         if (user != null) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("mainScreen.fxml"));
-                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("formationScreen.fxml"));
+                if (mainScene == null){
+                    mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                }
+                else {
+                    mainScene.setRoot(fxmlLoader.load());
+                }
                 stage.setScene(mainScene);
                 stage.show();
-                mainController controller = fxmlLoader.getController();
+                formationController controller = fxmlLoader.getController();
                 if (user.isDarkSasuke()) {
                     controller.setDarkMode(true);
                     goDarkMode();
@@ -138,8 +141,8 @@ public class BetterEDT extends Application {
     public static void goToPersonalScreen() {
         if (user != null) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("personalSchedule.fxml"));
-                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("personalScreen.fxml"));
+                mainScene.setRoot(fxmlLoader.load());
                 stage.setScene(mainScene);
                 stage.show();
             } catch (IOException e) {
@@ -150,8 +153,8 @@ public class BetterEDT extends Application {
     public static void switchToSalleSchedule() {
         if (user != null) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("salleSchedule.fxml"));
-                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("salleScreen.fxml"));
+                mainScene.setRoot(fxmlLoader.load());
                 stage.setScene(mainScene);
                 stage.show();
             } catch (IOException e) {
@@ -163,7 +166,7 @@ public class BetterEDT extends Application {
         if (user != null) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("createEvent.fxml"));
-                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                mainScene.setRoot(fxmlLoader.load());
                 stage.setScene(mainScene);
                 stage.show();
             } catch (IOException e) {
@@ -184,6 +187,31 @@ public class BetterEDT extends Application {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public static List<EventCalendrier> parseFile(String path) {
+        currentEvents = Parser.startParser(path);
+        return currentEvents;
+    }
+
+    public static String getIcsName(int type) {
+        String folder = switch (type) {
+            case 0 -> "formation";
+            case 1 -> "salle";
+            case 2 -> "personnel";
+            default -> "";
+        };
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisissez votre fichier");
+        File initialDirectory = new File("src/main/resources/" + folder);
+        fileChooser.setInitialDirectory(initialDirectory);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier ICS", "*.ics"));
+
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            return selectedFile.getAbsolutePath();
+        }
+        return null;
     }
 
 }
