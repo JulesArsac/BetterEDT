@@ -71,9 +71,6 @@ public class salleScreenController implements Initializable {
         }
 
         AddNewReservationEvent.setVisible(BetterEDT.getUser().isAdmin());
-
-
-
     }
 
     @FXML

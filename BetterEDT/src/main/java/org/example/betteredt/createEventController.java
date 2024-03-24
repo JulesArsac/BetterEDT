@@ -19,6 +19,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -27,11 +28,14 @@ import static org.example.betteredt.BetterEDT.getUser;
 
 public class createEventController implements Initializable {
 
+    private List<EventCalendrier> EventsListSalle = null;
+
     public TextField startTimeFieldHeure;
     public TextField startTimeFieldMinute;
     public TextField endTimeFieldHeure;
     public TextField endTimeFieldMinute;
     public AnchorPane rootPane;
+    public Label SalleNameField;
 
     @FXML
     private TextField eventNameField;
@@ -84,6 +88,13 @@ public class createEventController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         mainGrid.prefHeightProperty().bind(Bindings.subtract(rootPane.heightProperty(), 100));
+        //SalleNameField initialiser pour prendre le nom de la salle dont on a cliquer dessus
+        if (SalleNameField!=null){
+            SalleNameField.setText("S1 = C 042 Nodes (HARDCODED)");
+        }
+
+        //EventsListSalle = Parser.startParser("src/main/resources/SalleNode.ics");
+
     }
 
     public void addNewEvent(ActionEvent actionEvent) throws SQLException {
@@ -119,7 +130,7 @@ public class createEventController implements Initializable {
             int heureFin = Integer.parseInt(endTimeFieldHeure.getText());
             int minuteFin = Integer.parseInt(endTimeFieldMinute.getText());
 
-            if (heureDebut>23||heureFin>23||heureDebut<0||heureFin<0){
+            if (heureDebut>19||heureFin>19||heureDebut<8||heureFin<8){
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Heures invalide");
                 alert.setHeaderText(null);
@@ -201,7 +212,7 @@ public class createEventController implements Initializable {
 
     public void addNewReservation(ActionEvent actionEvent) throws SQLException {
 
-        if (eventNameField.getText().isEmpty()||dayField.getText().isEmpty()||monthField.getText().isEmpty()||yearField.getText().isEmpty()||
+        if (SalleNameField.getText().isEmpty()||dayField.getText().isEmpty()||monthField.getText().isEmpty()||yearField.getText().isEmpty()||
                 startTimeFieldHeure.getText().isEmpty() || startTimeFieldMinute.getText().isEmpty()||endTimeFieldHeure.getText().isEmpty() || endTimeFieldMinute.getText().isEmpty()){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Champs obligatoires");
@@ -232,7 +243,7 @@ public class createEventController implements Initializable {
             int heureFin = Integer.parseInt(endTimeFieldHeure.getText());
             int minuteFin = Integer.parseInt(endTimeFieldMinute.getText());
 
-            if (heureDebut>23||heureFin>23||heureDebut<0||heureFin<0){
+            if (heureDebut>19||heureFin>19||heureDebut<8||heureFin<8){
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Heures invalide");
                 alert.setHeaderText(null);
@@ -292,18 +303,13 @@ public class createEventController implements Initializable {
         }
 
 
-        Color selectedColor = colorPicker.getValue();
-        String hexColor = String.format("%02X%02X%02X",
-                (int) (selectedColor.getRed() * 255),
-                (int) (selectedColor.getGreen() * 255),
-                (int) (selectedColor.getBlue() * 255));
-        System.out.println(hexColor);
-
 
         String insertSQL =
-                "INSERT INTO personalSchedule(user, eventName, description, lieu, couleur, jour, mois, anner, startHeure, endHeure) " +
-                        "VALUES ('" + getUser().getUsername() + "', '" + eventNameField.getText() + "', '" + descriptionArea.getText() + "', '" + locationField.getText() + "', '" + hexColor + "', " +
-                        "'" + dayField.getText() + "', '" + monthField.getText() + "', '" + yearField.getText() + "', '" + startTimeFieldHeure.getText() + "H" + startTimeFieldMinute.getText() + "', '" + endTimeFieldHeure.getText() + "H" + endTimeFieldMinute.getText() + "')";
+                "INSERT INTO reservationSalleTable(user, salleName, description, jour, mois, anner, startHeure, endHeure) " +
+                        "VALUES ('" + getUser().getUsername() + "', '" + SalleNameField.getText() + "', '" + descriptionArea.getText() + "', '" +
+                        dayField.getText() + "', '" + monthField.getText() + "', '" + yearField.getText() + "', '" +
+                        startTimeFieldHeure.getText() + "H" + startTimeFieldMinute.getText() + "', '" +
+                        endTimeFieldHeure.getText() + "H" + endTimeFieldMinute.getText() + "')";
 
         getConn().createStatement().execute(insertSQL);
 

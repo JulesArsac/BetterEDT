@@ -45,27 +45,23 @@
          </rowConstraints>
          <Label wrapText="true" text="*Nom de la salle:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
          <Label wrapText="true" text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-         <Label wrapText="true" text="Location:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-         <Label wrapText="true" text="Couleur:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-         <Label wrapText="true" text="*Jour:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-         <Label wrapText="true" text="*Mois:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-         <Label wrapText="true" text="*Année:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-         <Label wrapText="true" text="*Heure début:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-         <Label wrapText="true" text="*Minute début:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
-         <Label wrapText="true" text="*Heure fin:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
-         <Label wrapText="true" text="*Minute Fin:" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
-         <TextField fx:id="eventNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+         <Label wrapText="true" text="*Jour:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+         <Label wrapText="true" text="*Mois:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+         <Label wrapText="true" text="*Année:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+         <Label wrapText="true" text="*Heure début:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+         <Label wrapText="true" text="*Minute début:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+         <Label wrapText="true" text="*Heure fin:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+         <Label wrapText="true" text="*Minute Fin:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+         <Label fx:id="SalleNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
          <TextArea fx:id="descriptionArea" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-         <TextField fx:id="locationField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-         <ColorPicker fx:id="colorPicker"  GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-         <TextField fx:id="dayField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-         <TextField fx:id="monthField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-         <TextField fx:id="yearField" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
-         <TextField fx:id="startTimeFieldHeure" GridPane.columnIndex="1" GridPane.rowIndex="7" promptText="Ex: 14"/>
-         <TextField fx:id="startTimeFieldMinute" GridPane.columnIndex="1" GridPane.rowIndex="8" promptText="Seulement 00 or 30"/>
-         <TextField fx:id="endTimeFieldHeure" GridPane.columnIndex="1" GridPane.rowIndex="9" promptText="Ex: 8"/>
-         <TextField fx:id="endTimeFieldMinute" GridPane.columnIndex="1" GridPane.rowIndex="10" promptText="Seulement 00 or 30"/>
-         <Button fx:id="sendButton" GridPane.columnIndex="1" GridPane.rowIndex="11" mnemonicParsing="false" onAction="#addNewReservation" text="Send"/>
+         <TextField fx:id="dayField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+         <TextField fx:id="monthField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+         <TextField fx:id="yearField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+         <TextField fx:id="startTimeFieldHeure" GridPane.columnIndex="1" GridPane.rowIndex="5" promptText="Ex: 14"/>
+         <TextField fx:id="startTimeFieldMinute" GridPane.columnIndex="1" GridPane.rowIndex="6" promptText="Seulement 00 or 30"/>
+         <TextField fx:id="endTimeFieldHeure" GridPane.columnIndex="1" GridPane.rowIndex="7" promptText="Ex: 8"/>
+         <TextField fx:id="endTimeFieldMinute" GridPane.columnIndex="1" GridPane.rowIndex="8" promptText="Seulement 00 or 30"/>
+         <Button fx:id="sendButton" GridPane.columnIndex="1" GridPane.rowIndex="9" mnemonicParsing="false" onAction="#addNewReservation" text="Send"/>
       </GridPane>
 
       <HBox spacing="10" alignment="CENTER" AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.leftAnchor="20.0">
