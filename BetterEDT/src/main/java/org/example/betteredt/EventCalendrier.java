@@ -1,5 +1,6 @@
 package org.example.betteredt;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.time.LocalDateTime;
@@ -83,6 +84,7 @@ public class EventCalendrier {
         String[] fragment = summary.split(" - ");
         UCE=fragment[0];
         if (fragment.length>1){
+            //System.out.println(Arrays.toString(fragment));
             professeur=fragment[1];
             if (fragment.length==2){
                 elevesConcerner="Ouvert a tous";
@@ -122,6 +124,7 @@ public class EventCalendrier {
             month=String.valueOf(mois);
         }
         dateCompacter=day+"/"+month+"/"+year+"-"+startHeure;
+        displayAllInfo();
     }
 
     public void displayAllInfo(){

@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
@@ -30,6 +31,10 @@ public class salleScreenController implements Initializable {
     private int currentDisplay = 1;
     private boolean darkMode = false;
 
+    //TODO check this
+    public Button AddNewReservationEvent;
+    @FXML
+    private Label welcomeText;
     @FXML
     private ComboBox periodChoice;
     @FXML
@@ -108,6 +113,8 @@ public class salleScreenController implements Initializable {
                 goForward();
             }
         });
+
+        AddNewReservationEvent.setVisible(BetterEDT.getUser().isAdmin());
     }
 
     @FXML
@@ -383,6 +390,10 @@ public class salleScreenController implements Initializable {
         else {
             switchToMonthly(displayedDate);
         }
+    }
+
+    public void switchToReservationMenu(ActionEvent actionEvent) {
+        BetterEDT.switchToReservationEventMenu();
     }
 
 }
