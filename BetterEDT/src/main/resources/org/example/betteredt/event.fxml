@@ -14,7 +14,8 @@
       <Label fx:id="title" text="Matière: Feur" wrapText="true" textFill="BLACK" styleClass="label-excluded" />
 
       <!-- Fourth label below third label -->
-      <Label fx:id="prof" text="Enseignant: Mr Feur" wrapText="true" textFill="BLACK" styleClass="label-excluded" />
+      <Label fx:id="prof" text="Enseignant: Mr Feur" wrapText="true" textFill="BLACK" styleClass="label-excluded" onMouseClicked="#switchToEmail"/>
+
 
       <!-- Fifth label below fourth label -->
       <Label fx:id="type" text="Type: TP" wrapText="true" textFill="BLACK" styleClass="label-excluded" />
