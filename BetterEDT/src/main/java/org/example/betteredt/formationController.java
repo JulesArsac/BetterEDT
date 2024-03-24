@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
-public class mainController implements Initializable {
+public class formationController implements Initializable {
 
     private List<EventCalendrier> mainList = null;
     private LocalDate displayedDate = LocalDate.now();
@@ -92,7 +92,7 @@ public class mainController implements Initializable {
             filterPane.setMaxHeight(newVal.doubleValue()-150);
         });
 
-        setupMainList();
+        setupMainList("src/main/resources/ILSEN.ics");
 
         switchToWeekly(LocalDate.now());
 
@@ -139,8 +139,8 @@ public class mainController implements Initializable {
         BetterEDT.switchToSalleSchedule();
     }
 
-    public void setupMainList() {
-        mainList = Parser.startParser("src/main/resources/ILSEN.ics");
+    public void setupMainList(String path) {
+        mainList = BetterEDT.parseFile(path);
         if (mainList == null) {
             throw new RuntimeException("Error while parsing the file");
         }

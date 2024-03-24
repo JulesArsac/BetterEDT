@@ -12,8 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
-
-import static org.example.betteredt.Parser.startParser;
+import java.util.List;
 
 public class BetterEDT extends Application {
 
@@ -40,7 +39,7 @@ public class BetterEDT extends Application {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        user = new User(1, "admin", true, false, 0);
+        user = new User(1, "admin", true, false, 1);
         if (user == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("connectionScreen.fxml"));
             mainScene = new Scene(fxmlLoader.load(), 1000, 600);
@@ -49,7 +48,7 @@ public class BetterEDT extends Application {
             stage.show();
         }
         else {
-            FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("mainScreen.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("formationScreen.fxml"));
             mainScene = new Scene(fxmlLoader.load(), 1000, 600);
             stage.setTitle("BetterEDT");
             stage.setScene(mainScene);
@@ -116,11 +115,11 @@ public class BetterEDT extends Application {
     public static void goToMainScreen() {
         if (user != null) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("mainScreen.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("formationScreen.fxml"));
                 mainScene = new Scene(fxmlLoader.load(), 1000, 600);
                 stage.setScene(mainScene);
                 stage.show();
-                mainController controller = fxmlLoader.getController();
+                formationController controller = fxmlLoader.getController();
                 if (user.isDarkSasuke()) {
                     controller.setDarkMode(true);
                     goDarkMode();
@@ -184,6 +183,10 @@ public class BetterEDT extends Application {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public static List<EventCalendrier> parseFile(String path) {
+        return Parser.startParser(path);
     }
 
 }
