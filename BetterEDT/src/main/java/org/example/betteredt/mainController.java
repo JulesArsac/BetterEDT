@@ -23,6 +23,7 @@ public class mainController implements Initializable {
     private List<EventCalendrier> mainList = null;
     private LocalDate displayedDate = LocalDate.now();
     private int currentDisplay = 1;
+    private boolean darkMode = false;
 
     @FXML
     private ComboBox periodChoice;
@@ -105,14 +106,21 @@ public class mainController implements Initializable {
 
     @FXML
     protected void onDarkSasukeClick() {
-        if (darkSasuke.isSelected()) {
+        if (!darkMode) {
             BetterEDT.goDarkMode();
-            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
-
-
+            setDarkMode(true);
         } else {
             BetterEDT.goLightMode();
+            setDarkMode(false);
+        }
+    }
+
+    public void setDarkMode(boolean darkMode) {
+        this.darkMode = darkMode;
+        if (!darkMode) {
             darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
+        } else {
+            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
         }
     }
 
