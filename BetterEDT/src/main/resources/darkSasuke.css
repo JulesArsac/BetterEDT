@@ -237,9 +237,9 @@
     -fx-background-color: #1A1A1A;
     background-color: #1A1A1A;
     -fx-text-fill: #AFB1B3;
-    -fx-min-height: 25;
-    min-height: 25;
-    -fx-pref-height: 25;
+    /*-fx-min-height: 25;*/
+    /*min-height: 25;*/
+    /*-fx-pref-height: 25;*/
 }
 .button:focused{
     -fx-border-color: #4e4e4e;

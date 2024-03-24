@@ -30,7 +30,6 @@ public class weeklyGridController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         edtGrid.getChildren().clear();
         edtGrid.getRowConstraints().clear();
         edtGrid.getColumnConstraints().clear();

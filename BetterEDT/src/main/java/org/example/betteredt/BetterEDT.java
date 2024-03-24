@@ -33,47 +33,14 @@ public class BetterEDT extends Application {
     public void start(Stage stage) throws IOException {
 
         this.stage = stage;
-        startParser();
+
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:src/main/resources/database/users.db");
             System.out.println("Connection to SQLite has been established.");
-
-//            String dropTableSQL = "DROP TABLE IF EXISTS users;";
-//            conn.createStatement().execute(dropTableSQL);
-//
-//            String createTableSQL = "CREATE TABLE IF NOT EXISTS users ("
-//                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-//                    + "username TEXT NOT NULL CHECK(length(username) <= 255),"
-//                    + "password TEXT NOT NULL CHECK(length(password) <= 2048),"
-//                    + "admin INTEGER DEFAULT 0 CHECK(admin IN (0, 1)),"
-//                    + "darkSasuke INTEGER DEFAULT 0 CHECK(darkSasuke IN (0, 1)),"
-//                    + "defaultTime INTEGER DEFAULT 0"
-//                    + ");";
-//            conn.createStatement().execute(createTableSQL);
-
-
-//            String insertSQL = "INSERT INTO users (username, password, admin, darkSasuke, defaultTime) VALUES ('admin', 'admin', 1, 1, 0);";
-//            conn.createStatement().execute(insertSQL);
-
-//            String selectSQL = "SELECT * FROM users";
-//            ResultSet rs = conn.createStatement().executeQuery(selectSQL);
-//            if (!rs.next()) {
-//                System.out.println("ResultSet is empty");
-//            } else {
-//                do {
-//                    System.out.println("id = " + rs.getInt("id"));
-//                    System.out.println("username = " + rs.getString("username"));
-//                    System.out.println("password = " + rs.getString("password"));
-//                    System.out.println("admin = " + rs.getInt("admin"));
-//                    System.out.println("darkSasuke = " + rs.getInt("darkSasuke"));
-//                    System.out.println("defaultTime = " + rs.getInt("defaultTime"));
-//                } while (rs.next());
-//            }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        user = new User(1, "admin", true, true, 0);
+        user = new User(1, "admin", true, false, 0);
         if (user == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("connectionScreen.fxml"));
             mainScene = new Scene(fxmlLoader.load(), 1000, 600);
@@ -103,10 +70,26 @@ public class BetterEDT extends Application {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+        if (user != null) {
+            String updateSQL = "UPDATE users SET darkSasuke = 1 WHERE id = " + user.getId() + ";";
+            try {
+                conn.createStatement().executeUpdate(updateSQL);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public static void goLightMode() {
         mainScene.getStylesheets().remove(darkSasukeFile.toURI().toString());
+        if (user != null) {
+            String updateSQL = "UPDATE users SET darkSasuke = 0 WHERE id = " + user.getId() + ";";
+            try {
+                conn.createStatement().executeUpdate(updateSQL);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public static void createUser(String username, String password) throws UserNotFountException, WrongPasswordException {
@@ -137,6 +120,16 @@ public class BetterEDT extends Application {
                 mainScene = new Scene(fxmlLoader.load(), 1000, 600);
                 stage.setScene(mainScene);
                 stage.show();
+                mainController controller = fxmlLoader.getController();
+                if (user.isDarkSasuke()) {
+                    controller.setDarkMode(true);
+                    goDarkMode();
+                }
+                else {
+                    controller.setDarkMode(false);
+                    goLightMode();
+                }
+                controller.changePrefType(user.getDefaultTime());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -182,5 +175,15 @@ public class BetterEDT extends Application {
         return user;
     }
 
+    public static void setPrefTime(int time) {
+        if (user != null) {
+            String updateSQL = "UPDATE users SET defaultTime = " + time + " WHERE id = " + user.getId() + ";";
+            try {
+                conn.createStatement().executeUpdate(updateSQL);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
 }

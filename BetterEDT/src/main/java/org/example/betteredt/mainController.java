@@ -5,27 +5,26 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import javafx.scene.layout.Pane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 public class mainController implements Initializable {
-    @FXML
-    private Label welcomeText;
+
+    private List<EventCalendrier> mainList = null;
+    private LocalDate displayedDate = LocalDate.now();
+    private int currentDisplay = 1;
+    private boolean darkMode = false;
+
     @FXML
     private ComboBox periodChoice;
     @FXML
@@ -36,13 +35,34 @@ public class mainController implements Initializable {
     AnchorPane rootPane;
     @FXML
     GridPane filterPane;
+    @FXML
+    VBox topVbox;
+    @FXML
+    Label currentDateLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        periodChoice.getItems().addAll("Month" , "Week" , "Day");
+        periodChoice.getItems().addAll("Semaine" , "Jour" , "Mois");
         periodChoice.getSelectionModel().selectFirst();
         periodChoice.valueProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("Selected period: " + newVal);
+            if (newVal == oldVal) {
+                return;
+            }
+            if (newVal.equals("Semaine")) {
+                currentDisplay = 1;
+                switchToWeekly(displayedDate);
+                BetterEDT.setPrefTime(1);
+            }
+            else if (newVal.equals("Jour")) {
+                currentDisplay = 0;
+                switchToDaily(displayedDate);
+                BetterEDT.setPrefTime(0);
+            }
+            else {
+                currentDisplay = 2;
+                switchToMonthly(displayedDate);
+                BetterEDT.setPrefTime(2);
+            }
         });
 
         darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
@@ -51,6 +71,9 @@ public class mainController implements Initializable {
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             edtPane.setPrefWidth(newVal.doubleValue()-160);
             edtPane.setMaxWidth(newVal.doubleValue()-160);
+
+            topVbox.setPrefWidth(newVal.doubleValue()-350);
+
             if (newVal.doubleValue() < 160) {
 
                 filterPane.setPrefWidth(newVal.doubleValue());
@@ -69,133 +92,42 @@ public class mainController implements Initializable {
             filterPane.setMaxHeight(newVal.doubleValue()-150);
         });
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("weeklyGrid.fxml"));
-        Parent rootNode = null;
-        try {
-            rootNode = fxmlLoader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        setupMainList();
 
-        AnchorPane edtRootPane = (AnchorPane) rootNode.lookup("#rootPane");
+        switchToWeekly(LocalDate.now());
 
-        edtRootPane.prefWidthProperty().bind(edtPane.widthProperty());
-        edtRootPane.prefHeightProperty().bind(edtPane.heightProperty());
-        edtRootPane.maxWidthProperty().bind(edtPane.widthProperty());
-        edtRootPane.maxHeightProperty().bind(edtPane.heightProperty());
-        edtRootPane.minWidthProperty().bind(edtPane.widthProperty());
-        edtRootPane.minHeightProperty().bind(edtPane.heightProperty());
-
-        edtPane.getChildren().add(rootNode);
-
-
-        List<EventCalendrier> mainList = Parser.startParser();
-        if (mainList == null) {
-            System.out.println("Error while parsing the file");
-        }
-        else {
-
-            Set<EventCalendrier> eventSet = new HashSet<>(mainList);
-
-            mainList = new ArrayList<>(eventSet);
-
-            mainList.sort(new Comparator<EventCalendrier>() {
-                @Override
-                public int compare(EventCalendrier e1, EventCalendrier e2) {
-                    return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
-                }
-            });
-
-            LocalDate currentDate = LocalDate.now();
-
-            int day = currentDate.getDayOfMonth();
-            int month = currentDate.getMonthValue();
-            int year = currentDate.getYear();
-
-            System.out.println("Current Day: " + day);
-            System.out.println("Current Month: " + month);
-            System.out.println("Current Year: " + year);
-
-            LocalDate startOfWeek = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-            LocalDate endOfWeek = currentDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-
-            int startDay = startOfWeek.getDayOfMonth();
-            int startMonth = startOfWeek.getMonthValue();
-            int startYear = startOfWeek.getYear();
-
-            int endDay = endOfWeek.getDayOfMonth();
-            int endMonth = endOfWeek.getMonthValue();
-            int endYear = endOfWeek.getYear();
-
-            System.out.println("Start of Week: " + startDay + "-" + startMonth + "-" + startYear);
-            System.out.println("End of Week: " + endDay + "-" + endMonth + "-" + endYear);
-
-
-            LocalDate startOfMonth = currentDate.with(TemporalAdjusters.firstDayOfMonth());
-
-            // Get the end of the month (last day)
-            LocalDate endOfMonth = currentDate.with(TemporalAdjusters.lastDayOfMonth());
-
-            int startDayMonth = startOfMonth.getDayOfMonth();
-            int startMonthMonth = startOfMonth.getMonthValue();
-            int startYearMonth = startOfMonth.getYear();
-
-            int endDayMonth = endOfMonth.getDayOfMonth();
-            int endMonthMonth = endOfMonth.getMonthValue();
-            int endYearMonth = endOfMonth.getYear();
-
-            System.out.println("Start of Month: " + startDayMonth + "-" + startMonthMonth + "-" + startYearMonth);
-            System.out.println("End of Month: " + endDayMonth + "-" + endMonthMonth + "-" + endYearMonth);
-
-            LocalDate startDate = LocalDate.of(startYear, startMonth, startDay);
-            LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
-
-            List<List<EventCalendrier>> eventList = new ArrayList<>();
-            boolean start = false;
-            LocalDate savedDate = startDate;
-            int currentIndex = 0;
-            eventList.add(new ArrayList<EventCalendrier>());
-            for (EventCalendrier event : mainList) {
-                LocalDate eventDate = LocalDate.of(event.getYear(), event.getMois(), event.getJour());
-                if (eventDate.isAfter(endDate)) {
-                    break;
-                }
-                if (event.getJour() == startDay && event.getMois() == startMonth && event.getYear() == startYear) {
-                    start = true;
-                }
-                if (eventDate.isAfter(savedDate)) {
-                    savedDate = eventDate;
-                    currentIndex++;
-                    eventList.add(new ArrayList<EventCalendrier>());
-                }
-                if (start) {
-                    eventList.get(currentIndex).add(event);
-                }
-
+        rootPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.LEFT) {
+                goBack();
             }
-
-            weeklyGridController controller = fxmlLoader.getController();
-            controller.setWeeklyList(eventList);
-
-        }
+            else if (event.getCode() == KeyCode.RIGHT) {
+                goForward();
+            }
+        });
 
     }
 
     @FXML
     protected void onDarkSasukeClick() {
-        if (darkSasuke.isSelected()) {
+        if (!darkMode) {
             BetterEDT.goDarkMode();
-            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
-
-
+            setDarkMode(true);
         } else {
             BetterEDT.goLightMode();
+            setDarkMode(false);
+        }
+    }
+
+    public void setDarkMode(boolean darkMode) {
+        this.darkMode = darkMode;
+        if (!darkMode) {
             darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
+        } else {
+            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
         }
     }
 
     public void switchToPersonalSchedule(ActionEvent actionEvent) {
-        //do some visual change here
         BetterEDT.goToPersonalScreen();
     }
 
@@ -206,4 +138,231 @@ public class mainController implements Initializable {
     public void switchToSalleSchedule(ActionEvent actionEvent) {
         BetterEDT.switchToSalleSchedule();
     }
+
+    public void setupMainList() {
+        mainList = Parser.startParser("src/main/resources/ILSEN.ics");
+        if (mainList == null) {
+            throw new RuntimeException("Error while parsing the file");
+        }
+
+        Set<EventCalendrier> eventSet = new HashSet<>(mainList);
+
+        mainList = new ArrayList<>(eventSet);
+
+        mainList.sort(new Comparator<EventCalendrier>() {
+            @Override
+            public int compare(EventCalendrier e1, EventCalendrier e2) {
+                return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
+            }
+        });
+    }
+
+    public List<List<EventCalendrier>> getEvents(LocalDate startDate, LocalDate endDate) {
+        List<List<EventCalendrier>> eventList = new ArrayList<>();
+        boolean start = false;
+        LocalDate savedDate = startDate;
+        int currentIndex = 0;
+        eventList.add(new ArrayList<EventCalendrier>());
+        for (EventCalendrier event : mainList) {
+            LocalDate eventDate = LocalDate.of(event.getYear(), event.getMois(), event.getJour());
+            if (eventDate.isAfter(endDate)) {
+                break;
+            }
+            if (event.getJour() == startDate.getDayOfMonth() && event.getMois() == startDate.getMonthValue() && event.getYear() == startDate.getYear()) {
+                start = true;
+            }
+            if (eventDate.isAfter(savedDate)) {
+                savedDate = eventDate;
+                currentIndex++;
+                eventList.add(new ArrayList<EventCalendrier>());
+            }
+            if (start) {
+                eventList.get(currentIndex).add(event);
+            }
+
+        }
+        return eventList;
+    }
+
+    public List<monthEvent> getMonthlyList(LocalDate startDate, LocalDate endDate) {
+        List<monthEvent> eventList = new ArrayList<>();
+        LocalDate currentDate = startDate;
+        boolean eval = false;
+        int nbEvent = 0;
+        while (currentDate.isBefore(endDate)) {
+            for (EventCalendrier event : mainList) {
+                LocalDate eventDate = LocalDate.of(event.getYear(), event.getMois(), event.getJour());
+                if (eventDate.isAfter(endDate)) {
+                    break;
+                }
+                if (event.getJour() == currentDate.getDayOfMonth() && event.getMois() == currentDate.getMonthValue() && event.getYear() == currentDate.getYear()) {
+                    if (event.getTypeDeCours().equals("Evaluation")) {
+                        eval = true;
+                    }
+                    nbEvent++;
+                }
+            }
+            monthEvent newEvent = new monthEvent();
+            newEvent.setNbEvent(nbEvent);
+            newEvent.setEval(eval);
+            eventList.add(newEvent);
+            nbEvent = 0;
+            currentDate = currentDate.plusDays(1);
+            eval = false;
+        }
+        return eventList;
+    }
+
+    private void switchToWeekly(LocalDate weekDay) {
+        edtPane.getChildren().clear();
+
+        for (EventCalendrier event : mainList) {
+            event.setDisplayed(false);
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("weeklyGrid.fxml"));
+        Parent rootNode = null;
+        try {
+            rootNode = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        AnchorPane edtRootPane = (AnchorPane) rootNode.lookup("#rootPane");
+        edtRootPane.prefWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.prefHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.maxWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.maxHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.minWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.minHeightProperty().bind(edtPane.heightProperty());
+
+        LocalDate startOfWeek = weekDay.with(DayOfWeek.MONDAY);
+        LocalDate endOfWeek = weekDay.with(DayOfWeek.SUNDAY);
+
+        currentDateLabel.setText("Semaine du " + startOfWeek.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " au " + endOfWeek.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+        weeklyGridController controller = fxmlLoader.getController();
+        controller.setWeeklyList(getEvents(startOfWeek, endOfWeek));
+
+        edtPane.getChildren().add(rootNode);
+    }
+
+    public void switchToDaily(LocalDate dayDate) {
+        edtPane.getChildren().clear();
+
+        for (EventCalendrier event : mainList) {
+            event.setDisplayed(false);
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("dailyGrid.fxml"));
+        Parent rootNode = null;
+        try {
+            rootNode = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        GridPane edtRootPane = (GridPane) rootNode.lookup("#edtGrid");
+        edtRootPane.prefWidthProperty().bind(edtPane.widthProperty().divide(2));
+        edtRootPane.prefHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.maxWidthProperty().bind(edtPane.widthProperty().divide(2));
+        edtRootPane.maxHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.minWidthProperty().bind(edtPane.widthProperty().divide(2));
+        edtRootPane.minHeightProperty().bind(edtPane.heightProperty());
+
+
+        currentDateLabel.setText("Journée du " + dayDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+        dailyGridController controller = fxmlLoader.getController();
+        controller.setDate(dayDate);
+        controller.setEventList(getEvents(dayDate, dayDate).get(0));
+
+        edtPane.getChildren().add(rootNode);
+    }
+
+    public void switchToMonthly(LocalDate dayOfMonth) {
+        edtPane.getChildren().clear();
+
+        for (EventCalendrier event : mainList) {
+            event.setDisplayed(false);
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("monthlyGrid.fxml"));
+        Parent rootNode = null;
+        try {
+            rootNode = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        GridPane edtRootPane = (GridPane) rootNode.lookup("#edtGrid");
+        edtRootPane.prefWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.prefHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.maxWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.maxHeightProperty().bind(edtPane.heightProperty());
+        edtRootPane.minWidthProperty().bind(edtPane.widthProperty());
+        edtRootPane.minHeightProperty().bind(edtPane.heightProperty());
+
+
+        LocalDate startOfMonth = dayOfMonth.with(TemporalAdjusters.firstDayOfMonth());
+
+        DayOfWeek dayOfWeek = startOfMonth.getDayOfWeek();
+
+        currentDateLabel.setText("Mois de " + startOfMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy")));
+
+        monthlyGridController controller = fxmlLoader.getController();
+        controller.setFirstDay(dayOfWeek);
+        controller.setEventNums(getMonthlyList(startOfMonth, startOfMonth.with(TemporalAdjusters.lastDayOfMonth())));
+
+        edtPane.getChildren().add(rootNode);
+    }
+
+    public void goBack() {
+        switch (currentDisplay) {
+            case 0:
+                displayedDate = displayedDate.minusDays(1);
+                switchToDaily(displayedDate);
+                break;
+            case 1:
+                displayedDate = displayedDate.minusWeeks(1);
+                switchToWeekly(displayedDate);
+                break;
+            case 2:
+                displayedDate = displayedDate.minusMonths(1);
+                switchToMonthly(displayedDate);
+                break;
+        }
+    }
+
+    public void goForward() {
+        switch (currentDisplay) {
+            case 0:
+                displayedDate = displayedDate.plusDays(1);
+                switchToDaily(displayedDate);
+                break;
+            case 1:
+                displayedDate = displayedDate.plusWeeks(1);
+                switchToWeekly(displayedDate);
+                break;
+            case 2:
+                displayedDate = displayedDate.plusMonths(1);
+                switchToMonthly(displayedDate);
+                break;
+        }
+    }
+
+    public void changePrefType(int type) {
+        switch (type) {
+            case 0:
+                periodChoice.getSelectionModel().select("Jour");
+                switchToDaily(displayedDate);
+                break;
+            case 1:
+                periodChoice.getSelectionModel().select("Semaine");
+                switchToWeekly(displayedDate);
+                break;
+            case 2:
+                periodChoice.getSelectionModel().select("Mois");
+                switchToMonthly(displayedDate);
+                break;
+        }
+    }
+
 }

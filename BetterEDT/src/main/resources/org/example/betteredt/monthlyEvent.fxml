@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.text.Font?>
+<VBox fx:id="root" spacing="5" style="-fx-background-color: #9dc1fc; -fx-border-color: black; -fx-border-width: 1px;" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="org.example.betteredt.monthlyEventController">
+    <children>
+        <!-- First label at top left -->
+        <Label fx:id="dayNum" styleClass="label-excluded" text="99" textFill="BLACK" wrapText="true" >
+            <font>
+                <Font size="18"/>
+            </font>
+        </Label>
+
+        <!-- Fifth label below fourth label -->
+        <Label fx:id="eventNum" styleClass="label-excluded" text="99 Evenements" textFill="BLACK" wrapText="true" >
+            <font>
+                <Font size="14"/>
+            </font>
+        </Label>
+    </children>
+</VBox>
