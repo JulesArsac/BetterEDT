@@ -178,18 +178,6 @@ public class BetterEDT extends Application {
             }
         }
     }
-    public static void switchToEmailCreationMenu() {
-        if (user != null) {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("createEmail.fxml"));
-                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
-                stage.setScene(mainScene);
-                stage.show();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
     public static User getUser() {
         return user;
     }
