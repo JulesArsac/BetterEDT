@@ -19,9 +19,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static org.example.betteredt.BetterEDT.getConn;
 import static org.example.betteredt.BetterEDT.getUser;
@@ -93,7 +91,22 @@ public class createEventController implements Initializable {
             SalleNameField.setText("S1 = C 042 Nodes (HARDCODED)");
         }
 
-        //EventsListSalle = Parser.startParser("src/main/resources/SalleNode.ics");
+        EventsListSalle = Parser.startParser("src/main/resources/SalleNode.ics");
+        if (EventsListSalle == null) {
+            throw new RuntimeException("Error while parsing the file");
+        }
+
+
+        Set<EventCalendrier> eventSet = new HashSet<>(EventsListSalle);
+
+        EventsListSalle = new ArrayList<>(eventSet);
+
+        EventsListSalle.sort(new Comparator<EventCalendrier>() {
+            @Override
+            public int compare(EventCalendrier e1, EventCalendrier e2) {
+                return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
+            }
+        });
 
     }
 
@@ -293,6 +306,37 @@ public class createEventController implements Initializable {
                 alert.showAndWait();
                 return;
             }
+
+            //verif global de si ya pas de reservation au millieu
+            for (int i=0; i<EventsListSalle.size();i++){
+                if (EventsListSalle.get(i).getJour()==Integer.parseInt(dayField.getText())&&
+                        EventsListSalle.get(i).getMois()==Integer.parseInt(monthField.getText())&&
+                        EventsListSalle.get(i).getYear()==Integer.parseInt(yearField.getText())){
+                    //si c'est le même jour
+                    int startHeureReserver = Integer.parseInt(EventsListSalle.get(i).getStartHeure().substring(0, EventsListSalle.get(i).getStartHeure().indexOf('H')));
+                    int endHeureReserver = Integer.parseInt(EventsListSalle.get(i).getEndHeure().substring(0, EventsListSalle.get(i).getEndHeure().indexOf('H')));
+                    int startMinuteReserver = Integer.parseInt(EventsListSalle.get(i).getStartHeure().substring(EventsListSalle.get(i).getStartHeure().indexOf('H') + 1));
+                    int endMinuteReserver = Integer.parseInt(EventsListSalle.get(i).getEndHeure().substring(EventsListSalle.get(i).getEndHeure().indexOf('H') + 1));
+
+                    if (!(endHeureReserver <= heureDebut || startHeureReserver >= heureFin)) {
+                        if ((endHeureReserver == heureDebut && endMinuteReserver == minuteFin) ||
+                                (startMinuteReserver == minuteFin && startMinuteReserver == minuteDebut)) {
+                            System.out.println("WHAT A CLOSE CALL! :D");
+                        } else{
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.setTitle("Créneau déjà pris");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Les horaires saisies sont déjà réservées. Veuillez saisir des horaires non prises.");
+                            alert.showAndWait();
+                            return;
+                        }
+                    }
+
+                }
+            }
+
+
+
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Horaires invalide");
@@ -301,7 +345,6 @@ public class createEventController implements Initializable {
             alert.showAndWait();
             return;
         }
-
 
 
         String insertSQL =
