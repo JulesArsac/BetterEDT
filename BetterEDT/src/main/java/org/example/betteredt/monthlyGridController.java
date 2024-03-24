@@ -74,6 +74,9 @@ public class monthlyGridController implements Initializable {
             controller.setDayNum(dayName + " " + dayNum);
             controller.setEventNum("Nombre d'évenements: " + event.getNbEvent());
             controller.setEval(event.isEval());
+            if (event.getNbEvent() == 0) {
+                controller.setEmpty();
+            }
 
             edtGrid.add(root, column, row);
             dayNum++;

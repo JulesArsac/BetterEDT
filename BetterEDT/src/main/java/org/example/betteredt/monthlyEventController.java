@@ -34,4 +34,8 @@ public class monthlyEventController {
         }
     }
 
+    public void setEmpty() {
+        root.setStyle("-fx-background-color: #b0b0b0; -fx-border-color: black; -fx-border-width: 1px;");
+    }
+
 }

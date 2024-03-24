@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.text.Font?>
-<VBox fx:id="root" spacing="5" style="-fx-background-color: #9dc1fc; -fx-border-color: black; -fx-border-width: 1px;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="org.example.betteredt.monthlyEventController">
+<VBox fx:id="root" spacing="5" style="-fx-background-color: #9dc1fc; -fx-border-color: black; -fx-border-width: 1px;" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="org.example.betteredt.monthlyEventController">
     <children>
         <!-- First label at top left -->
         <Label fx:id="dayNum" styleClass="label-excluded" text="99" textFill="BLACK" wrapText="true" >
