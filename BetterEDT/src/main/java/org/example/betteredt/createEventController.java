@@ -153,7 +153,22 @@ public class createEventController implements Initializable {
                     endTimeFieldMinute.setText("00");
                 }
             }
-
+            if (heureDebut>heureFin){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Horaires invalide");
+                alert.setHeaderText(null);
+                alert.setContentText("Les horaires saisies ne sont pas valide. Veuillez saisir des horaires valide.");
+                alert.showAndWait();
+                return;
+            }
+            if (heureDebut==heureFin&&minuteFin<minuteDebut){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Horaires invalide");
+                alert.setHeaderText(null);
+                alert.setContentText("Les horaires saisies ne sont pas valide. Veuillez saisir des horaires valide.");
+                alert.showAndWait();
+                return;
+            }
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Horaires invalide");
@@ -162,6 +177,7 @@ public class createEventController implements Initializable {
             alert.showAndWait();
             return;
         }
+
 
         Color selectedColor = colorPicker.getValue();
         String hexColor = String.format("%02X%02X%02X",
