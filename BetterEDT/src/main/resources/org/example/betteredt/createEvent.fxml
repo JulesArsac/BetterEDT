@@ -17,7 +17,7 @@
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.createEventController">
    <children>
       <VBox alignment="CENTER" prefWidth="300" prefHeight="150" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-         <Text text="Creation d'un évenement personnel:" style="-fx-font-size: 14px;-fx-underline: true;"/>
+         <Label text="Creation d'un évenement personnel:" style="-fx-font-size: 14px;-fx-underline: true;"/>
       </VBox>
 
       <ToggleButton AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" fx:id="darkSasuke" mnemonicParsing="false" onAction="#onDarkSasukeClick" text="Dark sasuke" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM"/>
