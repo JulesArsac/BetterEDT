@@ -51,14 +51,17 @@ public class mainController implements Initializable {
             if (newVal.equals("Semaine")) {
                 currentDisplay = 1;
                 switchToWeekly(displayedDate);
+                BetterEDT.setPrefTime(1);
             }
             else if (newVal.equals("Jour")) {
                 currentDisplay = 0;
                 switchToDaily(displayedDate);
+                BetterEDT.setPrefTime(0);
             }
             else {
                 currentDisplay = 2;
                 switchToMonthly(displayedDate);
+                BetterEDT.setPrefTime(2);
             }
         });
 
@@ -182,7 +185,6 @@ public class mainController implements Initializable {
     }
 
     public List<monthEvent> getMonthlyList(LocalDate startDate, LocalDate endDate) {
-        System.out.println("Start date: " + startDate + " End date: " + endDate);
         List<monthEvent> eventList = new ArrayList<>();
         LocalDate currentDate = startDate;
         boolean eval = false;
@@ -341,6 +343,23 @@ public class mainController implements Initializable {
                 break;
             case 2:
                 displayedDate = displayedDate.plusMonths(1);
+                switchToMonthly(displayedDate);
+                break;
+        }
+    }
+
+    public void changePrefType(int type) {
+        switch (type) {
+            case 0:
+                periodChoice.getSelectionModel().select("Jour");
+                switchToDaily(displayedDate);
+                break;
+            case 1:
+                periodChoice.getSelectionModel().select("Semaine");
+                switchToWeekly(displayedDate);
+                break;
+            case 2:
+                periodChoice.getSelectionModel().select("Mois");
                 switchToMonthly(displayedDate);
                 break;
         }

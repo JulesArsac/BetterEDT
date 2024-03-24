@@ -31,7 +31,6 @@ public class monthlyGridController implements Initializable {
         int column = firstDay.getValue()-1;
         int row = 0;
         int dayNum = 1;
-        System.out.println(eventNums.size());
         for (monthEvent event : eventNums) {
             if (column == 7) {
                 column = 0;

@@ -40,7 +40,7 @@ public class BetterEDT extends Application {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-//        user = new User(1, "admin", true, true, 0);
+        user = new User(1, "admin", true, false, 0);
         if (user == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("connectionScreen.fxml"));
             mainScene = new Scene(fxmlLoader.load(), 1000, 600);
@@ -65,7 +65,6 @@ public class BetterEDT extends Application {
     }
 
     public static void goDarkMode() {
-        System.out.println("going dark");
         try {
             mainScene.getStylesheets().add(darkSasukeFile.toURI().toURL().toExternalForm());
         } catch (MalformedURLException e) {
@@ -82,7 +81,6 @@ public class BetterEDT extends Application {
     }
 
     public static void goLightMode() {
-        System.out.println("going light");
         mainScene.getStylesheets().remove(darkSasukeFile.toURI().toString());
         if (user != null) {
             String updateSQL = "UPDATE users SET darkSasuke = 0 WHERE id = " + user.getId() + ";";
@@ -131,6 +129,7 @@ public class BetterEDT extends Application {
                     controller.setDarkMode(false);
                     goLightMode();
                 }
+                controller.changePrefType(user.getDefaultTime());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -176,5 +175,15 @@ public class BetterEDT extends Application {
         return user;
     }
 
+    public static void setPrefTime(int time) {
+        if (user != null) {
+            String updateSQL = "UPDATE users SET defaultTime = " + time + " WHERE id = " + user.getId() + ";";
+            try {
+                conn.createStatement().executeUpdate(updateSQL);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
 }
