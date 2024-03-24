@@ -136,8 +136,8 @@ public class BetterEDT extends Application {
     public static void goToPersonalScreen() {
         if (user != null) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("personalSchedule.fxml"));
-                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("personalScreen.fxml"));
+                mainScene.setRoot(fxmlLoader.load());
                 stage.setScene(mainScene);
                 stage.show();
             } catch (IOException e) {
@@ -148,8 +148,8 @@ public class BetterEDT extends Application {
     public static void switchToSalleSchedule() {
         if (user != null) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("salleSchedule.fxml"));
-                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("salleScreen.fxml"));
+                mainScene.setRoot(fxmlLoader.load());
                 stage.setScene(mainScene);
                 stage.show();
             } catch (IOException e) {
@@ -161,7 +161,7 @@ public class BetterEDT extends Application {
         if (user != null) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("createEvent.fxml"));
-                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                mainScene.setRoot(fxmlLoader.load());
                 stage.setScene(mainScene);
                 stage.show();
             } catch (IOException e) {

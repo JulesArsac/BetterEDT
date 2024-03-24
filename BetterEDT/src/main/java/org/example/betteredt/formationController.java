@@ -44,8 +44,6 @@ public class formationController implements Initializable {
     @FXML
     VBox middleVbox;
     @FXML
-    VBox topLeftVbox;
-    @FXML
     Label currentDateLabel;
 
     @Override
