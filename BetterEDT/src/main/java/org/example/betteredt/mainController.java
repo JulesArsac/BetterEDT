@@ -170,7 +170,6 @@ public class mainController implements Initializable {
         List<monthEvent> eventList = new ArrayList<>();
         LocalDate currentDate = startDate;
         boolean eval = false;
-        eventList.add(new monthEvent());
         int nbEvent = 0;
         while (currentDate.isBefore(endDate)) {
             for (EventCalendrier event : mainList) {
