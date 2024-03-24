@@ -4,10 +4,15 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -71,4 +76,20 @@ public class eventController implements Initializable {
     }
 
 
+    public void sendAnEmail(MouseEvent mouseEvent) {
+        String lowercaseInput = prof.getText().toLowerCase();
+        String[] words = lowercaseInput.split(" ");
+        String output = String.join(".", words);
+
+        String mailto = "mailto:"+output+"@univ-avignon.fr";
+        try {
+            // Encode the mailto URI to handle special characters (e.g., spaces)
+            URI uri = new URI(mailto.replace(" ", "%20"));
+
+            // Use the Desktop class to open the default mail client with the pre-populated email
+            Desktop.getDesktop().browse(uri);
+        } catch (URISyntaxException | IOException | UnsupportedOperationException e) {
+            e.printStackTrace();
+        }
+    }
 }

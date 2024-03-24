@@ -177,7 +177,7 @@ public class weeklyGridController implements Initializable {
                             controller.setTime(event.getStartHeure() + " - " + event.getEndHeure());
                             controller.setRoom(event.getLocation());
                             controller.setTitle(event.getUCE());
-                            controller.setProf(event.getProfesseur());
+                            controller.setProf(event.getProfesseur()); //lien ici
                             controller.setType(event.getTypeDeCours());
                             if (eventStartTime.equals(span.getStart())) {
                                 hbox.getChildren().add(eventRootNode);
