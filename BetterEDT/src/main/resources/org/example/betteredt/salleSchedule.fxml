@@ -13,7 +13,7 @@
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.salleScreenController">
     <children>
         <VBox alignment="CENTER" prefWidth="300" prefHeight="200">
-            <Text text="Ceci est l'écran des salles" />
+            <Text text="Ceci est l'écran de l'emploi du temps des salles" />
         </VBox>
         <GridPane fx:id="edtGrid" layoutX="172.0" layoutY="129.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="982.0">
             <columnConstraints>
@@ -42,6 +42,7 @@
             </rowConstraints>
             <children>
                 <ComboBox fx:id="periodChoice" prefHeight="17.0" prefWidth="118.0" GridPane.halignment="CENTER" GridPane.valignment="TOP"/>
+                <Button fx:id="AddNewReservationEvent" layoutX="370.0" layoutY="20.0" mnemonicParsing="false" onAction="#switchToReservationMenu" text="New Reservation"/>
                 <ToggleButton fx:id="darkSasuke" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onDarkSasukeClick" text="Dark sasuke" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM"/>
             </children>
         </GridPane>

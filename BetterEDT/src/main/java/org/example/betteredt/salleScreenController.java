@@ -3,6 +3,7 @@ package org.example.betteredt;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class salleScreenController implements Initializable {
+    public Button AddNewReservationEvent;
     @FXML
     private Label welcomeText;
     @FXML
@@ -68,6 +70,9 @@ public class salleScreenController implements Initializable {
             throw new RuntimeException("Error while parsing the file");
         }
 
+        AddNewReservationEvent.setVisible(BetterEDT.getUser().isAdmin());
+
+
 
     }
 
@@ -95,5 +100,9 @@ public class salleScreenController implements Initializable {
 
     public void switchToSalleSchedule(ActionEvent actionEvent) {
         BetterEDT.switchToSalleSchedule();
+    }
+
+    public void switchToReservationMenu(ActionEvent actionEvent) {
+        BetterEDT.switchToReservationEventMenu();
     }
 }
