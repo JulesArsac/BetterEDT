@@ -1,5 +1,7 @@
 package org.example.betteredt;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,9 +11,12 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +30,7 @@ public class formationController implements Initializable {
     private int currentDisplay = 1;
     private boolean darkMode = false;
 
+
     @FXML
     private ComboBox periodChoice;
     @FXML
@@ -36,7 +42,9 @@ public class formationController implements Initializable {
     @FXML
     GridPane filterPane;
     @FXML
-    VBox topVbox;
+    VBox middleVbox;
+    @FXML
+    VBox topLeftVbox;
     @FXML
     Label currentDateLabel;
 
@@ -72,7 +80,7 @@ public class formationController implements Initializable {
             edtPane.setPrefWidth(newVal.doubleValue()-160);
             edtPane.setMaxWidth(newVal.doubleValue()-160);
 
-            topVbox.setPrefWidth(newVal.doubleValue()-350);
+            middleVbox.setPrefWidth(newVal.doubleValue());
 
             if (newVal.doubleValue() < 160) {
 
@@ -92,7 +100,7 @@ public class formationController implements Initializable {
             filterPane.setMaxHeight(newVal.doubleValue()-150);
         });
 
-        setupMainList("src/main/resources/ILSEN.ics");
+        setupMainList("src/main/resources/formation/ILSEN.ics");
 
         switchToWeekly(LocalDate.now());
 
@@ -362,6 +370,23 @@ public class formationController implements Initializable {
                 periodChoice.getSelectionModel().select("Mois");
                 switchToMonthly(displayedDate);
                 break;
+        }
+    }
+
+    public void selectFormation() {
+        String path = BetterEDT.getIcsName(0);
+        if (path == null) {
+            return;
+        }
+        setupMainList(path);
+        if (currentDisplay == 0) {
+            switchToDaily(displayedDate);
+        }
+        else if (currentDisplay == 1) {
+            switchToWeekly(displayedDate);
+        }
+        else {
+            switchToMonthly(displayedDate);
         }
     }
 
