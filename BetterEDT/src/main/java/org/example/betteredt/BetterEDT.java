@@ -17,7 +17,7 @@ import java.util.List;
 
 public class BetterEDT extends Application {
 
-    private static Scene mainScene;
+    private static Scene mainScene = null;
     private static Stage stage;
     private static File darkSasukeFile = new File("src/main/resources/darkSasuke.css");
     public static Connection getConn() {
@@ -115,7 +115,12 @@ public class BetterEDT extends Application {
         if (user != null) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("formationScreen.fxml"));
-                mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                if (mainScene == null){
+                    mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+                }
+                else {
+                    mainScene.setRoot(fxmlLoader.load());
+                }
                 stage.setScene(mainScene);
                 stage.show();
                 formationController controller = fxmlLoader.getController();

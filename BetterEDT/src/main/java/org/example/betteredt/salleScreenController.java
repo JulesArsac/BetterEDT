@@ -369,7 +369,7 @@ public class salleScreenController implements Initializable {
     }
 
     public void selectFormation() {
-        String path = BetterEDT.getIcsName(0);
+        String path = BetterEDT.getIcsName(1);
         if (path == null) {
             return;
         }
