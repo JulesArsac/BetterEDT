@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.weeklyGridController">
+   <children>
+      <GridPane fx:id="edtGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="1164.0">
+         <columnConstraints>
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints  vgrow="SOMETIMES" />
+            <RowConstraints  vgrow="ALWAYS" />
+         </rowConstraints>
+      </GridPane>
+   </children>
+</AnchorPane>

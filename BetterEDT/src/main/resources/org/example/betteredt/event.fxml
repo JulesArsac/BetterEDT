@@ -1,0 +1,24 @@
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="root" style="-fx-background-color: #9dc1fc; -fx-border-color: black; -fx-border-width: 1px;" fx:controller="org.example.betteredt.eventController" spacing="5">
+   <children>
+      <!-- First label at top left -->
+      <Label fx:id="time" text="XX:XX - XX:XX" wrapText="true" textFill="BLACK" styleClass="label-excluded" />
+
+      <!-- Second label at top right -->
+      <Label fx:id="room" text="Stat X = C XXX"  wrapText="true" textFill="BLACK" styleClass="label-excluded" />
+
+      <!-- Third label below first label -->
+      <Label fx:id="title" text="Matière: Feur" wrapText="true" textFill="BLACK" styleClass="label-excluded" />
+
+      <!-- Fourth label below third label -->
+      <Label fx:id="prof" text="Enseignant: Mr Feur" wrapText="true" textFill="BLACK" styleClass="label-excluded" onMouseClicked="#sendAnEmail"/>
+
+
+      <!-- Fifth label below fourth label -->
+      <Label fx:id="type" text="Type: TP" wrapText="true" textFill="BLACK" styleClass="label-excluded" />
+   </children>
+</VBox>
+
