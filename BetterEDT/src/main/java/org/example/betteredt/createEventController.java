@@ -56,36 +56,17 @@ public class createEventController implements Initializable {
     @FXML
     private GridPane mainGrid;
 
-    @FXML
-    void openNewScene(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("newScene.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    @FXML
-    protected void onDarkSasukeClick() {
-        if (darkSasuke.isSelected()) {
-            BetterEDT.goDarkMode();
-            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
-
-
-        } else {
-            BetterEDT.goLightMode();
-            darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
-        }
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        if (BetterEDT.isDarkMode()) {
+            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
+        } else {
+            darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
+        }
+
         mainGrid.prefHeightProperty().bind(Bindings.subtract(rootPane.heightProperty(), 100));
-        //SalleNameField initialiser pour prendre le nom de la salle dont on a cliquer dessus
         if (SalleNameField!=null){
             SalleNameField.setText("S1 = C 042 Nodes (HARDCODED)");
         }
@@ -94,7 +75,6 @@ public class createEventController implements Initializable {
         if (EventsListSalle == null) {
             throw new RuntimeException("Error while parsing the file");
         }
-
 
         Set<EventCalendrier> eventSet = new HashSet<>(EventsListSalle);
 
@@ -108,6 +88,26 @@ public class createEventController implements Initializable {
         });
 
     }
+
+    @FXML
+    protected void onDarkSasukeClick() {
+        if (!BetterEDT.isDarkMode()) {
+            BetterEDT.goDarkMode();
+            setDarkMode(true);
+        } else {
+            BetterEDT.goLightMode();
+            setDarkMode(false);
+        }
+    }
+
+    public void setDarkMode(boolean darkMode) {
+        if (!darkMode) {
+            darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
+        } else {
+            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
+        }
+    }
+
 
     public void addNewEvent(ActionEvent actionEvent) throws SQLException {
 

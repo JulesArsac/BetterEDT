@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
 
 public class filtersController implements Initializable {
 
-    private boolean darkMode = false;
     private IEdtController parentController;
 
     @FXML
@@ -57,7 +56,7 @@ public class filtersController implements Initializable {
 
     @FXML
     protected void onDarkSasukeClick() {
-        if (!darkMode) {
+        if (!BetterEDT.isDarkMode()) {
             BetterEDT.goDarkMode();
             setDarkMode(true);
         } else {
@@ -67,7 +66,6 @@ public class filtersController implements Initializable {
     }
 
     public void setDarkMode(boolean darkMode) {
-        this.darkMode = darkMode;
         if (!darkMode) {
             darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
         } else {
