@@ -25,7 +25,7 @@ public class BetterEDT extends Application {
     }
     private static Connection conn = null;
     private static User user = null;
-    private static List<EventCalendrier> currentEvents = null;
+    private static boolean darkMode = false;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -38,7 +38,6 @@ public class BetterEDT extends Application {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        user = new User(1, "admin", true, false, 1);
         if (user == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("connectionScreen.fxml"));
             mainScene = new Scene(fxmlLoader.load(), 1000, 600);
@@ -63,6 +62,7 @@ public class BetterEDT extends Application {
     }
 
     public static void goDarkMode() {
+        darkMode = true;
         try {
             mainScene.getStylesheets().add(darkSasukeFile.toURI().toURL().toExternalForm());
         } catch (MalformedURLException e) {
@@ -79,6 +79,7 @@ public class BetterEDT extends Application {
     }
 
     public static void goLightMode() {
+        darkMode = false;
         mainScene.getStylesheets().remove(darkSasukeFile.toURI().toString());
         if (user != null) {
             String updateSQL = "UPDATE users SET darkSasuke = 0 WHERE id = " + user.getId() + ";";
@@ -111,7 +112,7 @@ public class BetterEDT extends Application {
         }
     }
 
-    public static void goToMainScreen() {
+    public static void goToFormationScreen() {
         if (user != null) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("formationScreen.fxml"));
@@ -175,11 +176,13 @@ public class BetterEDT extends Application {
         }
     }
 
-    public static void switchToReservationEventMenu() {
+    public static void switchToReservationEventMenu(String salle) {
         if (user != null) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("createReservationEvent.fxml"));
                 mainScene.setRoot(fxmlLoader.load());
+                createEventController controller = fxmlLoader.getController();
+                controller.setSalleNameField(salle);
                 stage.setScene(mainScene);
                 stage.show();
             } catch (IOException e) {
@@ -203,8 +206,7 @@ public class BetterEDT extends Application {
     }
 
     public static List<EventCalendrier> parseFile(String path) {
-        currentEvents = Parser.startParser(path);
-        return currentEvents;
+        return Parser.startParser(path);
     }
 
     public static String getIcsName(int type) {
@@ -222,7 +224,77 @@ public class BetterEDT extends Application {
 
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
+            if (type == 2) {
+                if (user != null) {
+                    String updateSQL = "UPDATE users SET defaultFile = '" + selectedFile.getName() + "' WHERE id = " + user.getId() + ";";
+                    try {
+                        conn.createStatement().executeUpdate(updateSQL);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
             return selectedFile.getAbsolutePath();
+        }
+        return null;
+    }
+
+    public static boolean isDarkMode() {
+        return darkMode;
+    }
+
+    public static List<EventCalendrier> addUserEvent(List<EventCalendrier> events) {
+        if (user == null) {
+            return events;
+        }
+        String selectSQL = "SELECT * FROM personalSchedule WHERE user = '" + user.getUsername() + "';";
+        try {
+            ResultSet rs = conn.createStatement().executeQuery(selectSQL);
+            while (rs.next()) {
+                EventCalendrier eventToAdd = new EventCalendrier(rs.getString("description"), rs.getString("startHeure"), rs.getString("endHeure"), rs.getString("lieu"), rs.getInt("mois"), rs.getInt("jour"), rs.getInt("anner"), rs.getString("eventName"), rs.getString("user"), rs.getString("couleur"), rs.getString("description"), rs.getString("description"));
+                events.add(eventToAdd);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        selectSQL = "SELECT * FROM reservationSalleTable WHERE user = '" + user.getUsername() + "';";
+        try {
+            ResultSet rs = conn.createStatement().executeQuery(selectSQL);
+            while (rs.next()) {
+                EventCalendrier eventToAdd = new EventCalendrier(rs.getString("description"), rs.getString("startHeure"), rs.getString("endHeure"), rs.getString("salleName"), rs.getInt("mois"), rs.getInt("jour"), rs.getInt("anner"), "Réservation de salle", rs.getString("user"), null, rs.getString("description"), rs.getString("description"));
+                events.add(eventToAdd);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return events;
+    }
+
+    public static List<EventCalendrier> addSalleEvent(List<EventCalendrier> events, String salle) {
+        String selectSQL = "SELECT * FROM reservationSalleTable WHERE salleName = '" + salle + "';";
+        try {
+            ResultSet rs = conn.createStatement().executeQuery(selectSQL);
+            while (rs.next()) {
+                EventCalendrier eventToAdd = new EventCalendrier(rs.getString("description"), rs.getString("startHeure"), rs.getString("endHeure"), rs.getString("salleName"), rs.getInt("mois"), rs.getInt("jour"), rs.getInt("anner"), "Réservation de salle", rs.getString("user"), null, rs.getString("description"), rs.getString("description"));
+                events.add(eventToAdd);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return events;
+    }
+
+    public static String getSavedFile() {
+        if (user != null) {
+            String selectSQL = "SELECT defaultFile FROM users WHERE id = " + user.getId() + ";";
+            try {
+                ResultSet rs = conn.createStatement().executeQuery(selectSQL);
+                if (rs.next()) {
+                    return rs.getString("defaultFile");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
         return null;
     }

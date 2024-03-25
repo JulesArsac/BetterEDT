@@ -1,5 +1,8 @@
 package org.example.betteredt;
 
+import net.fortuna.ical4j.model.DateTime;
+
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,22 +16,39 @@ public class EventCalendrier {
     private final String endHeure;
     private final String location;
 
-    private final String dateCompacter;
+    private String dateCompacter;
 
     private final int mois;
     private final int jour;
-    private final int jourSemaine;
+    private int jourSemaine;
     private final int year;
 
     private final String UCE;
     private final String professeur;
-    private final String elevesConcerner;
+    private String elevesConcerner = null;
     private final String typeDeCours;
     private final String additionalInfo;
+    private String color = null;
 
     private boolean isDisplayed = false;
 
 
+    public EventCalendrier(String summary, String startHeure, String endHeure, String location, int mois, int jour, int year, String UCE, String professeur, String color, String typeDeCours, String additionalInfo) {
+        this.summary = summary;
+        this.startHeure = startHeure;
+        this.endHeure = endHeure;
+        this.location = location;
+        this.mois = mois;
+        this.jour = jour;
+        this.year = year;
+        this.UCE = UCE;
+        this.professeur = professeur;
+        this.color = color;
+        this.typeDeCours = typeDeCours;
+        this.additionalInfo = additionalInfo;
+        setJourSemaine();
+        setDateCompacter();
+    }
 
     public EventCalendrier(String summary, Date startDate, Date endDate, String location) {
 
@@ -103,9 +123,13 @@ public class EventCalendrier {
 
         }
 
+        setDateCompacter();
+
+    }
+
+    public void setDateCompacter() {
         String day;
         String month;
-        String hour;
         if (jour < 10){
             day="0"+jour;
         } else {
@@ -117,6 +141,11 @@ public class EventCalendrier {
             month=String.valueOf(mois);
         }
         dateCompacter=day+"/"+month+"/"+year+"-"+startHeure;
+    }
+
+    public void setJourSemaine() {
+        LocalDate date = LocalDate.of(year, mois, jour);
+        jourSemaine = date.getDayOfWeek().getValue()-1;
     }
 
     public void displayAllInfo(){
@@ -196,6 +225,10 @@ public class EventCalendrier {
 
     public void setDisplayed(boolean displayed) {
         isDisplayed = displayed;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     @Override

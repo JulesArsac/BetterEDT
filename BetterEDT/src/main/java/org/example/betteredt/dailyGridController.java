@@ -145,6 +145,7 @@ public class dailyGridController implements Initializable {
                     controller.setTitle(event.getUCE());
                     controller.setProf(event.getProfesseur());
                     controller.setType(event.getTypeDeCours());
+                    controller.setEvent(event);
                     if (eventStartTime.equals(span.getStart())) {
                         hbox.getChildren().add(eventRootNode);
                     }

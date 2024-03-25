@@ -18,6 +18,8 @@ import java.util.ResourceBundle;
 
 public class eventController implements Initializable {
 
+    private EventCalendrier event = null;
+
     @FXML
     VBox root;
     @FXML
@@ -48,6 +50,11 @@ public class eventController implements Initializable {
         //Check if the type is "Evaluation" and change the color of the event
         type.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("Evaluation")) {
+                if (event != null) {
+                    if (event.getColor() != null) {
+                        return;
+                    }
+                }
                 root.setStyle("-fx-background-color: #f56e64; -fx-border-color: black; -fx-border-width: 1px;");
             }
         });
@@ -73,6 +80,13 @@ public class eventController implements Initializable {
 
     public void setType(String type) {
         this.type.setText(type);
+    }
+
+    public void setEvent(EventCalendrier event) {
+        this.event = event;
+        if (event.getColor() != null) {
+            root.setStyle("-fx-background-color: #" + event.getColor() + "; -fx-border-color: black; -fx-border-width: 1px;");
+        }
     }
 
 

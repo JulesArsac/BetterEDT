@@ -1,7 +1,5 @@
 package org.example.betteredt;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,36 +9,29 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-import javafx.stage.FileChooser;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.channels.FileChannel;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
-public class formationController implements Initializable {
+public class formationController implements Initializable, IEdtController {
 
+    private List<EventCalendrier> allEventList = null;
     private List<EventCalendrier> mainList = null;
     private LocalDate displayedDate = LocalDate.now();
     private int currentDisplay = 1;
-    private boolean darkMode = false;
+    private filtersController filtersController;
 
-
-    @FXML
-    private ComboBox periodChoice;
-    @FXML
-    private ToggleButton darkSasuke;
     @FXML
     Pane edtPane;
     @FXML
     AnchorPane rootPane;
     @FXML
-    GridPane filterPane;
+    Pane filterPane;
     @FXML
     VBox middleVbox;
     @FXML
@@ -48,31 +39,6 @@ public class formationController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        periodChoice.getItems().addAll("Semaine" , "Jour" , "Mois");
-        periodChoice.getSelectionModel().selectFirst();
-        periodChoice.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == oldVal) {
-                return;
-            }
-            if (newVal.equals("Semaine")) {
-                currentDisplay = 1;
-                switchToWeekly(displayedDate);
-                BetterEDT.setPrefTime(1);
-            }
-            else if (newVal.equals("Jour")) {
-                currentDisplay = 0;
-                switchToDaily(displayedDate);
-                BetterEDT.setPrefTime(0);
-            }
-            else {
-                currentDisplay = 2;
-                switchToMonthly(displayedDate);
-                BetterEDT.setPrefTime(2);
-            }
-        });
-
-        darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
-
 
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             edtPane.setPrefWidth(newVal.doubleValue()-160);
@@ -80,14 +46,13 @@ public class formationController implements Initializable {
 
             middleVbox.setPrefWidth(newVal.doubleValue());
 
-            if (newVal.doubleValue() < 160) {
-
-                filterPane.setPrefWidth(newVal.doubleValue());
-                filterPane.setMaxWidth(newVal.doubleValue());
+            if (newVal.doubleValue() < 180) {
+                filterPane.setPrefWidth(newVal.doubleValue()-40);
+                filterPane.setMaxWidth(newVal.doubleValue()-40);
             }
             else {
-                filterPane.setPrefWidth(160);
-                filterPane.setMaxWidth(160);
+                filterPane.setPrefWidth(140);
+                filterPane.setMaxWidth(140);
             }
         });
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
@@ -97,6 +62,22 @@ public class formationController implements Initializable {
             filterPane.setPrefHeight(newVal.doubleValue()-150);
             filterPane.setMaxHeight(newVal.doubleValue()-150);
         });
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("filters.fxml"));
+        VBox rootNode = null;
+        try {
+            rootNode = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        filtersController = fxmlLoader.getController();
+        filtersController.setParentController(this);
+
+        rootNode.prefWidthProperty().bind(filterPane.widthProperty());
+        rootNode.prefHeightProperty().bind(filterPane.heightProperty());
+
+        filterPane.getChildren().add(rootNode);
+
 
         setupMainList("src/main/resources/formation/ILSEN.ics");
 
@@ -113,24 +94,8 @@ public class formationController implements Initializable {
 
     }
 
-    @FXML
-    protected void onDarkSasukeClick() {
-        if (!darkMode) {
-            BetterEDT.goDarkMode();
-            setDarkMode(true);
-        } else {
-            BetterEDT.goLightMode();
-            setDarkMode(false);
-        }
-    }
-
-    public void setDarkMode(boolean darkMode) {
-        this.darkMode = darkMode;
-        if (!darkMode) {
-            darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
-        } else {
-            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
-        }
+    public void setDarkMode(Boolean bool) {
+        filtersController.setDarkMode(bool);
     }
 
     public void switchToPersonalSchedule(ActionEvent actionEvent) {
@@ -138,7 +103,7 @@ public class formationController implements Initializable {
     }
 
     public void switchToMainScreen(ActionEvent actionEvent) {
-        BetterEDT.goToMainScreen();
+        BetterEDT.goToFormationScreen();
     }
 
     public void switchToSalleSchedule(ActionEvent actionEvent) {
@@ -146,21 +111,22 @@ public class formationController implements Initializable {
     }
 
     public void setupMainList(String path) {
-        mainList = BetterEDT.parseFile(path);
-        if (mainList == null) {
+        allEventList = BetterEDT.parseFile(path);
+        if (allEventList == null) {
             throw new RuntimeException("Error while parsing the file");
         }
 
-        Set<EventCalendrier> eventSet = new HashSet<>(mainList);
+        Set<EventCalendrier> eventSet = new HashSet<>(allEventList);
 
-        mainList = new ArrayList<>(eventSet);
+        allEventList = new ArrayList<>(eventSet);
 
-        mainList.sort(new Comparator<EventCalendrier>() {
+        allEventList.sort(new Comparator<EventCalendrier>() {
             @Override
             public int compare(EventCalendrier e1, EventCalendrier e2) {
                 return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
             }
         });
+        mainList = allEventList;
     }
 
     public List<List<EventCalendrier>> getEvents(LocalDate startDate, LocalDate endDate) {
@@ -174,7 +140,7 @@ public class formationController implements Initializable {
             if (eventDate.isAfter(endDate)) {
                 break;
             }
-            if (event.getJour() == startDate.getDayOfMonth() && event.getMois() == startDate.getMonthValue() && event.getYear() == startDate.getYear()) {
+            if (eventDate.isAfter(startDate) || eventDate.equals(startDate)) {
                 start = true;
             }
             if (eventDate.isAfter(savedDate)) {
@@ -355,20 +321,7 @@ public class formationController implements Initializable {
     }
 
     public void changePrefType(int type) {
-        switch (type) {
-            case 0:
-                periodChoice.getSelectionModel().select("Jour");
-                switchToDaily(displayedDate);
-                break;
-            case 1:
-                periodChoice.getSelectionModel().select("Semaine");
-                switchToWeekly(displayedDate);
-                break;
-            case 2:
-                periodChoice.getSelectionModel().select("Mois");
-                switchToMonthly(displayedDate);
-                break;
-        }
+        filtersController.setPeriodChoice(type);
     }
 
     public void selectFormation() {
@@ -386,6 +339,42 @@ public class formationController implements Initializable {
         else {
             switchToMonthly(displayedDate);
         }
+    }
+
+    public void switchToDailyFilter() {
+        currentDisplay = 0;
+        switchToDaily(displayedDate);
+    }
+
+    public void switchToWeeklyFilter() {
+        currentDisplay = 1;
+        switchToWeekly(displayedDate);
+    }
+
+    public void switchToMonthlyFilter() {
+        currentDisplay = 2;
+        switchToMonthly(displayedDate);
+    }
+
+    @Override
+    public void updateEventList(List<EventCalendrier> newEvents) {
+        mainList = newEvents;
+        switch (currentDisplay) {
+            case 0:
+                switchToDaily(displayedDate);
+                break;
+            case 1:
+                switchToWeekly(displayedDate);
+                break;
+            case 2:
+                switchToMonthly(displayedDate);
+                break;
+        }
+    }
+
+    @Override
+    public List<EventCalendrier> getCurrentEvents() {
+        return allEventList;
     }
 
 }

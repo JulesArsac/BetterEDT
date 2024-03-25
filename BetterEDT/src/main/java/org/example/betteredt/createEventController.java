@@ -3,18 +3,12 @@ package org.example.betteredt;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.DateTimeException;
@@ -33,7 +27,7 @@ public class createEventController implements Initializable {
     public TextField endTimeFieldHeure;
     public TextField endTimeFieldMinute;
     public AnchorPane rootPane;
-    public Label SalleNameField;
+    public Label salleNameField;
 
     @FXML
     private TextField eventNameField;
@@ -57,45 +51,25 @@ public class createEventController implements Initializable {
     @FXML
     private GridPane mainGrid;
 
-    @FXML
-    void openNewScene(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("newScene.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    @FXML
-    protected void onDarkSasukeClick() {
-        if (darkSasuke.isSelected()) {
-            BetterEDT.goDarkMode();
-            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
-
-
-        } else {
-            BetterEDT.goLightMode();
-            darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
-        }
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        if (BetterEDT.isDarkMode()) {
+            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
+        } else {
+            darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
+        }
+
         mainGrid.prefHeightProperty().bind(Bindings.subtract(rootPane.heightProperty(), 100));
-        //SalleNameField initialiser pour prendre le nom de la salle dont on a cliquer dessus
-        if (SalleNameField!=null){
-            SalleNameField.setText("S1 = C 042 Nodes (HARDCODED)");
+        if (salleNameField != null){
+            salleNameField.setText("S1 = C 042 Nodes (HARDCODED)");
         }
 
         EventsListSalle = Parser.startParser("src/main/resources/SalleNode.ics");
         if (EventsListSalle == null) {
             throw new RuntimeException("Error while parsing the file");
         }
-
 
         Set<EventCalendrier> eventSet = new HashSet<>(EventsListSalle);
 
@@ -109,6 +83,26 @@ public class createEventController implements Initializable {
         });
 
     }
+
+    @FXML
+    protected void onDarkSasukeClick() {
+        if (!BetterEDT.isDarkMode()) {
+            BetterEDT.goDarkMode();
+            setDarkMode(true);
+        } else {
+            BetterEDT.goLightMode();
+            setDarkMode(false);
+        }
+    }
+
+    public void setDarkMode(boolean darkMode) {
+        if (!darkMode) {
+            darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
+        } else {
+            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
+        }
+    }
+
 
     public void addNewEvent(ActionEvent actionEvent) throws SQLException {
 
@@ -225,7 +219,7 @@ public class createEventController implements Initializable {
 
     public void addNewReservation(ActionEvent actionEvent) throws SQLException {
 
-        if (SalleNameField.getText().isEmpty()||dayField.getText().isEmpty()||monthField.getText().isEmpty()||yearField.getText().isEmpty()||
+        if (salleNameField.getText().isEmpty()||dayField.getText().isEmpty()||monthField.getText().isEmpty()||yearField.getText().isEmpty()||
                 startTimeFieldHeure.getText().isEmpty() || startTimeFieldMinute.getText().isEmpty()||endTimeFieldHeure.getText().isEmpty() || endTimeFieldMinute.getText().isEmpty()){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Champs obligatoires");
@@ -235,7 +229,6 @@ public class createEventController implements Initializable {
             return;
         }
 
-        //test des dates
         try {
             int day = Integer.parseInt(dayField.getText());
             int month = Integer.parseInt(monthField.getText());
@@ -264,6 +257,9 @@ public class createEventController implements Initializable {
                 alert.showAndWait();
                 return;
             }
+            if (heureDebut < 10) {
+                startTimeFieldHeure.setText("0" + startTimeFieldHeure.getText());
+            }
             if (minuteDebut!=30){
                 if (minuteDebut!=0){
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -276,6 +272,9 @@ public class createEventController implements Initializable {
                 if (Objects.equals(startTimeFieldMinute.getText(), "0")){
                     startTimeFieldMinute.setText("00");
                 }
+            }
+            if (heureFin < 10) {
+                endTimeFieldHeure.setText("0" + endTimeFieldHeure.getText());
             }
             if (minuteFin!=30){
                 if (minuteFin!=0){
@@ -307,12 +306,10 @@ public class createEventController implements Initializable {
                 return;
             }
 
-            //verif global de si ya pas de reservation au millieu
-            for (int i=0; i<EventsListSalle.size();i++){
+            for (int i=0; i<EventsListSalle.size(); i++) {
                 if (EventsListSalle.get(i).getJour()==Integer.parseInt(dayField.getText())&&
                         EventsListSalle.get(i).getMois()==Integer.parseInt(monthField.getText())&&
                         EventsListSalle.get(i).getYear()==Integer.parseInt(yearField.getText())){
-                    //si c'est le même jour
                     int startHeureReserver = Integer.parseInt(EventsListSalle.get(i).getStartHeure().substring(0, EventsListSalle.get(i).getStartHeure().indexOf('H')));
                     int endHeureReserver = Integer.parseInt(EventsListSalle.get(i).getEndHeure().substring(0, EventsListSalle.get(i).getEndHeure().indexOf('H')));
                     int startMinuteReserver = Integer.parseInt(EventsListSalle.get(i).getStartHeure().substring(EventsListSalle.get(i).getStartHeure().indexOf('H') + 1));
@@ -321,7 +318,6 @@ public class createEventController implements Initializable {
                     if (!(endHeureReserver <= heureDebut || startHeureReserver >= heureFin)) {
                         if ((endHeureReserver == heureDebut && endMinuteReserver == minuteFin) ||
                                 (startMinuteReserver == minuteFin && startMinuteReserver == minuteDebut)) {
-                            System.out.println("WHAT A CLOSE CALL! :D");
                         } else{
                             Alert alert = new Alert(Alert.AlertType.WARNING);
                             alert.setTitle("Créneau déjà pris");
@@ -334,9 +330,6 @@ public class createEventController implements Initializable {
 
                 }
             }
-
-
-
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Horaires invalide");
@@ -349,14 +342,14 @@ public class createEventController implements Initializable {
 
         String insertSQL =
                 "INSERT INTO reservationSalleTable(user, salleName, description, jour, mois, anner, startHeure, endHeure) " +
-                        "VALUES ('" + getUser().getUsername() + "', '" + SalleNameField.getText() + "', '" + descriptionArea.getText() + "', '" +
+                        "VALUES ('" + getUser().getUsername() + "', '" + salleNameField.getText() + "', '" + descriptionArea.getText() + "', '" +
                         dayField.getText() + "', '" + monthField.getText() + "', '" + yearField.getText() + "', '" +
                         startTimeFieldHeure.getText() + "H" + startTimeFieldMinute.getText() + "', '" +
                         endTimeFieldHeure.getText() + "H" + endTimeFieldMinute.getText() + "')";
 
         getConn().createStatement().execute(insertSQL);
 
-        BetterEDT.goToPersonalScreen();
+        BetterEDT.switchToSalleSchedule();
 
     }
     public void switchToPersonalSchedule(ActionEvent actionEvent) {
@@ -364,11 +357,15 @@ public class createEventController implements Initializable {
     }
 
     public void switchToMainScreen(ActionEvent actionEvent) {
-        BetterEDT.goToMainScreen();
+        BetterEDT.goToFormationScreen();
     }
 
     public void switchToSalleSchedule(ActionEvent actionEvent) {
         BetterEDT.switchToSalleSchedule();
+    }
+
+    public void setSalleNameField(String salleName) {
+        salleNameField.setText(salleName);
     }
 
 }
