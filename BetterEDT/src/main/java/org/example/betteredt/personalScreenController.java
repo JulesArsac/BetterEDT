@@ -81,7 +81,13 @@ public class personalScreenController implements Initializable, IEdtController {
 
         filterPane.getChildren().add(rootNode);
 
-        setupMainList("src/main/resources/personnel/ILSENcla.ics");
+        String savedIcs = BetterEDT.getSavedFile();
+        if (savedIcs != null) {
+            setupMainList("src/main/resources/personnel/" + savedIcs);
+        }
+        else {
+            setupMainList("src/main/resources/personnel/ILSENcla.ics");
+        }
 
         switchToWeekly(LocalDate.now());
 

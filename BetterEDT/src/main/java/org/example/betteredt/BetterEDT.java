@@ -284,7 +284,21 @@ public class BetterEDT extends Application {
             throw new RuntimeException(e);
         }
         return events;
+    }
 
+    public static String getSavedFile() {
+        if (user != null) {
+            String selectSQL = "SELECT defaultFile FROM users WHERE id = " + user.getId() + ";";
+            try {
+                ResultSet rs = conn.createStatement().executeQuery(selectSQL);
+                if (rs.next()) {
+                    return rs.getString("defaultFile");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return null;
     }
 
 }
