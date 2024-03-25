@@ -9,8 +9,6 @@ import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class connectionController implements Initializable {
 
@@ -57,7 +55,7 @@ public class connectionController implements Initializable {
         connectPassword.setPromptText("");
         try {
             BetterEDT.createUser(connectUsername.getText(), connectPassword.getText());
-            BetterEDT.goToMainScreen();
+            BetterEDT.goToFormationScreen();
         } catch (UserNotFountException e) {
             connectUsername.setStyle("-fx-border-color: red;");
             connectUsername.setPromptText("Invalid username");

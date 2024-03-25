@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="root" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.betteredt.filtersController">
+   <children>
+      <ComboBox fx:id="periodChoice" prefHeight="17.0" prefWidth="118.0" />
+      <Label text="Matière">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField />
+      <Label text="Groupe">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField />
+      <Label text="Salle">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField />
+      <Label text="Type de cours">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField />
+      <Button mnemonicParsing="false" text="Mettre a jour" />
+      <Button fx:id="addNewReservationEvent" mnemonicParsing="false" onAction="#switchToReservationMenu" text="Réserver une salle" visible="false" />
+      <Button fx:id="addNewPersonalEvent" mnemonicParsing="false" onAction="#switchToCustomEventMenu" text="Nouvel évenement" visible="false" />
+      <ToggleButton fx:id="darkSasuke" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onDarkSasukeClick" text="Dark sasuke" />
+   </children>
+</VBox>

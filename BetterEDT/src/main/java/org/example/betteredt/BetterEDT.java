@@ -26,6 +26,7 @@ public class BetterEDT extends Application {
     private static Connection conn = null;
     private static User user = null;
     private static List<EventCalendrier> currentEvents = null;
+    private static boolean darkMode = false;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -63,6 +64,7 @@ public class BetterEDT extends Application {
     }
 
     public static void goDarkMode() {
+        darkMode = true;
         try {
             mainScene.getStylesheets().add(darkSasukeFile.toURI().toURL().toExternalForm());
         } catch (MalformedURLException e) {
@@ -79,6 +81,7 @@ public class BetterEDT extends Application {
     }
 
     public static void goLightMode() {
+        darkMode = false;
         mainScene.getStylesheets().remove(darkSasukeFile.toURI().toString());
         if (user != null) {
             String updateSQL = "UPDATE users SET darkSasuke = 0 WHERE id = " + user.getId() + ";";
@@ -111,7 +114,7 @@ public class BetterEDT extends Application {
         }
     }
 
-    public static void goToMainScreen() {
+    public static void goToFormationScreen() {
         if (user != null) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("formationScreen.fxml"));
@@ -225,6 +228,10 @@ public class BetterEDT extends Application {
             return selectedFile.getAbsolutePath();
         }
         return null;
+    }
+
+    public static boolean isDarkMode() {
+        return darkMode;
     }
 
 }

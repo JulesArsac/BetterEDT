@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -364,7 +363,7 @@ public class createEventController implements Initializable {
     }
 
     public void switchToMainScreen(ActionEvent actionEvent) {
-        BetterEDT.goToMainScreen();
+        BetterEDT.goToFormationScreen();
     }
 
     public void switchToSalleSchedule(ActionEvent actionEvent) {

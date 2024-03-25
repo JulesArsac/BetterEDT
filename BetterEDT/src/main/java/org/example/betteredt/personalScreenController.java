@@ -23,69 +23,38 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
-public class personalScreenController implements Initializable {
+public class personalScreenController implements Initializable, IEdtController {
 
     private List<EventCalendrier> mainList = null;
     private LocalDate displayedDate = LocalDate.now();
     private int currentDisplay = 1;
-    private boolean darkMode = false;
+    private filtersController filtersController;
 
-    @FXML
-    private ComboBox periodChoice;
-    @FXML
-    private ToggleButton darkSasuke;
     @FXML
     Pane edtPane;
     @FXML
     AnchorPane rootPane;
     @FXML
-    GridPane filterPane;
+    Pane filterPane;
     @FXML
     VBox middleVbox;
     @FXML
     Label currentDateLabel;
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        periodChoice.getItems().addAll("Semaine" , "Jour" , "Mois");
-        periodChoice.getSelectionModel().selectFirst();
-        periodChoice.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == oldVal) {
-                return;
-            }
-            if (newVal.equals("Semaine")) {
-                currentDisplay = 1;
-                switchToWeekly(displayedDate);
-                BetterEDT.setPrefTime(1);
-            }
-            else if (newVal.equals("Jour")) {
-                currentDisplay = 0;
-                switchToDaily(displayedDate);
-                BetterEDT.setPrefTime(0);
-            }
-            else {
-                currentDisplay = 2;
-                switchToMonthly(displayedDate);
-                BetterEDT.setPrefTime(2);
-            }
-        });
-
-        darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
-
-
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             edtPane.setPrefWidth(newVal.doubleValue()-160);
             edtPane.setMaxWidth(newVal.doubleValue()-160);
 
             middleVbox.setPrefWidth(newVal.doubleValue());
 
-            if (newVal.doubleValue() < 160) {
-
-                filterPane.setPrefWidth(newVal.doubleValue());
-                filterPane.setMaxWidth(newVal.doubleValue());
+            if (newVal.doubleValue() < 180) {
+                filterPane.setPrefWidth(newVal.doubleValue()-40);
+                filterPane.setMaxWidth(newVal.doubleValue()-40);
             }
             else {
-                filterPane.setPrefWidth(160);
-                filterPane.setMaxWidth(160);
+                filterPane.setPrefWidth(140);
+                filterPane.setMaxWidth(140);
             }
         });
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
@@ -95,6 +64,22 @@ public class personalScreenController implements Initializable {
             filterPane.setPrefHeight(newVal.doubleValue()-150);
             filterPane.setMaxHeight(newVal.doubleValue()-150);
         });
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("filters.fxml"));
+        VBox rootNode = null;
+        try {
+            rootNode = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        filtersController = fxmlLoader.getController();
+        filtersController.setParentController(this);
+        filtersController.setCustomEventVisibility(true);
+
+        rootNode.prefWidthProperty().bind(filterPane.widthProperty());
+        rootNode.prefHeightProperty().bind(filterPane.heightProperty());
+
+        filterPane.getChildren().add(rootNode);
 
         setupMainList("src/main/resources/personnel/ILSENcla.ics");
 
@@ -110,32 +95,12 @@ public class personalScreenController implements Initializable {
         });
     }
 
-    @FXML
-    protected void onDarkSasukeClick() {
-        if (!darkMode) {
-            BetterEDT.goDarkMode();
-            setDarkMode(true);
-        } else {
-            BetterEDT.goLightMode();
-            setDarkMode(false);
-        }
-    }
-
-    public void setDarkMode(boolean darkMode) {
-        this.darkMode = darkMode;
-        if (!darkMode) {
-            darkSasuke.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: #000000; -fx-border-color: #222222");
-        } else {
-            darkSasuke.setStyle("-fx-background-color: #1A1A1A; -fx-text-fill: #FFFFFF; -fx-border-color: #222222");
-        }
-    }
-
     public void switchToPersonalSchedule(ActionEvent actionEvent) {
         BetterEDT.goToPersonalScreen();
     }
 
     public void switchToMainScreen(ActionEvent actionEvent) {
-        BetterEDT.goToMainScreen();
+        BetterEDT.goToFormationScreen();
     }
 
     public void switchToSalleSchedule(ActionEvent actionEvent) {
@@ -351,22 +316,6 @@ public class personalScreenController implements Initializable {
         }
     }
 
-    public void changePrefType(int type) {
-        switch (type) {
-            case 0:
-                periodChoice.getSelectionModel().select("Jour");
-                switchToDaily(displayedDate);
-                break;
-            case 1:
-                periodChoice.getSelectionModel().select("Semaine");
-                switchToWeekly(displayedDate);
-                break;
-            case 2:
-                periodChoice.getSelectionModel().select("Mois");
-                switchToMonthly(displayedDate);
-                break;
-        }
-    }
 
     public void selectFormation() {
         String path = BetterEDT.getIcsName(2);
@@ -385,8 +334,20 @@ public class personalScreenController implements Initializable {
         }
     }
 
-    public void switchToCustomEventMenu(ActionEvent actionEvent) {
-        BetterEDT.switchToCustomEventMenu();
+    public void switchToDailyFilter() {
+        currentDisplay = 0;
+        switchToDaily(displayedDate);
     }
+
+    public void switchToWeeklyFilter() {
+        currentDisplay = 1;
+        switchToWeekly(displayedDate);
+    }
+
+    public void switchToMonthlyFilter() {
+        currentDisplay = 2;
+        switchToMonthly(displayedDate);
+    }
+
 
 }
