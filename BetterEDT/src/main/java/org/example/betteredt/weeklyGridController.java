@@ -13,6 +13,7 @@ import javafx.scene.shape.Rectangle;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -77,9 +78,15 @@ public class weeklyGridController implements Initializable {
 
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH'H'mm");
-            int column = 0;
+            if (weeklyList.isEmpty()) {
+                return;
+            }
+
+
             int currentDuration = 0;
             for (List<EventCalendrier> dayEventList : weeklyList) {
+                LocalDate firstEventDate = LocalDate.of(dayEventList.get(0).getYear(), dayEventList.get(0).getMois(), dayEventList.get(0).getJour());
+                int column = firstEventDate.getDayOfWeek().getValue() - 1;
                 LocalTime currentTime = startTime;
                 VBox vbox = setUpVBox();
                 edtGrid.add(vbox, column, 1);
@@ -202,7 +209,6 @@ public class weeklyGridController implements Initializable {
                     currentTime = currentTime.plus(increment);
                 }
                 //New day
-                column++;
             }
         }
 
