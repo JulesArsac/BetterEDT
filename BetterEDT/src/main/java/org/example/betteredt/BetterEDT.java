@@ -234,4 +234,31 @@ public class BetterEDT extends Application {
         return darkMode;
     }
 
+    public static List<EventCalendrier> addUserEvent(List<EventCalendrier> events) {
+        if (user == null) {
+            return events;
+        }
+        String selectSQL = "SELECT * FROM personalSchedule WHERE user = '" + user.getUsername() + "';";
+        try {
+            ResultSet rs = conn.createStatement().executeQuery(selectSQL);
+            while (rs.next()) {
+                EventCalendrier eventToAdd = new EventCalendrier(rs.getString("description"), rs.getString("startHeure"), rs.getString("endHeure"), rs.getString("lieu"), rs.getInt("mois"), rs.getInt("jour"), rs.getInt("anner"), rs.getString("eventName"), rs.getString("user"), rs.getString("couleur"), rs.getString("description"), rs.getString("description"));
+                events.add(eventToAdd);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        selectSQL = "SELECT * FROM reservationSalleTable WHERE user = '" + user.getUsername() + "';";
+        try {
+            ResultSet rs = conn.createStatement().executeQuery(selectSQL);
+            while (rs.next()) {
+                EventCalendrier eventToAdd = new EventCalendrier(rs.getString("description"), rs.getString("startHeure"), rs.getString("endHeure"), rs.getString("salleName"), rs.getInt("mois"), rs.getInt("jour"), rs.getInt("anner"), "Réservation de salle", rs.getString("user"), null, rs.getString("description"), rs.getString("description"));
+                events.add(eventToAdd);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return events;
+    }
+
 }

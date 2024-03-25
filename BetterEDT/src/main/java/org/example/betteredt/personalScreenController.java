@@ -113,6 +113,8 @@ public class personalScreenController implements Initializable, IEdtController {
             throw new RuntimeException("Error while parsing the file");
         }
 
+        mainList = BetterEDT.addUserEvent(mainList);
+
         Set<EventCalendrier> eventSet = new HashSet<>(mainList);
 
         mainList = new ArrayList<>(eventSet);
