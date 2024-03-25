@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 public class filtersController implements Initializable {
 
     private IEdtController parentController;
+    private String salleName = null;
 
     @FXML
     ToggleButton darkSasuke;
@@ -103,7 +104,10 @@ public class filtersController implements Initializable {
     }
 
     public void switchToReservationMenu(ActionEvent actionEvent) {
-        BetterEDT.switchToReservationEventMenu();
+        if (salleName == null) {
+            return;
+        }
+        BetterEDT.switchToReservationEventMenu(salleName);
     }
 
     public void setReservationVisibility(boolean visible) {
@@ -151,7 +155,10 @@ public class filtersController implements Initializable {
         }
 
         parentController.updateEventList(filteredEvents);
+    }
 
+    public void setSalleName(String salleName) {
+        this.salleName = salleName;
     }
 
 }

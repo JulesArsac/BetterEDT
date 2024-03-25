@@ -177,11 +177,13 @@ public class BetterEDT extends Application {
         }
     }
 
-    public static void switchToReservationEventMenu() {
+    public static void switchToReservationEventMenu(String salle) {
         if (user != null) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("createReservationEvent.fxml"));
                 mainScene.setRoot(fxmlLoader.load());
+                createEventController controller = fxmlLoader.getController();
+                controller.setSalleNameField(salle);
                 stage.setScene(mainScene);
                 stage.show();
             } catch (IOException e) {

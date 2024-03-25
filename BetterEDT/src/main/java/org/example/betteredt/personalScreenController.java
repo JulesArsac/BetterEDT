@@ -136,7 +136,7 @@ public class personalScreenController implements Initializable, IEdtController {
             if (eventDate.isAfter(endDate)) {
                 break;
             }
-            if (event.getJour() == startDate.getDayOfMonth() && event.getMois() == startDate.getMonthValue() && event.getYear() == startDate.getYear()) {
+            if (eventDate.isAfter(startDate) || eventDate.equals(startDate)) {
                 start = true;
             }
             if (eventDate.isAfter(savedDate)) {

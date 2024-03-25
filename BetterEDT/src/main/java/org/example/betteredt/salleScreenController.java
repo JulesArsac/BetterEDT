@@ -83,6 +83,12 @@ public class salleScreenController implements Initializable, IEdtController {
         filterPane.getChildren().add(rootNode);
 
         setupMainList("src/main/resources/salle/nodes.ics");
+        for (EventCalendrier event : mainList) {
+            if (event.getLocation() != null) {
+                filtersController.setSalleName(event.getLocation());
+                break;
+            }
+        }
 
         switchToWeekly(LocalDate.now());
 
@@ -138,7 +144,7 @@ public class salleScreenController implements Initializable, IEdtController {
             if (eventDate.isAfter(endDate)) {
                 break;
             }
-            if (event.getJour() == startDate.getDayOfMonth() && event.getMois() == startDate.getMonthValue() && event.getYear() == startDate.getYear()) {
+            if (eventDate.isAfter(startDate) || eventDate.equals(startDate)) {
                 start = true;
             }
             if (eventDate.isAfter(savedDate)) {

@@ -85,6 +85,9 @@ public class weeklyGridController implements Initializable {
 
             int currentDuration = 0;
             for (List<EventCalendrier> dayEventList : weeklyList) {
+                if (dayEventList.isEmpty()) {
+                    continue;
+                }
                 LocalDate firstEventDate = LocalDate.of(dayEventList.get(0).getYear(), dayEventList.get(0).getMois(), dayEventList.get(0).getJour());
                 int column = firstEventDate.getDayOfWeek().getValue() - 1;
                 LocalTime currentTime = startTime;
