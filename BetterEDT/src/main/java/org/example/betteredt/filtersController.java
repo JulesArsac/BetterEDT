@@ -5,10 +5,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class filtersController implements Initializable {
@@ -23,6 +26,14 @@ public class filtersController implements Initializable {
     public Button addNewReservationEvent;
     @FXML
     public Button addNewPersonalEvent;
+    @FXML
+    public TextField matiere;
+    @FXML
+    public TextField group;
+    @FXML
+    public TextField salle;
+    @FXML
+    public TextField type;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -105,6 +116,42 @@ public class filtersController implements Initializable {
 
     public void setCustomEventVisibility(boolean visible) {
         addNewPersonalEvent.setVisible(visible);
+    }
+
+    public void filterEvents(ActionEvent actionEvent) {
+        String matiereText = matiere.getText();
+        String groupText = group.getText();
+        String salleText = salle.getText();
+        String typeText = type.getText();
+        List<EventCalendrier> allEvents = parentController.getCurrentEvents();
+        List<EventCalendrier> filteredEvents = new ArrayList<>();
+
+        for (EventCalendrier event : allEvents) {
+            if (!matiereText.isEmpty()) {
+                if (!(event.getUCE().toLowerCase()).contains(matiereText.toLowerCase())) {
+                    continue;
+                }
+            }
+            if (!groupText.isEmpty()) {
+                if (!(event.getElevesConcerner().toLowerCase()).contains(groupText.toLowerCase())) {
+                    continue;
+                }
+            }
+            if (!salleText.isEmpty()) {
+                if (!(event.getLocation().toLowerCase()).contains(salleText.toLowerCase())) {
+                    continue;
+                }
+            }
+            if (!typeText.isEmpty()) {
+                if (!(event.getTypeDeCours().toLowerCase()).contains(typeText.toLowerCase())) {
+                    continue;
+                }
+            }
+            filteredEvents.add(event);
+        }
+
+        parentController.updateEventList(filteredEvents);
+
     }
 
 }

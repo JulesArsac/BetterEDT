@@ -20,6 +20,7 @@ import java.util.*;
 
 public class formationController implements Initializable, IEdtController {
 
+    private List<EventCalendrier> allEventList = null;
     private List<EventCalendrier> mainList = null;
     private LocalDate displayedDate = LocalDate.now();
     private int currentDisplay = 1;
@@ -110,21 +111,22 @@ public class formationController implements Initializable, IEdtController {
     }
 
     public void setupMainList(String path) {
-        mainList = BetterEDT.parseFile(path);
-        if (mainList == null) {
+        allEventList = BetterEDT.parseFile(path);
+        if (allEventList == null) {
             throw new RuntimeException("Error while parsing the file");
         }
 
-        Set<EventCalendrier> eventSet = new HashSet<>(mainList);
+        Set<EventCalendrier> eventSet = new HashSet<>(allEventList);
 
-        mainList = new ArrayList<>(eventSet);
+        allEventList = new ArrayList<>(eventSet);
 
-        mainList.sort(new Comparator<EventCalendrier>() {
+        allEventList.sort(new Comparator<EventCalendrier>() {
             @Override
             public int compare(EventCalendrier e1, EventCalendrier e2) {
                 return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
             }
         });
+        mainList = allEventList;
     }
 
     public List<List<EventCalendrier>> getEvents(LocalDate startDate, LocalDate endDate) {
@@ -352,6 +354,27 @@ public class formationController implements Initializable, IEdtController {
     public void switchToMonthlyFilter() {
         currentDisplay = 2;
         switchToMonthly(displayedDate);
+    }
+
+    @Override
+    public void updateEventList(List<EventCalendrier> newEvents) {
+        mainList = newEvents;
+        switch (currentDisplay) {
+            case 0:
+                switchToDaily(displayedDate);
+                break;
+            case 1:
+                switchToWeekly(displayedDate);
+                break;
+            case 2:
+                switchToMonthly(displayedDate);
+                break;
+        }
+    }
+
+    @Override
+    public List<EventCalendrier> getCurrentEvents() {
+        return allEventList;
     }
 
 }

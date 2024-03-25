@@ -25,7 +25,6 @@ public class BetterEDT extends Application {
     }
     private static Connection conn = null;
     private static User user = null;
-    private static List<EventCalendrier> currentEvents = null;
     private static boolean darkMode = false;
 
     @Override
@@ -206,8 +205,7 @@ public class BetterEDT extends Application {
     }
 
     public static List<EventCalendrier> parseFile(String path) {
-        currentEvents = Parser.startParser(path);
-        return currentEvents;
+        return Parser.startParser(path);
     }
 
     public static String getIcsName(int type) {

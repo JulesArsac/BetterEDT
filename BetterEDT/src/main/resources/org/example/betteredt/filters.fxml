@@ -16,26 +16,26 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField />
+      <TextField fx:id="matiere" promptText="Ex: UCE 4 Application" />
       <Label text="Groupe">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField />
+      <TextField fx:id="group" promptText="Ex: M1-ILSEN-cla" />
       <Label text="Salle">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField />
+      <TextField fx:id="salle" promptText="Ex: Stat 1" />
       <Label text="Type de cours">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField />
-      <Button mnemonicParsing="false" text="Mettre a jour" />
+      <TextField fx:id="type" promptText="Ex: TP" />
+      <Button onAction="#filterEvents" mnemonicParsing="false" text="Mettre a jour" />
       <Button fx:id="addNewReservationEvent" mnemonicParsing="false" onAction="#switchToReservationMenu" text="Réserver une salle" visible="false" />
       <Button fx:id="addNewPersonalEvent" mnemonicParsing="false" onAction="#switchToCustomEventMenu" text="Nouvel évenement" visible="false" />
       <ToggleButton fx:id="darkSasuke" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onDarkSasukeClick" text="Dark sasuke" />

@@ -349,5 +349,25 @@ public class personalScreenController implements Initializable, IEdtController {
         switchToMonthly(displayedDate);
     }
 
+    @Override
+    public void updateEventList(List<EventCalendrier> newEvents) {
+        mainList = newEvents;
+        switch (currentDisplay) {
+            case 0:
+                switchToDaily(displayedDate);
+                break;
+            case 1:
+                switchToWeekly(displayedDate);
+                break;
+            case 2:
+                switchToMonthly(displayedDate);
+                break;
+        }
+    }
+
+    @Override
+    public List<EventCalendrier> getCurrentEvents() {
+        return mainList;
+    }
 
 }
