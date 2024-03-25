@@ -148,6 +148,7 @@ public class weeklyGridController implements Initializable {
                                     }
                                 }
 
+
                             }
                         }
                         if (!spanToDisplay.getStart().equals(LocalTime.of(0, 0)) && !spanToDisplay.getEnd().equals(LocalTime.of(0, 0))) {
@@ -187,7 +188,7 @@ public class weeklyGridController implements Initializable {
                             controller.setTime(event.getStartHeure() + " - " + event.getEndHeure());
                             controller.setRoom(event.getLocation());
                             controller.setTitle(event.getUCE());
-                            controller.setProf(event.getProfesseur()); //lien ici
+                            controller.setProf(event.getProfesseur());
                             controller.setType(event.getTypeDeCours());
                             controller.setEvent(event);
                             if (eventStartTime.equals(span.getStart())) {

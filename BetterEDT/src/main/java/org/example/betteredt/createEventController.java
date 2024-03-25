@@ -257,6 +257,9 @@ public class createEventController implements Initializable {
                 alert.showAndWait();
                 return;
             }
+            if (heureDebut < 10) {
+                startTimeFieldHeure.setText("0" + startTimeFieldHeure.getText());
+            }
             if (minuteDebut!=30){
                 if (minuteDebut!=0){
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -269,6 +272,9 @@ public class createEventController implements Initializable {
                 if (Objects.equals(startTimeFieldMinute.getText(), "0")){
                     startTimeFieldMinute.setText("00");
                 }
+            }
+            if (heureFin < 10) {
+                endTimeFieldHeure.setText("0" + endTimeFieldHeure.getText());
             }
             if (minuteFin!=30){
                 if (minuteFin!=0){
@@ -343,7 +349,7 @@ public class createEventController implements Initializable {
 
         getConn().createStatement().execute(insertSQL);
 
-        BetterEDT.goToPersonalScreen();
+        BetterEDT.switchToSalleSchedule();
 
     }
     public void switchToPersonalSchedule(ActionEvent actionEvent) {

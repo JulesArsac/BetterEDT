@@ -30,6 +30,7 @@ public class salleScreenController implements Initializable, IEdtController {
     private LocalDate displayedDate = LocalDate.now();
     private int currentDisplay = 1;
     private filtersController filtersController;
+    private String salleName = null;
 
     @FXML
     Pane edtPane;
@@ -83,12 +84,9 @@ public class salleScreenController implements Initializable, IEdtController {
         filterPane.getChildren().add(rootNode);
 
         setupMainList("src/main/resources/salle/nodes.ics");
-        for (EventCalendrier event : mainList) {
-            if (event.getLocation() != null) {
-                filtersController.setSalleName(event.getLocation());
-                break;
-            }
-        }
+
+        filtersController.setSalleName(salleName);
+
 
         switchToWeekly(LocalDate.now());
 
@@ -120,6 +118,17 @@ public class salleScreenController implements Initializable, IEdtController {
         if (mainList == null) {
             throw new RuntimeException("Error while parsing the file");
         }
+        for (EventCalendrier event : mainList) {
+            if (event.getLocation() != null) {
+                if (event.getLocation().contains(",")) {
+                    continue;
+                }
+                salleName = event.getLocation();
+                break;
+            }
+        }
+
+        mainList = BetterEDT.addSalleEvent(mainList, salleName);
 
         Set<EventCalendrier> eventSet = new HashSet<>(mainList);
 

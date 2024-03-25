@@ -225,6 +225,17 @@ public class BetterEDT extends Application {
 
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
+
+            if (type == 2) {
+                if (user != null) {
+                    String updateSQL = "UPDATE users SET defaultFile = '" + selectedFile.getName() + "' WHERE id = " + user.getId() + ";";
+                    try {
+                        conn.createStatement().executeUpdate(updateSQL);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
             return selectedFile.getAbsolutePath();
         }
         return null;
@@ -259,6 +270,21 @@ public class BetterEDT extends Application {
             throw new RuntimeException(e);
         }
         return events;
+    }
+
+    public static List<EventCalendrier> addSalleEvent(List<EventCalendrier> events, String salle) {
+        String selectSQL = "SELECT * FROM reservationSalleTable WHERE salleName = '" + salle + "';";
+        try {
+            ResultSet rs = conn.createStatement().executeQuery(selectSQL);
+            while (rs.next()) {
+                EventCalendrier eventToAdd = new EventCalendrier(rs.getString("description"), rs.getString("startHeure"), rs.getString("endHeure"), rs.getString("salleName"), rs.getInt("mois"), rs.getInt("jour"), rs.getInt("anner"), "Réservation de salle", rs.getString("user"), null, rs.getString("description"), rs.getString("description"));
+                events.add(eventToAdd);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return events;
+
     }
 
 }
