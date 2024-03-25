@@ -38,7 +38,6 @@ public class BetterEDT extends Application {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        user = new User(1, "admin", true, false, 1);
         if (user == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("connectionScreen.fxml"));
             mainScene = new Scene(fxmlLoader.load(), 1000, 600);
@@ -225,7 +224,6 @@ public class BetterEDT extends Application {
 
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
-
             if (type == 2) {
                 if (user != null) {
                     String updateSQL = "UPDATE users SET defaultFile = '" + selectedFile.getName() + "' WHERE id = " + user.getId() + ";";

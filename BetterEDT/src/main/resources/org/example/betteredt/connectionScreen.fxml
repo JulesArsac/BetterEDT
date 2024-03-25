@@ -27,24 +27,7 @@
                      </font>
                   </Label>
                   <PasswordField fx:id="connectPassword" />
-                  <Button fx:id="connectButton" onAction="#connect" mnemonicParsing="false" text="Connect" />
-               </children>
-            </VBox>
-            <VBox fx:id="createBox" alignment="CENTER" prefHeight="286.0" prefWidth="204.0" spacing="10.0">
-               <children>
-                  <Label text="Username">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="createUsername" />
-                  <Label text="Password">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
-                  <PasswordField fx:id="createPassword" />
-                  <Button fx:id="createButton" onAction="#create" mnemonicParsing="false" text="Create account" />
+                  <Button fx:id="connectButton" mnemonicParsing="false" onAction="#connect" text="Connect" />
                </children>
             </VBox>
          </children>
