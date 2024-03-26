@@ -46,15 +46,42 @@
          <Label wrapText="true" text="Nom de la salle:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
          <Label wrapText="true" text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
          <Label wrapText="true" text="*Date:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-         <Label wrapText="true" text="*Heure début:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-         <Label wrapText="true" text="*Minute début:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-         <Label wrapText="true" text="*Heure fin:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-         <Label wrapText="true" text="*Minute Fin:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+         <Label wrapText="true" text="*Heure début:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+         <Label wrapText="true" text="*Minute début:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+         <Label wrapText="true" text="*Heure fin:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+         <Label wrapText="true" text="*Minute Fin:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
          <Label fx:id="salleNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
          <TextArea fx:id="descriptionArea" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
          <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-         <ComboBox fx:id="startTimeHourComboBox" GridPane.columnIndex="1" GridPane.rowIndex="5">
+         <ComboBox fx:id="startTimeHourComboBox" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <items>
+               <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="8"/>
+                  <String fx:value="9"/>
+                  <String fx:value="10"/>
+                  <String fx:value="11"/>
+                  <String fx:value="12"/>
+                  <String fx:value="13"/>
+                  <String fx:value="14"/>
+                  <String fx:value="15"/>
+                  <String fx:value="16"/>
+                  <String fx:value="17"/>
+                  <String fx:value="18"/>
+                  <String fx:value="19"/>
+               </FXCollections>
+            </items>
+         </ComboBox>
+
+         <ComboBox fx:id="startTimeMinuteComboBox" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <items>
+               <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="0"/>
+                  <String fx:value="30"/>
+               </FXCollections>
+            </items>
+         </ComboBox>
+         <ComboBox fx:id="endTimeHourComboBox" GridPane.columnIndex="1" GridPane.rowIndex="5">
             <items>
                <FXCollections fx:factory="observableArrayList">
                   <String fx:value="8"/>
@@ -81,36 +108,9 @@
                </FXCollections>
             </items>
          </ComboBox>
-         <ComboBox fx:id="endTimeHourComboBox" GridPane.columnIndex="1" GridPane.rowIndex="7">
-            <items>
-               <FXCollections fx:factory="observableArrayList">
-                  <String fx:value="8"/>
-                  <String fx:value="9"/>
-                  <String fx:value="10"/>
-                  <String fx:value="11"/>
-                  <String fx:value="12"/>
-                  <String fx:value="13"/>
-                  <String fx:value="14"/>
-                  <String fx:value="15"/>
-                  <String fx:value="16"/>
-                  <String fx:value="17"/>
-                  <String fx:value="18"/>
-                  <String fx:value="19"/>
-               </FXCollections>
-            </items>
-         </ComboBox>
-
-         <ComboBox fx:id="startTimeMinuteComboBox" GridPane.columnIndex="1" GridPane.rowIndex="8">
-            <items>
-               <FXCollections fx:factory="observableArrayList">
-                  <String fx:value="0"/>
-                  <String fx:value="30"/>
-               </FXCollections>
-            </items>
-         </ComboBox>
 
 
-         <Button fx:id="sendButton" GridPane.columnIndex="1" GridPane.rowIndex="9" mnemonicParsing="false" onAction="#addNewReservation" text="Send"/>
+         <Button fx:id="sendButton" GridPane.columnIndex="1" GridPane.rowIndex="7" mnemonicParsing="false" onAction="#addNewReservation" text="Réserver"/>
       </GridPane>
 
       <HBox spacing="10" alignment="CENTER" AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.leftAnchor="20.0">

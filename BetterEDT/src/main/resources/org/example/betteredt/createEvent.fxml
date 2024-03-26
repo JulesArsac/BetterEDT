@@ -80,7 +80,7 @@
             </items>
          </ComboBox>
 
-         <ComboBox fx:id="endTimeMinuteComboBox" GridPane.columnIndex="1" GridPane.rowIndex="6">
+         <ComboBox fx:id="startTimeMinuteComboBox" GridPane.columnIndex="1" GridPane.rowIndex="6">
             <items>
                <FXCollections fx:factory="observableArrayList">
                   <String fx:value="0"/>
@@ -107,7 +107,7 @@
             </items>
          </ComboBox>
 
-         <ComboBox fx:id="startTimeMinuteComboBox" GridPane.columnIndex="1" GridPane.rowIndex="8">
+         <ComboBox fx:id="endTimeMinuteComboBox" GridPane.columnIndex="1" GridPane.rowIndex="8">
             <items>
                <FXCollections fx:factory="observableArrayList">
                   <String fx:value="0"/>
@@ -115,7 +115,7 @@
                </FXCollections>
             </items>
          </ComboBox>
-         <Button fx:id="sendButton" GridPane.columnIndex="1" GridPane.rowIndex="11" mnemonicParsing="false" onAction="#addNewEvent" text="Send"/>
+         <Button fx:id="sendButton" GridPane.columnIndex="1" GridPane.rowIndex="11" mnemonicParsing="false" onAction="#addNewEvent" text="Crée évènement"/>
       </GridPane>
 
       <HBox spacing="10" alignment="CENTER" AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.leftAnchor="20.0">

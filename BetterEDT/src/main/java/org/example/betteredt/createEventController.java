@@ -136,7 +136,7 @@ public class createEventController implements Initializable {
         String startTimeFieldHeure=startTimeHourComboBox.getValue();
         String endTimeFieldHeure=endTimeHourComboBox.getValue();
         String startTimeFieldMinute=startTimeMinuteComboBox.getValue();
-        String endTimeFieldMinute=startTimeMinuteComboBox.getValue();
+        String endTimeFieldMinute=endTimeMinuteComboBox.getValue();
 
         try {
             int heureDebut = Integer.parseInt(startTimeFieldHeure);
@@ -222,8 +222,9 @@ public class createEventController implements Initializable {
 
         String startTimeFieldHeure=startTimeHourComboBox.getValue();
         String endTimeFieldHeure=endTimeHourComboBox.getValue();
+
         String startTimeFieldMinute=startTimeMinuteComboBox.getValue();
-        String endTimeFieldMinute=startTimeMinuteComboBox.getValue();
+        String endTimeFieldMinute=endTimeMinuteComboBox.getValue();
 
 
         try {
@@ -231,7 +232,6 @@ public class createEventController implements Initializable {
             int minuteDebut = Integer.parseInt(startTimeFieldMinute);
             int heureFin = Integer.parseInt(endTimeFieldHeure);
             int minuteFin = Integer.parseInt(endTimeFieldMinute);
-
 
             if (heureDebut < 10) {
                 startTimeFieldHeure=("0" + startTimeFieldHeure);
@@ -267,12 +267,19 @@ public class createEventController implements Initializable {
                 if (EventsListSalle.get(i).getJour()==Integer.parseInt(dayField)&&
                         EventsListSalle.get(i).getMois()==Integer.parseInt(monthField)&&
                         EventsListSalle.get(i).getYear()==Integer.parseInt(yearField)){
+
                     int startHeureReserver = Integer.parseInt(EventsListSalle.get(i).getStartHeure().substring(0, EventsListSalle.get(i).getStartHeure().indexOf('H')));
                     int endHeureReserver = Integer.parseInt(EventsListSalle.get(i).getEndHeure().substring(0, EventsListSalle.get(i).getEndHeure().indexOf('H')));
                     int startMinuteReserver = Integer.parseInt(EventsListSalle.get(i).getStartHeure().substring(EventsListSalle.get(i).getStartHeure().indexOf('H') + 1));
                     int endMinuteReserver = Integer.parseInt(EventsListSalle.get(i).getEndHeure().substring(EventsListSalle.get(i).getEndHeure().indexOf('H') + 1));
 
+                    System.out.println("heureDebut="+heureDebut);
+                    System.out.println("minuteFin="+minuteFin);
+                    System.out.println("startHeureReserver="+startHeureReserver);
+                    System.out.println("endHeureReserver="+endHeureReserver);
+
                     if (!(endHeureReserver <= heureDebut || startHeureReserver >= heureFin)) {
+                        System.out.println("owo");
                         if ((endHeureReserver == heureDebut && endMinuteReserver == minuteFin) ||
                                 (startMinuteReserver == minuteFin && startMinuteReserver == minuteDebut)) {
                         } else{
