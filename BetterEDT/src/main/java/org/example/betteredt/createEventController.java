@@ -72,21 +72,8 @@ public class createEventController implements Initializable {
             salleNameField.setText("S1 = C 042 Nodes (HARDCODED)");
         }
 
-        EventsListSalle = Parser.startParser("src/main/resources/SalleNode.ics");
-        if (EventsListSalle == null) {
-            throw new RuntimeException("Error while parsing the file");
-        }
 
-        Set<EventCalendrier> eventSet = new HashSet<>(EventsListSalle);
 
-        EventsListSalle = new ArrayList<>(eventSet);
-
-        EventsListSalle.sort(new Comparator<EventCalendrier>() {
-            @Override
-            public int compare(EventCalendrier e1, EventCalendrier e2) {
-                return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
-            }
-        });
         ObservableList<String> hourOptions = FXCollections.observableArrayList(
                 "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"
         );
@@ -325,6 +312,10 @@ public class createEventController implements Initializable {
 
     public void setSalleNameField(String salleName) {
         salleNameField.setText(salleName);
+    }
+
+    public void setEventsListSalle(List<EventCalendrier> eventsListSalle) {
+        EventsListSalle = eventsListSalle;
     }
 
 }

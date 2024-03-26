@@ -38,6 +38,7 @@ public class BetterEDT extends Application {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        user = new User(1, "admin", true, false, 1);
         if (user == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("connectionScreen.fxml"));
             mainScene = new Scene(fxmlLoader.load(), 1000, 600);
@@ -188,13 +189,14 @@ public class BetterEDT extends Application {
         }
     }
 
-    public static void switchToReservationEventMenu(String salle) {
+    public static void switchToReservationEventMenu(String salle, List<EventCalendrier> events) {
         if (user != null) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("createReservationEvent.fxml"));
                 mainScene.setRoot(fxmlLoader.load());
                 createEventController controller = fxmlLoader.getController();
                 controller.setSalleNameField(salle);
+                controller.setEventsListSalle(events);
                 stage.setScene(mainScene);
                 stage.show();
             } catch (IOException e) {

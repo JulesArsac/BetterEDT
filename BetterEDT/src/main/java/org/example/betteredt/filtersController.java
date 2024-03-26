@@ -107,7 +107,7 @@ public class filtersController implements Initializable {
         if (salleName == null) {
             return;
         }
-        BetterEDT.switchToReservationEventMenu(salleName);
+        BetterEDT.switchToReservationEventMenu(salleName, parentController.getCurrentEvents());
     }
 
     public void setReservationVisibility(boolean visible) {
