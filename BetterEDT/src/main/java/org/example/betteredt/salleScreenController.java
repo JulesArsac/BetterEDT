@@ -26,6 +26,7 @@ import java.util.*;
 
 public class salleScreenController implements Initializable, IEdtController {
 
+    private List<EventCalendrier> allEventList = null;
     private List<EventCalendrier> mainList = null;
     private LocalDate displayedDate = LocalDate.now();
     private int currentDisplay = 1;
@@ -83,11 +84,9 @@ public class salleScreenController implements Initializable, IEdtController {
 
         filterPane.getChildren().add(rootNode);
 
-        setupMainList("src/main/resources/salle/nodes.ics");
+        setupMainList(BetterEDT.getDisplayedSalle());
 
-
-
-
+        
         switchToWeekly(LocalDate.now());
 
         rootPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
@@ -114,11 +113,11 @@ public class salleScreenController implements Initializable, IEdtController {
     }
 
     public void setupMainList(String path) {
-        mainList = BetterEDT.parseFile(path);
-        if (mainList == null) {
+        allEventList = BetterEDT.parseFile(path);
+        if (allEventList == null) {
             throw new RuntimeException("Error while parsing the file");
         }
-        for (EventCalendrier event : mainList) {
+        for (EventCalendrier event : allEventList) {
             if (event.getLocation() != null) {
                 if (event.getLocation().contains(",")) {
                     continue;
@@ -128,18 +127,19 @@ public class salleScreenController implements Initializable, IEdtController {
             }
         }
         filtersController.setSalleName(salleName);
-        mainList = BetterEDT.addSalleEvent(mainList, salleName);
+        allEventList = BetterEDT.addSalleEvent(allEventList, salleName);
 
-        Set<EventCalendrier> eventSet = new HashSet<>(mainList);
+        Set<EventCalendrier> eventSet = new HashSet<>(allEventList);
 
-        mainList = new ArrayList<>(eventSet);
+        allEventList = new ArrayList<>(eventSet);
 
-        mainList.sort(new Comparator<EventCalendrier>() {
+        allEventList.sort(new Comparator<EventCalendrier>() {
             @Override
             public int compare(EventCalendrier e1, EventCalendrier e2) {
                 return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
             }
         });
+        mainList = allEventList;
     }
 
     public List<List<EventCalendrier>> getEvents(LocalDate startDate, LocalDate endDate) {
@@ -387,7 +387,7 @@ public class salleScreenController implements Initializable, IEdtController {
 
     @Override
     public List<EventCalendrier> getCurrentEvents() {
-        return mainList;
+        return allEventList;
     }
 
 }

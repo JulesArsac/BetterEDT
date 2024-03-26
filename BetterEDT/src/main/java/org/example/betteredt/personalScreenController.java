@@ -25,6 +25,7 @@ import java.util.*;
 
 public class personalScreenController implements Initializable, IEdtController {
 
+    private List<EventCalendrier> allEventList = null;
     private List<EventCalendrier> mainList = null;
     private LocalDate displayedDate = LocalDate.now();
     private int currentDisplay = 1;
@@ -114,23 +115,24 @@ public class personalScreenController implements Initializable, IEdtController {
     }
 
     public void setupMainList(String path) {
-        mainList = BetterEDT.parseFile(path);
-        if (mainList == null) {
+        allEventList = BetterEDT.parseFile(path);
+        if (allEventList == null) {
             throw new RuntimeException("Error while parsing the file");
         }
 
-        mainList = BetterEDT.addUserEvent(mainList);
+        allEventList = BetterEDT.addUserEvent(allEventList);
 
-        Set<EventCalendrier> eventSet = new HashSet<>(mainList);
+        Set<EventCalendrier> eventSet = new HashSet<>(allEventList);
 
-        mainList = new ArrayList<>(eventSet);
+        allEventList = new ArrayList<>(eventSet);
 
-        mainList.sort(new Comparator<EventCalendrier>() {
+        allEventList.sort(new Comparator<EventCalendrier>() {
             @Override
             public int compare(EventCalendrier e1, EventCalendrier e2) {
                 return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
             }
         });
+        mainList = allEventList;
     }
 
     public List<List<EventCalendrier>> getEvents(LocalDate startDate, LocalDate endDate) {
@@ -378,7 +380,7 @@ public class personalScreenController implements Initializable, IEdtController {
 
     @Override
     public List<EventCalendrier> getCurrentEvents() {
-        return mainList;
+        return allEventList;
     }
 
 }

@@ -26,6 +26,7 @@ public class BetterEDT extends Application {
     private static Connection conn = null;
     private static User user = null;
     private static boolean darkMode = false;
+    private static String displayedSalle = "src/main/resources/salle/nodes.ics";
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -249,6 +250,7 @@ public class BetterEDT extends Application {
                     }
                 }
             }
+            displayedSalle = selectedFile.getAbsolutePath();
             return selectedFile.getAbsolutePath();
         }
         return null;
@@ -314,4 +316,11 @@ public class BetterEDT extends Application {
         return null;
     }
 
+    public static String getDisplayedSalle() {
+        return displayedSalle;
+    }
+
+    public static void setDisplayedSalle(String displayedSalle) {
+        BetterEDT.displayedSalle = displayedSalle;
+    }
 }
