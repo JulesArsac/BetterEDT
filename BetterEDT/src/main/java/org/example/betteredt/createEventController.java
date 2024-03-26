@@ -181,9 +181,16 @@ public class createEventController implements Initializable {
         System.out.println(hexColor);
 
 
+
+        String eventName = eventNameField.getText();
+        eventName = eventName.replace("'", " ");
+        String description = descriptionArea.getText();
+        description = description.replace("'", " ");
+        String location = locationField.getText();
+        location = location.replace("'", " ");
         String insertSQL =
                 "INSERT INTO personalSchedule(user, eventName, description, lieu, couleur, jour, mois, anner, startHeure, endHeure) " +
-                        "VALUES ('" + getUser().getUsername() + "', '" + eventNameField.getText() + "', '" + descriptionArea.getText() + "', '" + locationField.getText() + "', '" + hexColor + "', " +
+                        "VALUES ('" + getUser().getUsername() + "', '" + eventName + "', '" + description + "', '" + location + "', '" + hexColor + "', " +
                         "'" + dayField + "', '" + monthField + "', '" + yearField + "', '" + startTimeFieldHeure + "H" + startTimeFieldMinute + "', '" + endTimeFieldHeure + "H" + endTimeFieldMinute + "')";
 
         getConn().createStatement().execute(insertSQL);
@@ -285,10 +292,13 @@ public class createEventController implements Initializable {
             return;
         }
 
-
+        String salleName = salleNameField.getText();
+        salleName = salleName.replace("'", " ");
+        String description = descriptionArea.getText();
+        description = description.replace("'", " ");
         String insertSQL =
                 "INSERT INTO reservationSalleTable(user, salleName, description, jour, mois, anner, startHeure, endHeure) " +
-                        "VALUES ('" + getUser().getUsername() + "', '" + salleNameField.getText() + "', '" + descriptionArea.getText() + "', '" +
+                        "VALUES ('" + getUser().getUsername() + "', '" + salleName + "', '" + description + "', '" +
                         dayField + "', '" + monthField + "', '" + yearField + "', '" +
                         startTimeFieldHeure + "H" + startTimeFieldMinute + "', '" +
                         endTimeFieldHeure + "H" + endTimeFieldMinute + "')";
