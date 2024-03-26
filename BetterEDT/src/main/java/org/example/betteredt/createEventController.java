@@ -15,6 +15,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.example.betteredt.BetterEDT.getConn;
@@ -268,28 +270,21 @@ public class createEventController implements Initializable {
                         EventsListSalle.get(i).getMois()==Integer.parseInt(monthField)&&
                         EventsListSalle.get(i).getYear()==Integer.parseInt(yearField)){
 
-                    int startHeureReserver = Integer.parseInt(EventsListSalle.get(i).getStartHeure().substring(0, EventsListSalle.get(i).getStartHeure().indexOf('H')));
-                    int endHeureReserver = Integer.parseInt(EventsListSalle.get(i).getEndHeure().substring(0, EventsListSalle.get(i).getEndHeure().indexOf('H')));
-                    int startMinuteReserver = Integer.parseInt(EventsListSalle.get(i).getStartHeure().substring(EventsListSalle.get(i).getStartHeure().indexOf('H') + 1));
-                    int endMinuteReserver = Integer.parseInt(EventsListSalle.get(i).getEndHeure().substring(EventsListSalle.get(i).getEndHeure().indexOf('H') + 1));
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH'H'mm");
+                    LocalTime startHeureReserver = LocalTime.parse(EventsListSalle.get(i).getStartHeure(), formatter);
+                    LocalTime endHeureReserver = LocalTime.parse(EventsListSalle.get(i).getEndHeure(), formatter);
 
-                    System.out.println("heureDebut="+heureDebut);
-                    System.out.println("minuteFin="+minuteFin);
-                    System.out.println("startHeureReserver="+startHeureReserver);
-                    System.out.println("endHeureReserver="+endHeureReserver);
+                    LocalTime startHeure = LocalTime.of(heureDebut, minuteDebut);
+                    LocalTime endHeure = LocalTime.of(heureFin, minuteFin);
 
-                    if (!(endHeureReserver <= heureDebut || startHeureReserver >= heureFin)) {
-                        System.out.println("owo");
-                        if ((endHeureReserver == heureDebut && endMinuteReserver == minuteFin) ||
-                                (startMinuteReserver == minuteFin && startMinuteReserver == minuteDebut)) {
-                        } else{
-                            Alert alert = new Alert(Alert.AlertType.WARNING);
-                            alert.setTitle("Créneau déjà pris");
-                            alert.setHeaderText(null);
-                            alert.setContentText("Les horaires saisies sont déjà réservées. Veuillez saisir des horaires non prises.");
-                            alert.showAndWait();
-                            return;
-                        }
+                    TimeSpan oldSpan = new TimeSpan(startHeureReserver, endHeureReserver);
+                    if (oldSpan.contains(startHeure) || oldSpan.contains(endHeure) || oldSpan.contains(startHeure) || oldSpan.contains(endHeure) || startHeureReserver.equals(startHeure) || startHeure.isBefore(startHeureReserver)) {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Créneau déjà pris");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Les horaires saisies sont déjà réservées. Veuillez saisir des horaires non prises.");
+                        alert.showAndWait();
+                        return;
                     }
 
                 }
