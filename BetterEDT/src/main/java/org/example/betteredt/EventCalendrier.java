@@ -141,6 +141,8 @@ public class EventCalendrier {
             month=String.valueOf(mois);
         }
         dateCompacter=day+"/"+month+"/"+year+"-"+startHeure;
+        //displayAllInfo();
+
     }
 
     public void setJourSemaine() {
