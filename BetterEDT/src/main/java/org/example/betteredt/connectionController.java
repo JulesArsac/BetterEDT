@@ -3,6 +3,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -45,6 +47,13 @@ public class connectionController implements Initializable {
             hBox.setPrefHeight(newVal.doubleValue());
             hBox.setMaxHeight(newVal.doubleValue());
         });
+
+        rootPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                connect();
+            }
+        });
+
     }
 
     public void connect() {
@@ -66,10 +75,4 @@ public class connectionController implements Initializable {
             connectButton.setDisable(false);
         }
     }
-
-    public void create() {
-        System.out.println("Creating user with username: " + createUsername.getText() + " and password: " + createPassword.getText());
-        createButton.setDisable(true);
-    }
-
 }

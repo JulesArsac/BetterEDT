@@ -324,6 +324,9 @@ public class personalScreenController implements Initializable, IEdtController {
         }
     }
 
+    public void changePrefType(int type) {
+        filtersController.setPeriodChoice(type);
+    }
 
     public void selectFormation() {
         String path = BetterEDT.getIcsName(2);
