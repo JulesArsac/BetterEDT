@@ -4,6 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -59,14 +60,19 @@ public class weeklyGridController implements Initializable {
 
         ColumnConstraints col0 = new ColumnConstraints();
         col0.setPercentWidth(20);
+        col0.setHalignment(HPos.CENTER);
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setPercentWidth(20);
+        col1.setHalignment(HPos.CENTER);
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(20);
+        col2.setHalignment(HPos.CENTER);
         ColumnConstraints col3 = new ColumnConstraints();
         col3.setPercentWidth(20);
+        col3.setHalignment(HPos.CENTER);
         ColumnConstraints col4 = new ColumnConstraints();
         col4.setPercentWidth(20);
+        col4.setHalignment(HPos.CENTER);
 
         edtGrid.getRowConstraints().addAll(row1, row2);
         edtGrid.getColumnConstraints().addAll(col0, col1, col2, col3, col4);
