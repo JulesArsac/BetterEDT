@@ -85,7 +85,7 @@ public class salleScreenController implements Initializable, IEdtController {
 
         setupMainList("src/main/resources/salle/nodes.ics");
 
-        filtersController.setSalleName(salleName);
+
 
 
         switchToWeekly(LocalDate.now());
@@ -127,7 +127,7 @@ public class salleScreenController implements Initializable, IEdtController {
                 break;
             }
         }
-
+        filtersController.setSalleName(salleName);
         mainList = BetterEDT.addSalleEvent(mainList, salleName);
 
         Set<EventCalendrier> eventSet = new HashSet<>(mainList);
@@ -331,6 +331,10 @@ public class salleScreenController implements Initializable, IEdtController {
                 switchToMonthly(displayedDate);
                 break;
         }
+    }
+
+    public void changePrefType(int type) {
+        filtersController.setPeriodChoice(type);
     }
 
     public void selectFormation() {

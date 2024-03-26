@@ -35,4 +35,24 @@ public class User {
     public int getDefaultTime() {
         return defaultTime;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
+    public void setDarkSasuke(boolean darkSasuke) {
+        this.darkSasuke = darkSasuke;
+    }
+
+    public void setDefaultTime(int defaultTime) {
+        this.defaultTime = defaultTime;
+    }
 }

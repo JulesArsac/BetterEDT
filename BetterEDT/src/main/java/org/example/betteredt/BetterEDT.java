@@ -62,6 +62,9 @@ public class BetterEDT extends Application {
     }
 
     public static void goDarkMode() {
+        if (darkMode) {
+            return;
+        }
         darkMode = true;
         try {
             mainScene.getStylesheets().add(darkSasukeFile.toURI().toURL().toExternalForm());
@@ -75,10 +78,14 @@ public class BetterEDT extends Application {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            user.setDarkSasuke(true);
         }
     }
 
     public static void goLightMode() {
+        if (!darkMode) {
+            return;
+        }
         darkMode = false;
         mainScene.getStylesheets().remove(darkSasukeFile.toURI().toString());
         if (user != null) {
@@ -88,6 +95,7 @@ public class BetterEDT extends Application {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            user.setDarkSasuke(false);
         }
     }
 
@@ -146,6 +154,8 @@ public class BetterEDT extends Application {
                 mainScene.setRoot(fxmlLoader.load());
                 stage.setScene(mainScene);
                 stage.show();
+                personalScreenController controller = fxmlLoader.getController();
+                controller.changePrefType(user.getDefaultTime());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -158,6 +168,8 @@ public class BetterEDT extends Application {
                 mainScene.setRoot(fxmlLoader.load());
                 stage.setScene(mainScene);
                 stage.show();
+                salleScreenController controller = fxmlLoader.getController();
+                controller.changePrefType(user.getDefaultTime());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -202,6 +214,7 @@ public class BetterEDT extends Application {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            user.setDefaultTime(time);
         }
     }
 
