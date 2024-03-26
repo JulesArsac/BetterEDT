@@ -26,6 +26,7 @@ public class BetterEDT extends Application {
     private static Connection conn = null;
     private static User user = null;
     private static boolean darkMode = false;
+    private static String displayedSalle = "src/main/resources/salle/nodes.ics";
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -38,6 +39,7 @@ public class BetterEDT extends Application {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        user = new User(1, "admin", true, false, 1);
         if (user == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("connectionScreen.fxml"));
             mainScene = new Scene(fxmlLoader.load(), 1000, 600);
@@ -188,13 +190,14 @@ public class BetterEDT extends Application {
         }
     }
 
-    public static void switchToReservationEventMenu(String salle) {
+    public static void switchToReservationEventMenu(String salle, List<EventCalendrier> events) {
         if (user != null) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(BetterEDT.class.getResource("createReservationEvent.fxml"));
                 mainScene.setRoot(fxmlLoader.load());
                 createEventController controller = fxmlLoader.getController();
                 controller.setSalleNameField(salle);
+                controller.setEventsListSalle(events);
                 stage.setScene(mainScene);
                 stage.show();
             } catch (IOException e) {
@@ -247,6 +250,7 @@ public class BetterEDT extends Application {
                     }
                 }
             }
+            displayedSalle = selectedFile.getAbsolutePath();
             return selectedFile.getAbsolutePath();
         }
         return null;
@@ -312,4 +316,11 @@ public class BetterEDT extends Application {
         return null;
     }
 
+    public static String getDisplayedSalle() {
+        return displayedSalle;
+    }
+
+    public static void setDisplayedSalle(String displayedSalle) {
+        BetterEDT.displayedSalle = displayedSalle;
+    }
 }

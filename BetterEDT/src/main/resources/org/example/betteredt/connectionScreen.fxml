@@ -15,19 +15,19 @@
          <children>
             <VBox fx:id="connectBox" alignment="CENTER" prefHeight="286.0" prefWidth="204.0" spacing="10.0">
                <children>
-                  <Label text="Username">
+                  <Label text="Pseudo">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
                   <TextField fx:id="connectUsername" />
-                  <Label text="Password">
+                  <Label text="Mot de passe">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
                   <PasswordField fx:id="connectPassword" />
-                  <Button fx:id="connectButton" mnemonicParsing="false" onAction="#connect" text="Connect" />
+                  <Button fx:id="connectButton" mnemonicParsing="false" onAction="#connect" text="Connexion" />
                </children>
             </VBox>
          </children>

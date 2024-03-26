@@ -4,6 +4,8 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -44,7 +46,9 @@ public class weeklyGridController implements Initializable {
             edtGrid.setMaxHeight(newVal.doubleValue());
         });
 
-        edtGrid.setGridLinesVisible(true);
+        RowConstraints row1 = new RowConstraints();
+        RowConstraints row2 = new RowConstraints();
+        row2.setVgrow(Priority.ALWAYS);
 
         edtGrid.add(new Label("Lundi"), 0, 0);
         edtGrid.add(new Label("Mardi"), 1, 0);
@@ -52,20 +56,23 @@ public class weeklyGridController implements Initializable {
         edtGrid.add(new Label("Jeudi"), 3, 0);
         edtGrid.add(new Label("Vendredi"), 4, 0);
 
-        RowConstraints row1 = new RowConstraints();
-        RowConstraints row2 = new RowConstraints();
-        row2.setVgrow(Priority.ALWAYS);
+
 
         ColumnConstraints col0 = new ColumnConstraints();
         col0.setPercentWidth(20);
+        col0.setHalignment(HPos.CENTER);
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setPercentWidth(20);
+        col1.setHalignment(HPos.CENTER);
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(20);
+        col2.setHalignment(HPos.CENTER);
         ColumnConstraints col3 = new ColumnConstraints();
         col3.setPercentWidth(20);
+        col3.setHalignment(HPos.CENTER);
         ColumnConstraints col4 = new ColumnConstraints();
         col4.setPercentWidth(20);
+        col4.setHalignment(HPos.CENTER);
 
         edtGrid.getRowConstraints().addAll(row1, row2);
         edtGrid.getColumnConstraints().addAll(col0, col1, col2, col3, col4);
@@ -92,6 +99,7 @@ public class weeklyGridController implements Initializable {
                 int column = firstEventDate.getDayOfWeek().getValue() - 1;
                 LocalTime currentTime = startTime;
                 VBox vbox = setUpVBox();
+                vbox.setStyle("-fx-border-color: black;");
                 edtGrid.add(vbox, column, 1);
                 List<HBox> hboxList = new ArrayList<>();
                 TimeSpan span = new TimeSpan(LocalTime.of(0, 0), LocalTime.of(0, 0));

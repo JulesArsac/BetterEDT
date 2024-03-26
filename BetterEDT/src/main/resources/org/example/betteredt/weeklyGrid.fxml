@@ -9,10 +9,11 @@
    <children>
       <GridPane fx:id="edtGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="1164.0">
          <columnConstraints>
+<!--            <ColumnConstraints hgrow="SOMETIMES" />-->
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints  vgrow="SOMETIMES" />
-            <RowConstraints  vgrow="ALWAYS" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="ALWAYS" />
          </rowConstraints>
       </GridPane>
    </children>

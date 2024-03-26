@@ -1,6 +1,8 @@
 package org.example.betteredt;
 
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +15,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.example.betteredt.BetterEDT.getConn;
@@ -20,12 +24,20 @@ import static org.example.betteredt.BetterEDT.getUser;
 
 public class createEventController implements Initializable {
 
+    @FXML
+    public DatePicker datePicker;
+    @FXML
+    public ComboBox<String> startTimeHourComboBox;
+    @FXML
+    public ComboBox<String> startTimeMinuteComboBox;
+
+    @FXML
+    public ComboBox<String> endTimeHourComboBox;
+    @FXML
+    public ComboBox<String> endTimeMinuteComboBox;
     private List<EventCalendrier> EventsListSalle = null;
 
-    public TextField startTimeFieldHeure;
-    public TextField startTimeFieldMinute;
-    public TextField endTimeFieldHeure;
-    public TextField endTimeFieldMinute;
+
     public AnchorPane rootPane;
     public Label salleNameField;
 
@@ -37,12 +49,6 @@ public class createEventController implements Initializable {
     private TextField locationField;
     @FXML
     private ColorPicker colorPicker;
-    @FXML
-    private TextField dayField;
-    @FXML
-    private TextField monthField;
-    @FXML
-    private TextField yearField;
 
     @FXML
     private Button sendButton;
@@ -66,21 +72,17 @@ public class createEventController implements Initializable {
             salleNameField.setText("S1 = C 042 Nodes (HARDCODED)");
         }
 
-        EventsListSalle = Parser.startParser("src/main/resources/SalleNode.ics");
-        if (EventsListSalle == null) {
-            throw new RuntimeException("Error while parsing the file");
-        }
 
-        Set<EventCalendrier> eventSet = new HashSet<>(EventsListSalle);
 
-        EventsListSalle = new ArrayList<>(eventSet);
+        ObservableList<String> hourOptions = FXCollections.observableArrayList(
+                "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"
+        );
+        startTimeHourComboBox.setItems(hourOptions);
+        ObservableList<String> minuteOptions = FXCollections.observableArrayList("0", "30");
+        startTimeMinuteComboBox.setItems(minuteOptions);
 
-        EventsListSalle.sort(new Comparator<EventCalendrier>() {
-            @Override
-            public int compare(EventCalendrier e1, EventCalendrier e2) {
-                return e1.getLocalDateTime().compareTo(e2.getLocalDateTime());
-            }
-        });
+        endTimeHourComboBox.setItems(hourOptions);
+        endTimeMinuteComboBox.setItems(minuteOptions);
 
     }
 
@@ -105,9 +107,9 @@ public class createEventController implements Initializable {
 
 
     public void addNewEvent(ActionEvent actionEvent) throws SQLException {
-
-        if (eventNameField.getText().isEmpty()||dayField.getText().isEmpty()||monthField.getText().isEmpty()||yearField.getText().isEmpty()||
-                startTimeFieldHeure.getText().isEmpty() || startTimeFieldMinute.getText().isEmpty()||endTimeFieldHeure.getText().isEmpty() || endTimeFieldMinute.getText().isEmpty()){
+        LocalDate selectedDate = datePicker.getValue();
+        if (selectedDate == null || startTimeHourComboBox.getValue() == null || endTimeHourComboBox.getValue() == null ||
+                startTimeMinuteComboBox.getValue() == null || endTimeMinuteComboBox.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Champs obligatoires");
             alert.setHeaderText(null);
@@ -116,62 +118,36 @@ public class createEventController implements Initializable {
             return;
         }
 
-        //test des dates
-        try {
-            int day = Integer.parseInt(dayField.getText());
-            int month = Integer.parseInt(monthField.getText());
-            int year = Integer.parseInt(yearField.getText());
-            LocalDate date = LocalDate.of(year, month, day);
-        } catch (DateTimeException | NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Date invalide");
-            alert.setHeaderText(null);
-            alert.setContentText("La date saisie n'est pas valide. Veuillez saisir une date valide.");
-            alert.showAndWait();
-            return;
-        }
+        String dayField= String.valueOf(selectedDate.getDayOfMonth());
+        String monthField = String.valueOf(selectedDate.getMonthValue());
+        String yearField = String.valueOf(selectedDate.getYear());
+
+        String startTimeFieldHeure=startTimeHourComboBox.getValue();
+        String endTimeFieldHeure=endTimeHourComboBox.getValue();
+        String startTimeFieldMinute=startTimeMinuteComboBox.getValue();
+        String endTimeFieldMinute=endTimeMinuteComboBox.getValue();
 
         try {
-            int heureDebut = Integer.parseInt(startTimeFieldHeure.getText());
-            int minuteDebut = Integer.parseInt(startTimeFieldMinute.getText());
-            int heureFin = Integer.parseInt(endTimeFieldHeure.getText());
-            int minuteFin = Integer.parseInt(endTimeFieldMinute.getText());
+            int heureDebut = Integer.parseInt(startTimeFieldHeure);
+            int minuteDebut = Integer.parseInt(startTimeFieldMinute);
+            int heureFin = Integer.parseInt(endTimeFieldHeure);
+            int minuteFin = Integer.parseInt(endTimeFieldMinute);
 
-            if (heureDebut>19||heureFin>19||heureDebut<8||heureFin<8){
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Heures invalide");
-                alert.setHeaderText(null);
-                alert.setContentText("Les heures saisies ne sont pas valide. Veuillez saisir des heures valide.");
-                alert.showAndWait();
-                return;
+
+            if (heureDebut < 10) {
+                startTimeFieldHeure=("0" + startTimeFieldHeure);
             }
-            if (minuteDebut!=30){
-                if (minuteDebut!=0){
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Minutes invalide");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Les minutes de début saisies ne sont pas valide. Veuillez saisir 0 ou 30.");
-                    alert.showAndWait();
-                    return;
-                }
-                if (Objects.equals(startTimeFieldMinute.getText(), "0")){
-                    startTimeFieldMinute.setText("00");
-                }
+            if (Objects.equals(startTimeFieldMinute, "0")){
+                startTimeFieldMinute=("00");
             }
-            if (minuteFin!=30){
-                if (minuteFin!=0){
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Minutes invalide");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Les minutes de début saisies ne sont pas valide. Veuillez saisir 0 ou 30.");
-                    alert.showAndWait();
-                    return;
-                }
-                if (Objects.equals(endTimeFieldMinute.getText(), "0")){
-                    endTimeFieldMinute.setText("00");
-                }
+            if (heureFin < 10) {
+                endTimeFieldHeure=("0" + endTimeFieldHeure);
             }
-            if (heureDebut>heureFin){
+            if (Objects.equals(endTimeFieldMinute, "0")){
+                endTimeFieldMinute="00";
+            }
+
+            if (heureDebut>heureFin||heureDebut==19&&minuteDebut==30||heureFin==19&&minuteFin==30){
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Horaires invalide");
                 alert.setHeaderText(null);
@@ -205,10 +181,17 @@ public class createEventController implements Initializable {
         System.out.println(hexColor);
 
 
+
+        String eventName = eventNameField.getText();
+        eventName = eventName.replace("'", " ");
+        String description = descriptionArea.getText();
+        description = description.replace("'", " ");
+        String location = locationField.getText();
+        location = location.replace("'", " ");
         String insertSQL =
                 "INSERT INTO personalSchedule(user, eventName, description, lieu, couleur, jour, mois, anner, startHeure, endHeure) " +
-                        "VALUES ('" + getUser().getUsername() + "', '" + eventNameField.getText() + "', '" + descriptionArea.getText() + "', '" + locationField.getText() + "', '" + hexColor + "', " +
-                        "'" + dayField.getText() + "', '" + monthField.getText() + "', '" + yearField.getText() + "', '" + startTimeFieldHeure.getText() + "H" + startTimeFieldMinute.getText() + "', '" + endTimeFieldHeure.getText() + "H" + endTimeFieldMinute.getText() + "')";
+                        "VALUES ('" + getUser().getUsername() + "', '" + eventName + "', '" + description + "', '" + location + "', '" + hexColor + "', " +
+                        "'" + dayField + "', '" + monthField + "', '" + yearField + "', '" + startTimeFieldHeure + "H" + startTimeFieldMinute + "', '" + endTimeFieldHeure + "H" + endTimeFieldMinute + "')";
 
         getConn().createStatement().execute(insertSQL);
 
@@ -218,9 +201,9 @@ public class createEventController implements Initializable {
 
 
     public void addNewReservation(ActionEvent actionEvent) throws SQLException {
-
-        if (salleNameField.getText().isEmpty()||dayField.getText().isEmpty()||monthField.getText().isEmpty()||yearField.getText().isEmpty()||
-                startTimeFieldHeure.getText().isEmpty() || startTimeFieldMinute.getText().isEmpty()||endTimeFieldHeure.getText().isEmpty() || endTimeFieldMinute.getText().isEmpty()){
+        LocalDate selectedDate = datePicker.getValue();
+        if (selectedDate == null || startTimeHourComboBox.getValue() == null || endTimeHourComboBox.getValue() == null ||
+                startTimeMinuteComboBox.getValue() == null || endTimeMinuteComboBox.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Champs obligatoires");
             alert.setHeaderText(null);
@@ -229,67 +212,37 @@ public class createEventController implements Initializable {
             return;
         }
 
-        try {
-            int day = Integer.parseInt(dayField.getText());
-            int month = Integer.parseInt(monthField.getText());
-            int year = Integer.parseInt(yearField.getText());
-            LocalDate date = LocalDate.of(year, month, day);
-        } catch (DateTimeException | NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Date invalide");
-            alert.setHeaderText(null);
-            alert.setContentText("La date saisie n'est pas valide. Veuillez saisir une date valide.");
-            alert.showAndWait();
-            return;
-        }
+        String dayField= String.valueOf(selectedDate.getDayOfMonth());
+        String monthField = String.valueOf(selectedDate.getMonthValue());
+        String yearField = String.valueOf(selectedDate.getYear());
+
+        String startTimeFieldHeure=startTimeHourComboBox.getValue();
+        String endTimeFieldHeure=endTimeHourComboBox.getValue();
+
+        String startTimeFieldMinute=startTimeMinuteComboBox.getValue();
+        String endTimeFieldMinute=endTimeMinuteComboBox.getValue();
+
 
         try {
-            int heureDebut = Integer.parseInt(startTimeFieldHeure.getText());
-            int minuteDebut = Integer.parseInt(startTimeFieldMinute.getText());
-            int heureFin = Integer.parseInt(endTimeFieldHeure.getText());
-            int minuteFin = Integer.parseInt(endTimeFieldMinute.getText());
+            int heureDebut = Integer.parseInt(startTimeFieldHeure);
+            int minuteDebut = Integer.parseInt(startTimeFieldMinute);
+            int heureFin = Integer.parseInt(endTimeFieldHeure);
+            int minuteFin = Integer.parseInt(endTimeFieldMinute);
 
-            if (heureDebut>19||heureFin>19||heureDebut<8||heureFin<8){
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Heures invalide");
-                alert.setHeaderText(null);
-                alert.setContentText("Les heures saisies ne sont pas valide. Veuillez saisir des heures valide.");
-                alert.showAndWait();
-                return;
-            }
             if (heureDebut < 10) {
-                startTimeFieldHeure.setText("0" + startTimeFieldHeure.getText());
+                startTimeFieldHeure=("0" + startTimeFieldHeure);
             }
-            if (minuteDebut!=30){
-                if (minuteDebut!=0){
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Minutes invalide");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Les minutes de début saisies ne sont pas valide. Veuillez saisir 0 ou 30.");
-                    alert.showAndWait();
-                    return;
-                }
-                if (Objects.equals(startTimeFieldMinute.getText(), "0")){
-                    startTimeFieldMinute.setText("00");
-                }
+            if (Objects.equals(startTimeFieldMinute, "0")){
+                startTimeFieldMinute=("00");
             }
             if (heureFin < 10) {
-                endTimeFieldHeure.setText("0" + endTimeFieldHeure.getText());
+                endTimeFieldHeure=("0" + endTimeFieldHeure);
             }
-            if (minuteFin!=30){
-                if (minuteFin!=0){
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Minutes invalide");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Les minutes de début saisies ne sont pas valide. Veuillez saisir 0 ou 30.");
-                    alert.showAndWait();
-                    return;
-                }
-                if (Objects.equals(endTimeFieldMinute.getText(), "0")){
-                    endTimeFieldMinute.setText("00");
-                }
+            if (Objects.equals(endTimeFieldMinute, "0")){
+                endTimeFieldMinute="00";
             }
-            if (heureDebut>heureFin){
+
+            if (heureDebut>heureFin||heureDebut==19&&minuteDebut==30||heureFin==19&&minuteFin==30){
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Horaires invalide");
                 alert.setHeaderText(null);
@@ -307,25 +260,25 @@ public class createEventController implements Initializable {
             }
 
             for (int i=0; i<EventsListSalle.size(); i++) {
-                if (EventsListSalle.get(i).getJour()==Integer.parseInt(dayField.getText())&&
-                        EventsListSalle.get(i).getMois()==Integer.parseInt(monthField.getText())&&
-                        EventsListSalle.get(i).getYear()==Integer.parseInt(yearField.getText())){
-                    int startHeureReserver = Integer.parseInt(EventsListSalle.get(i).getStartHeure().substring(0, EventsListSalle.get(i).getStartHeure().indexOf('H')));
-                    int endHeureReserver = Integer.parseInt(EventsListSalle.get(i).getEndHeure().substring(0, EventsListSalle.get(i).getEndHeure().indexOf('H')));
-                    int startMinuteReserver = Integer.parseInt(EventsListSalle.get(i).getStartHeure().substring(EventsListSalle.get(i).getStartHeure().indexOf('H') + 1));
-                    int endMinuteReserver = Integer.parseInt(EventsListSalle.get(i).getEndHeure().substring(EventsListSalle.get(i).getEndHeure().indexOf('H') + 1));
+                if (EventsListSalle.get(i).getJour()==Integer.parseInt(dayField)&&
+                        EventsListSalle.get(i).getMois()==Integer.parseInt(monthField)&&
+                        EventsListSalle.get(i).getYear()==Integer.parseInt(yearField)){
 
-                    if (!(endHeureReserver <= heureDebut || startHeureReserver >= heureFin)) {
-                        if ((endHeureReserver == heureDebut && endMinuteReserver == minuteFin) ||
-                                (startMinuteReserver == minuteFin && startMinuteReserver == minuteDebut)) {
-                        } else{
-                            Alert alert = new Alert(Alert.AlertType.WARNING);
-                            alert.setTitle("Créneau déjà pris");
-                            alert.setHeaderText(null);
-                            alert.setContentText("Les horaires saisies sont déjà réservées. Veuillez saisir des horaires non prises.");
-                            alert.showAndWait();
-                            return;
-                        }
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH'H'mm");
+                    LocalTime startHeureReserver = LocalTime.parse(EventsListSalle.get(i).getStartHeure(), formatter);
+                    LocalTime endHeureReserver = LocalTime.parse(EventsListSalle.get(i).getEndHeure(), formatter);
+
+                    LocalTime startHeure = LocalTime.of(heureDebut, minuteDebut);
+                    LocalTime endHeure = LocalTime.of(heureFin, minuteFin);
+
+                    TimeSpan oldSpan = new TimeSpan(startHeureReserver, endHeureReserver);
+                    if (oldSpan.contains(startHeure) || oldSpan.contains(endHeure) || oldSpan.contains(startHeure) || oldSpan.contains(endHeure) || startHeureReserver.equals(startHeure) || startHeure.isBefore(startHeureReserver)) {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Créneau déjà pris");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Les horaires saisies sont déjà réservées. Veuillez saisir des horaires non prises.");
+                        alert.showAndWait();
+                        return;
                     }
 
                 }
@@ -339,13 +292,16 @@ public class createEventController implements Initializable {
             return;
         }
 
-
+        String salleName = salleNameField.getText();
+        salleName = salleName.replace("'", " ");
+        String description = descriptionArea.getText();
+        description = description.replace("'", " ");
         String insertSQL =
                 "INSERT INTO reservationSalleTable(user, salleName, description, jour, mois, anner, startHeure, endHeure) " +
-                        "VALUES ('" + getUser().getUsername() + "', '" + salleNameField.getText() + "', '" + descriptionArea.getText() + "', '" +
-                        dayField.getText() + "', '" + monthField.getText() + "', '" + yearField.getText() + "', '" +
-                        startTimeFieldHeure.getText() + "H" + startTimeFieldMinute.getText() + "', '" +
-                        endTimeFieldHeure.getText() + "H" + endTimeFieldMinute.getText() + "')";
+                        "VALUES ('" + getUser().getUsername() + "', '" + salleName + "', '" + description + "', '" +
+                        dayField + "', '" + monthField + "', '" + yearField + "', '" +
+                        startTimeFieldHeure + "H" + startTimeFieldMinute + "', '" +
+                        endTimeFieldHeure + "H" + endTimeFieldMinute + "')";
 
         getConn().createStatement().execute(insertSQL);
 
@@ -366,6 +322,10 @@ public class createEventController implements Initializable {
 
     public void setSalleNameField(String salleName) {
         salleNameField.setText(salleName);
+    }
+
+    public void setEventsListSalle(List<EventCalendrier> eventsListSalle) {
+        EventsListSalle = eventsListSalle;
     }
 
 }
