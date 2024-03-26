@@ -65,7 +65,7 @@
          <TextField fx:id="startTimeFieldMinute" GridPane.columnIndex="1" GridPane.rowIndex="8" promptText="Seulement 00 or 30"/>
          <TextField fx:id="endTimeFieldHeure" GridPane.columnIndex="1" GridPane.rowIndex="9" promptText="Ex: 8"/>
          <TextField fx:id="endTimeFieldMinute" GridPane.columnIndex="1" GridPane.rowIndex="10" promptText="Seulement 00 or 30"/>
-         <Button fx:id="sendButton" GridPane.columnIndex="1" GridPane.rowIndex="11" mnemonicParsing="false" onAction="#addNewEvent" text="Send"/>
+         <Button fx:id="sendButton" GridPane.columnIndex="1" GridPane.rowIndex="11" mnemonicParsing="false" onAction="#addNewEvent" text="Valider"/>
       </GridPane>
 
       <HBox spacing="10" alignment="CENTER" AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.leftAnchor="20.0">

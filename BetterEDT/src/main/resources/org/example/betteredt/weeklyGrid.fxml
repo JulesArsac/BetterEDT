@@ -11,8 +11,8 @@
          <columnConstraints>
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints  vgrow="SOMETIMES" />
-            <RowConstraints  vgrow="ALWAYS" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="ALWAYS" />
          </rowConstraints>
       </GridPane>
    </children>

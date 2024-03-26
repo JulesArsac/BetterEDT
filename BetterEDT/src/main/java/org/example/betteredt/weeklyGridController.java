@@ -4,6 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -44,7 +45,9 @@ public class weeklyGridController implements Initializable {
             edtGrid.setMaxHeight(newVal.doubleValue());
         });
 
-        edtGrid.setGridLinesVisible(true);
+        RowConstraints row1 = new RowConstraints();
+        RowConstraints row2 = new RowConstraints();
+        row2.setVgrow(Priority.ALWAYS);
 
         edtGrid.add(new Label("Lundi"), 0, 0);
         edtGrid.add(new Label("Mardi"), 1, 0);
@@ -52,9 +55,7 @@ public class weeklyGridController implements Initializable {
         edtGrid.add(new Label("Jeudi"), 3, 0);
         edtGrid.add(new Label("Vendredi"), 4, 0);
 
-        RowConstraints row1 = new RowConstraints();
-        RowConstraints row2 = new RowConstraints();
-        row2.setVgrow(Priority.ALWAYS);
+
 
         ColumnConstraints col0 = new ColumnConstraints();
         col0.setPercentWidth(20);
@@ -92,6 +93,7 @@ public class weeklyGridController implements Initializable {
                 int column = firstEventDate.getDayOfWeek().getValue() - 1;
                 LocalTime currentTime = startTime;
                 VBox vbox = setUpVBox();
+                vbox.setStyle("-fx-border-color: black;");
                 edtGrid.add(vbox, column, 1);
                 List<HBox> hboxList = new ArrayList<>();
                 TimeSpan span = new TimeSpan(LocalTime.of(0, 0), LocalTime.of(0, 0));

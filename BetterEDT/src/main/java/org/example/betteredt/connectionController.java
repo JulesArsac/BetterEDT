@@ -22,19 +22,11 @@ public class connectionController implements Initializable {
     @FXML
     private VBox connectBox;
     @FXML
-    private VBox createBox;
-    @FXML
     private TextField connectUsername;
     @FXML
     private TextField connectPassword;
     @FXML
-    private TextField createUsername;
-    @FXML
-    private TextField createPassword;
-    @FXML
     private Button connectButton;
-    @FXML
-    private Button createButton;
 
 
     @Override
@@ -67,11 +59,11 @@ public class connectionController implements Initializable {
             BetterEDT.goToFormationScreen();
         } catch (UserNotFountException e) {
             connectUsername.setStyle("-fx-border-color: red;");
-            connectUsername.setPromptText("Invalid username");
+            connectUsername.setPromptText("Pseudo invalide");
             connectButton.setDisable(false);
         } catch (WrongPasswordException e) {
             connectPassword.setStyle("-fx-border-color: red;");
-            connectPassword.setPromptText("Wrong password");
+            connectPassword.setPromptText("Mot de passe invalide");
             connectButton.setDisable(false);
         }
     }

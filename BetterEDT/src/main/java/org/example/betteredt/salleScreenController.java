@@ -83,11 +83,9 @@ public class salleScreenController implements Initializable, IEdtController {
 
         filterPane.getChildren().add(rootNode);
 
-        setupMainList("src/main/resources/salle/nodes.ics");
+        setupMainList(BetterEDT.getDisplayedSalle());
 
-
-
-
+        
         switchToWeekly(LocalDate.now());
 
         rootPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
