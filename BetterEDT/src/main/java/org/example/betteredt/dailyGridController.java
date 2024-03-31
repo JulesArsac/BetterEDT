@@ -4,6 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 
 import java.io.IOException;
@@ -139,6 +140,23 @@ public class dailyGridController implements Initializable {
                     eventRootNode.maxHeightProperty().bind(Bindings.multiply(Bindings.divide(vbox.heightProperty(), 23), duration));
                     eventRootNode.setMinHeight(0);
                     eventRootNode.prefWidthProperty().bind(Bindings.divide(hbox.widthProperty(), eventToDisplay.size()));
+
+                    FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("eventTooltip.fxml"));
+                    Tooltip tooltip = new Tooltip();
+                    try {
+                        tooltip.setGraphic(fxmlLoader2.load());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    EventTooltipController tooltipController = fxmlLoader2.getController();
+                    tooltipController.setEvent(event);
+
+                    Tooltip.install(eventRootNode, tooltip);
+
+                    tooltip.setShowDelay(javafx.util.Duration.millis(50));
+                    tooltip.setHideDelay(javafx.util.Duration.millis(50));
+                    Tooltip.install(eventRootNode, tooltip);
+
                     eventController controller = fxmlLoader.getController();
                     controller.setTime(event.getStartHeure() + " - " + event.getEndHeure());
                     controller.setRoom(event.getLocation());
